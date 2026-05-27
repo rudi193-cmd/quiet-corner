@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Welcome · Classroom OS</title>
+<script src="cos-data.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+
+body {
+  min-height: 100vh;
+  color: #3d2b1f;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: #2a1a0e;
+  background-image: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1920&q=80');
+  background-size: cover;
+  background-position: center 30%;
+  background-attachment: fixed;
+  display: flex; align-items: center; justify-content: center;
+  padding: 2rem 1rem;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: rgba(39, 22, 10, 0.52);
+  pointer-events: none; z-index: 0;
+}
+
+.ob-wrap {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 760px;
+}
+
+/* ── Header ────────────────────────────────────── */
+.ob-head {
+  text-align: center;
+  padding-bottom: 2.5rem;
+}
+.ob-head-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.4rem; font-weight: 700;
+  color: #fdf6e3; letter-spacing: -0.02em;
+  text-shadow: 0 1px 16px rgba(39, 22, 10, 0.6);
+  margin-bottom: 0.5rem;
+}
+.ob-head-sub {
+  font-size: 16px; color: rgba(200, 168, 122, 0.9);
+  line-height: 1.55;
+}
+
+/* ── Steps ──────────────────────────────────────── */
+.ob-steps {
+  display: flex; gap: 0.5rem; justify-content: center;
+  margin-bottom: 2rem;
+}
+.ob-step {
+  width: 28px; height: 4px; border-radius: 2px;
+  background: rgba(221, 200, 152, 0.25);
+  transition: background 0.3s;
+}
+.ob-step--active { background: #c8a87a; }
+.ob-step--done   { background: rgba(200, 168, 122, 0.55); }
+
+/* ── Panel ──────────────────────────────────────── */
+.ob-panel {
+  background: rgba(253, 246, 227, 0.90);
+  backdrop-filter: blur(16px) saturate(1.1);
+  -webkit-backdrop-filter: blur(16px) saturate(1.1);
+  border: 1px solid rgba(221, 200, 152, 0.55);
+  border-radius: 14px;
+  box-shadow: 0 4px 40px rgba(39, 22, 10, 0.28);
+  overflow: hidden;
+}
+
+.ob-panel-inner { padding: 2.25rem 2.5rem 2.5rem; }
+
+.ob-section-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase; color: #b5622a; margin-bottom: 1.25rem;
+}
+
+/* ── Teacher name ───────────────────────────────── */
+.ob-field { margin-bottom: 2rem; }
+.ob-field label {
+  display: block; font-size: 13px; font-weight: 600;
+  color: #6a4a35; margin-bottom: 0.45rem;
+}
+.ob-input {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 1.5px solid rgba(181, 98, 42, 0.28);
+  border-radius: 8px;
+  background: rgba(255, 250, 235, 0.8);
+  font-size: 15px; color: #3d2b1f;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.ob-input:focus { border-color: #b5622a; }
+.ob-input::placeholder { color: #b89a7a; }
+
+/* ── Archetype grid ─────────────────────────────── */
+.ob-archetypes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.9rem;
+}
+
+.ob-archetype {
+  padding: 1.1rem 1.2rem;
+  border: 2px solid rgba(181, 98, 42, 0.2);
+  border-radius: 10px;
+  background: rgba(255, 250, 235, 0.5);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.1s;
+  user-select: none;
+}
+.ob-archetype:hover {
+  border-color: rgba(181, 98, 42, 0.45);
+  background: rgba(255, 250, 235, 0.75);
+  transform: translateY(-1px);
+}
+.ob-archetype--selected {
+  border-color: #b5622a;
+  background: rgba(181, 98, 42, 0.1);
+  box-shadow: 0 0 0 3px rgba(181, 98, 42, 0.12);
+}
+.ob-archetype-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+.ob-archetype-name {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 15px; font-weight: 700; color: #3d2b1f;
+  margin-bottom: 0.25rem;
+}
+.ob-archetype-companion { font-size: 11px; color: #b5622a; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.35rem; }
+.ob-archetype-desc { font-size: 12.5px; color: #6a4a35; line-height: 1.5; }
+
+/* ── Schedule builder ───────────────────────────── */
+.ob-day-tabs {
+  display: flex; gap: 0.35rem;
+  border-bottom: 1px solid rgba(181, 98, 42, 0.18);
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0;
+}
+.ob-day-tab {
+  padding: 0.4rem 0.85rem;
+  font-size: 12px; font-weight: 600;
+  color: #8a6a50; letter-spacing: 0.04em;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-bottom: none;
+  background: transparent;
+  transition: color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+.ob-day-tab:hover { color: #b5622a; }
+.ob-day-tab--active {
+  color: #b5622a;
+  background: rgba(181, 98, 42, 0.08);
+  border-color: rgba(181, 98, 42, 0.18);
+}
+
+.ob-periods { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; min-height: 48px; }
+
+.ob-period-row {
+  display: grid;
+  grid-template-columns: 1fr 90px 90px 90px auto;
+  gap: 0.5rem; align-items: center;
+}
+.ob-period-row .ob-input { margin: 0; font-size: 13px; padding: 0.5rem 0.7rem; }
+
+.ob-period-del {
+  width: 30px; height: 30px; border-radius: 6px;
+  border: 1.5px solid rgba(181, 98, 42, 0.25);
+  background: transparent; cursor: pointer;
+  color: #b5622a; font-size: 16px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.ob-period-del:hover { background: rgba(181, 98, 42, 0.1); }
+
+.ob-empty { font-size: 13px; color: #b89a7a; padding: 0.5rem 0; font-style: italic; }
+
+.ob-add-btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  border: 1.5px dashed rgba(181, 98, 42, 0.35);
+  border-radius: 7px;
+  background: transparent; cursor: pointer;
+  font-size: 13px; color: #8a6a50;
+  transition: color 0.15s, border-color 0.15s;
+}
+.ob-add-btn:hover { color: #b5622a; border-color: #b5622a; }
+
+/* Column headers */
+.ob-period-headers {
+  display: grid;
+  grid-template-columns: 1fr 90px 90px 90px auto;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+.ob-period-headers span {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: #b89a7a;
+}
+
+/* ── Actions ────────────────────────────────────── */
+.ob-actions {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.25rem 2.5rem 1.5rem;
+  border-top: 1px solid rgba(181, 98, 42, 0.12);
+}
+.ob-btn {
+  padding: 0.65rem 1.6rem;
+  border-radius: 8px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; border: none;
+  transition: background 0.2s, opacity 0.2s;
+}
+.ob-btn--ghost {
+  background: transparent;
+  border: 1.5px solid rgba(181, 98, 42, 0.3);
+  color: #8a6a50;
+}
+.ob-btn--ghost:hover { border-color: #b5622a; color: #b5622a; }
+.ob-btn--primary {
+  background: #b5622a; color: #fdf6e3;
+  box-shadow: 0 2px 10px rgba(181, 98, 42, 0.28);
+}
+.ob-btn--primary:hover { background: #9e5524; }
+.ob-btn--primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ── Completion flash ───────────────────────────── */
+.ob-complete {
+  text-align: center; padding: 3rem 2.5rem;
+}
+.ob-complete-icon { font-size: 3rem; margin-bottom: 1rem; }
+.ob-complete-h {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.8rem; font-weight: 700; color: #3d2b1f;
+  margin-bottom: 0.5rem;
+}
+.ob-complete-p { font-size: 15px; color: #6a4a35; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="ob-wrap">
+
+  <div class="ob-head">
+    <div class="ob-head-title">Welcome to your classroom.</div>
+    <div class="ob-head-sub">Two quick steps before the day begins.</div>
+  </div>
+
+  <div class="ob-steps">
+    <div class="ob-step ob-step--active" id="step-dot-1"></div>
+    <div class="ob-step" id="step-dot-2"></div>
+  </div>
+
+  <div class="ob-panel" id="ob-panel">
+
+    <!-- Step 1: Name + Archetype -->
+    <div id="step-1" class="ob-panel-inner">
+      <div class="ob-section-label">Step 1 of 2 — Your room</div>
+
+      <div class="ob-field">
+        <label for="teacher-name">Your name</label>
+        <input id="teacher-name" class="ob-input" type="text" placeholder="Ms. Morales" autocomplete="off" />
+      </div>
+
+      <div class="ob-section-label" style="margin-bottom:1rem;">Choose your companion</div>
+      <div class="ob-archetypes" id="archetype-grid">
+        <div class="ob-archetype" data-archetype="wren">
+          <div class="ob-archetype-icon">📚</div>
+          <div class="ob-archetype-name">Book Nook</div>
+          <div class="ob-archetype-companion">Wren</div>
+          <div class="ob-archetype-desc">Warm, literary. A quiet reading room that thinks alongside you.</div>
+        </div>
+        <div class="ob-archetype" data-archetype="patches">
+          <div class="ob-archetype-icon">🐱</div>
+          <div class="ob-archetype-name">Cat Gremlin</div>
+          <div class="ob-archetype-companion">Patches</div>
+          <div class="ob-archetype-desc">Playful, chaotic-good. Keeps things moving, never takes itself too seriously.</div>
+        </div>
+        <div class="ob-archetype" data-archetype="sage">
+          <div class="ob-archetype-icon">🌿</div>
+          <div class="ob-archetype-name">Cottagecore</div>
+          <div class="ob-archetype-companion">Sage</div>
+          <div class="ob-archetype-desc">Gentle, nature-grounded. Slow and steady, rooted in what matters.</div>
+        </div>
+        <div class="ob-archetype" data-archetype="apex">
+          <div class="ob-archetype-icon">🚀</div>
+          <div class="ob-archetype-name">STEM Commander</div>
+          <div class="ob-archetype-companion">Apex</div>
+          <div class="ob-archetype-desc">Precise, systems-minded. Turns classroom data into clear signal.</div>
+        </div>
+        <div class="ob-archetype" data-archetype="archivist">
+          <div class="ob-archetype-icon">🗂️</div>
+          <div class="ob-archetype-name">Retro Academia</div>
+          <div class="ob-archetype-companion">The Archivist</div>
+          <div class="ob-archetype-desc">Scholarly, deliberate. Every lesson leaves a record worth keeping.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Schedule -->
+    <div id="step-2" class="ob-panel-inner" style="display:none;">
+      <div class="ob-section-label">Step 2 of 2 — Your schedule</div>
+
+      <div class="ob-day-tabs" id="day-tabs">
+        <button class="ob-day-tab ob-day-tab--active" data-day="0">Monday</button>
+        <button class="ob-day-tab" data-day="1">Tuesday</button>
+        <button class="ob-day-tab" data-day="2">Wednesday</button>
+        <button class="ob-day-tab" data-day="3">Thursday</button>
+        <button class="ob-day-tab" data-day="4">Friday</button>
+      </div>
+
+      <div class="ob-period-headers">
+        <span>Label</span>
+        <span>Start</span>
+        <span>End</span>
+        <span>Subject</span>
+        <span></span>
+      </div>
+
+      <div class="ob-periods" id="period-list"></div>
+
+      <button class="ob-add-btn" id="add-period-btn">+ Add period</button>
+    </div>
+
+    <!-- Completion -->
+    <div id="step-complete" class="ob-complete" style="display:none;">
+      <div class="ob-complete-icon">🌱</div>
+      <div class="ob-complete-h">Room is ready.</div>
+      <div class="ob-complete-p">Opening your classroom now.</div>
+    </div>
+
+    <div class="ob-actions" id="ob-actions">
+      <button class="ob-btn ob-btn--ghost" id="back-btn" style="visibility:hidden;">Back</button>
+      <button class="ob-btn ob-btn--primary" id="next-btn" disabled>Continue</button>
+    </div>
+
+  </div><!-- /ob-panel -->
+</div><!-- /ob-wrap -->
+
+<script>
+const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+
+let currentStep = 1;
+let selectedArchetype = null;
+let currentDay = 0;
+
+// scheduleData[day] = [{label, start_time, end_time, subject}]
+const scheduleData = { 0:[], 1:[], 2:[], 3:[], 4:[] };
+
+const nextBtn  = document.getElementById('next-btn');
+const backBtn  = document.getElementById('back-btn');
+const step1El  = document.getElementById('step-1');
+const step2El  = document.getElementById('step-2');
+const stepDone = document.getElementById('step-complete');
+const actionsEl = document.getElementById('ob-actions');
+
+// ── Archetype selection ──────────────────────────
+document.getElementById('archetype-grid').addEventListener('click', e => {
+  const card = e.target.closest('[data-archetype]');
+  if (!card) return;
+  document.querySelectorAll('.ob-archetype--selected').forEach(el => el.classList.remove('ob-archetype--selected'));
+  card.classList.add('ob-archetype--selected');
+  selectedArchetype = card.dataset.archetype;
+  validateStep1();
+});
+
+document.getElementById('teacher-name').addEventListener('input', validateStep1);
+
+function validateStep1() {
+  const name = document.getElementById('teacher-name').value.trim();
+  nextBtn.disabled = !(name && selectedArchetype);
+}
+
+// ── Day tabs ────────────────────────────────────
+document.getElementById('day-tabs').addEventListener('click', e => {
+  const tab = e.target.closest('[data-day]');
+  if (!tab) return;
+  currentDay = parseInt(tab.dataset.day);
+  document.querySelectorAll('.ob-day-tab').forEach(t => t.classList.remove('ob-day-tab--active'));
+  tab.classList.add('ob-day-tab--active');
+  renderPeriods();
+});
+
+// ── Period list ──────────────────────────────────
+function renderPeriods() {
+  const list = document.getElementById('period-list');
+  const periods = scheduleData[currentDay];
+  if (!periods.length) {
+    list.innerHTML = '<div class="ob-empty">No periods yet — add one below.</div>';
+    return;
+  }
+  list.innerHTML = periods.map((p, i) => `
+    <div class="ob-period-row" data-index="${i}">
+      <input class="ob-input" type="text" placeholder="Morning Meeting" value="${esc(p.label)}" data-field="label" />
+      <input class="ob-input" type="time" value="${p.start_time}" data-field="start_time" />
+      <input class="ob-input" type="time" value="${p.end_time}" data-field="end_time" />
+      <input class="ob-input" type="text" placeholder="Math" value="${esc(p.subject)}" data-field="subject" />
+      <button class="ob-period-del" data-del="${i}" title="Remove">×</button>
+    </div>
+  `).join('');
+}
+
+document.getElementById('period-list').addEventListener('input', e => {
+  const row = e.target.closest('[data-index]');
+  if (!row) return;
+  const i = parseInt(row.dataset.index);
+  const field = e.target.dataset.field;
+  scheduleData[currentDay][i][field] = e.target.value;
+});
+
+document.getElementById('period-list').addEventListener('click', e => {
+  const btn = e.target.closest('[data-del]');
+  if (!btn) return;
+  scheduleData[currentDay].splice(parseInt(btn.dataset.del), 1);
+  renderPeriods();
+});
+
+document.getElementById('add-period-btn').addEventListener('click', () => {
+  scheduleData[currentDay].push({ label: '', start_time: '08:00', end_time: '08:45', subject: '' });
+  renderPeriods();
+  const rows = document.querySelectorAll('.ob-period-row');
+  if (rows.length) rows[rows.length - 1].querySelector('input').focus();
+});
+
+// ── Navigation ───────────────────────────────────
+nextBtn.addEventListener('click', async () => {
+  if (currentStep === 1) {
+    goToStep2();
+  } else if (currentStep === 2) {
+    await finish();
+  }
+});
+
+backBtn.addEventListener('click', () => {
+  if (currentStep === 2) goToStep1();
+});
+
+function goToStep1() {
+  currentStep = 1;
+  step1El.style.display = '';
+  step2El.style.display = 'none';
+  backBtn.style.visibility = 'hidden';
+  nextBtn.textContent = 'Continue';
+  document.getElementById('step-dot-1').classList.add('ob-step--active');
+  document.getElementById('step-dot-2').classList.remove('ob-step--active');
+  validateStep1();
+}
+
+function goToStep2() {
+  currentStep = 2;
+  step1El.style.display = 'none';
+  step2El.style.display = '';
+  backBtn.style.visibility = 'visible';
+  nextBtn.disabled = false;
+  nextBtn.textContent = 'Open my classroom';
+  document.getElementById('step-dot-1').classList.remove('ob-step--active');
+  document.getElementById('step-dot-1').classList.add('ob-step--done');
+  document.getElementById('step-dot-2').classList.add('ob-step--active');
+  renderPeriods();
+}
+
+async function finish() {
+  nextBtn.disabled = true;
+  nextBtn.textContent = 'Saving…';
+
+  const name = document.getElementById('teacher-name').value.trim();
+
+  await cosData.patchConfig({
+    teacher_name: name,
+    preferences: { archetype: selectedArchetype }
+  });
+
+  // Save all periods across all days
+  for (const [day, periods] of Object.entries(scheduleData)) {
+    for (const p of periods) {
+      if (p.label || p.subject) {
+        await cosData.postSchedule({
+          day_of_week: parseInt(day),
+          label: p.label || 'Period',
+          subject: p.subject || '',
+          start_time: p.start_time,
+          end_time: p.end_time,
+        });
+      }
+    }
+  }
+
+  // Show completion, then redirect
+  step2El.style.display = 'none';
+  actionsEl.style.display = 'none';
+  stepDone.style.display = '';
+
+  setTimeout(() => {
+    window.location.href = 'index.html';
+  }, 1400);
+}
+
+function esc(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+
+// ── Boot: skip if already onboarded ─────────────
+(async () => {
+  const config = await cosData.getConfig();
+  if (cosData.isOnboardingComplete(config)) {
+    window.location.replace('index.html');
+  }
+})();
+</script>
+</body>
+</html>
