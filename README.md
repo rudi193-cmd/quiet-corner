@@ -13,7 +13,7 @@ Implements [Assessment Visibility v1.1](docs/assessment-visibility-v1.1/) (CC BY
 **Requirements:** Python 3 (for the local server only).
 
 ```bash
-cd quiet-corner   # or teachers-app — folder name may vary
+cd quiet-corner
 ./serve.sh
 ```
 

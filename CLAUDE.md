@@ -55,6 +55,6 @@ of the framework."
 ## Source context
 
 - White paper: `docs/assessment-visibility-v1.1/` (canonical copy for this repo)
-- Mirror: `willow-2.0/worktrees/upstream-emerging-rule-community/research/assessment-visibility-v1.1/`
+- Mirror: `~/github/willow-2.0/worktrees/upstream-emerging-rule-community/research/assessment-visibility-v1.1/`
 - Related: Emerging-Rule/community lessons, UTETY persona stack, LevelShip
 - Companion materials: appendix-a through appendix-e, classroom-signals.md, assessment-visibility-v1.1.json
