@@ -1,0 +1,1089 @@
+/*
+  Classroom OS — shared app shell (records, hub utilities, onboarding accents)
+  Requires cos-archetype-themes.css + html[data-archetype]
+*/
+
+/* ── Page backdrop ── */
+body.cos-app {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--cos-font-sans);
+  font-size: 14px;
+  color: var(--cos-ink);
+  background: var(--cos-bg-deep);
+  position: relative;
+}
+
+body.cos-app::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: var(--cos-photo);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body.cos-app::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: var(--cos-bg-page);
+  opacity: 0.92;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body.cos-app > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Layout ── */
+body.cos-app {
+  display: flex;
+  min-height: 100vh;
+}
+
+body.cos-app .sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  background: var(--cos-sidebar);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid var(--cos-sidebar-border);
+  display: flex;
+  flex-direction: column;
+  padding: 28px 0 20px;
+}
+
+body.cos-app .wordmark {
+  padding: 0 22px 24px;
+  border-bottom: 1px solid var(--cos-sidebar-border);
+  margin-bottom: 8px;
+}
+
+body.cos-app .wordmark-title {
+  font-family: var(--cos-font-serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--cos-heading-on-dark);
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+}
+
+body.cos-app .wordmark-sub {
+  font-size: 11px;
+  color: var(--cos-muted-on-dark);
+  margin-top: 6px;
+  letter-spacing: 0.04em;
+}
+
+body.cos-app .sidebar-head {
+  padding: 0 22px 20px;
+  border-bottom: 1px solid var(--cos-sidebar-border);
+  margin-bottom: 8px;
+}
+
+body.cos-app .sidebar-head .wordmark {
+  font-family: var(--cos-font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cos-heading-on-dark);
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  padding: 0;
+  border: none;
+  margin: 0;
+}
+
+body.cos-app .school {
+  font-size: 12px;
+  color: var(--cos-muted-on-dark);
+  margin-top: 6px;
+}
+
+body.cos-app .sidebar-foot {
+  margin-top: auto;
+  padding: 16px 22px 0;
+  font-size: 11px;
+  color: var(--cos-muted-on-dark);
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+body.cos-app .sidebar-foot a {
+  color: var(--cos-muted-on-dark);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+body.cos-app .sidebar-foot a:hover {
+  color: var(--cos-heading-on-dark);
+}
+
+body.cos-app .nav-section {
+  padding: 12px 14px 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cos-muted-on-dark);
+  opacity: 0.75;
+}
+
+body.cos-app .nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 22px;
+  font-size: 13px;
+  color: var(--cos-nav-link);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+body.cos-app .nav-item:hover {
+  color: var(--cos-nav-link-hover);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+body.cos-app .nav-item.active {
+  color: var(--cos-heading-on-dark);
+  border-left-color: var(--cos-accent);
+  background: var(--cos-accent-soft);
+}
+
+body.cos-app .nav-icon {
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+body.cos-app .nav-item .icon {
+  width: 18px;
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+body.cos-app .sidebar-footer {
+  margin-top: auto;
+  padding: 16px 22px 0;
+  font-size: 11px;
+  color: var(--cos-muted-on-dark);
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+body.cos-app .main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+body.cos-app .topbar {
+  padding: 18px 28px;
+  background: var(--cos-topbar);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--cos-panel-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+body.cos-app .topbar-title,
+body.cos-app .topbar h1 {
+  font-family: var(--cos-font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--cos-ink);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+body.cos-app .topbar-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+body.cos-app .topbar-meta {
+  font-size: 12px;
+  color: var(--cos-ink-muted);
+}
+
+body.cos-app .content {
+  flex: 1;
+  padding: 24px 28px 100px;
+  overflow-y: auto;
+}
+
+/* ── Panels & cards ── */
+body.cos-app .card {
+  background: var(--cos-panel);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--cos-panel-border);
+  border-radius: var(--cos-radius);
+  box-shadow: var(--cos-panel-shadow);
+  padding: 22px 24px;
+  margin-bottom: 18px;
+}
+
+body.cos-app .card-title {
+  font-family: var(--cos-font-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--cos-ink);
+  margin: 0 0 6px;
+}
+
+body.cos-app .card-desc {
+  font-size: 13px;
+  color: var(--cos-ink-soft);
+  margin: 0 0 18px;
+  line-height: 1.55;
+}
+
+body.cos-app .stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+body.cos-app .stat-card {
+  background: var(--cos-panel);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--cos-panel-border);
+  border-radius: var(--cos-radius);
+  padding: 18px 20px;
+  box-shadow: var(--cos-panel-shadow);
+}
+
+body.cos-app .stat-num {
+  font-family: var(--cos-font-serif);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--cos-accent);
+  line-height: 1;
+}
+
+body.cos-app .stat-label {
+  font-size: 11px;
+  color: var(--cos-ink-muted);
+  margin-top: 6px;
+  letter-spacing: 0.04em;
+}
+
+/* ── Forms (warm, not gov-form) ── */
+body.cos-app label,
+body.cos-app .field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--cos-ink-soft);
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+
+body.cos-app input[type="text"],
+body.cos-app input[type="date"],
+body.cos-app input[type="email"],
+body.cos-app select,
+body.cos-app textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--cos-ink);
+  background: var(--cos-input-bg);
+  border: 1px solid var(--cos-input-border);
+  border-radius: var(--cos-radius-sm);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+body.cos-app input:focus,
+body.cos-app select:focus,
+body.cos-app textarea:focus {
+  outline: none;
+  border-color: var(--cos-accent);
+  box-shadow: 0 0 0 3px var(--cos-accent-soft);
+}
+
+body.cos-app textarea {
+  min-height: 88px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+body.cos-app .field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+body.cos-app .field {
+  margin-bottom: 16px;
+}
+
+@media (max-width: 720px) {
+  body.cos-app .field-row { grid-template-columns: 1fr; }
+  body.cos-app .sidebar { display: none; }
+}
+
+/* ── Pathway chips ── */
+body.cos-app .pathway-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+body.cos-app .pathway-btn {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--cos-ink-soft);
+  background: var(--cos-input-bg);
+  border: 1px solid var(--cos-input-border);
+  border-radius: var(--cos-radius-pill);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+body.cos-app .pathway-btn:hover {
+  border-color: var(--cos-accent);
+  color: var(--cos-ink);
+}
+
+body.cos-app .pathway-btn.on {
+  background: var(--cos-accent);
+  border-color: var(--cos-accent);
+  color: #fff;
+  box-shadow: 0 2px 12px var(--cos-accent-glow);
+}
+
+/* ── Signal rows ── */
+body.cos-app .signal-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+body.cos-app .signal-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--cos-input-bg);
+  border: 1px solid var(--cos-input-border);
+  border-radius: var(--cos-radius-sm);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+body.cos-app .signal-row:hover {
+  border-color: var(--cos-accent);
+}
+
+body.cos-app .signal-row.on {
+  background: var(--cos-accent-soft);
+  border-color: var(--cos-accent);
+  box-shadow: 0 0 0 1px var(--cos-accent-glow);
+}
+
+body.cos-app .signal-row input[type="checkbox"] {
+  width: auto;
+  margin-top: 3px;
+  accent-color: var(--cos-accent);
+}
+
+body.cos-app .signal-text {
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--cos-ink);
+}
+
+body.cos-app .signal-tag {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: var(--cos-radius-pill);
+  background: var(--cos-accent-soft);
+  color: var(--cos-accent);
+  white-space: nowrap;
+}
+
+/* ── Buttons ── */
+body.cos-app .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--cos-radius-sm);
+  border: 1px solid var(--cos-input-border);
+  background: var(--cos-input-bg);
+  color: var(--cos-ink-soft);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s, border-color 0.15s;
+}
+
+body.cos-app .btn:hover {
+  border-color: var(--cos-accent);
+  color: var(--cos-ink);
+}
+
+body.cos-app .btn-primary {
+  background: var(--cos-accent);
+  color: #fff;
+  box-shadow: 0 2px 12px var(--cos-accent-glow);
+}
+
+body.cos-app .btn-primary:hover {
+  background: var(--cos-accent-hover);
+  transform: translateY(-1px);
+}
+
+body.cos-app .btn-ghost {
+  background: transparent;
+  color: var(--cos-ink-soft);
+  border: 1px solid var(--cos-input-border);
+}
+
+body.cos-app .btn-ghost:hover {
+  border-color: var(--cos-accent);
+  color: var(--cos-accent);
+}
+
+body.cos-app .btn-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+/* ── Tables & lists ── */
+body.cos-app .data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+body.cos-app .data-table th {
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cos-ink-muted);
+  border-bottom: 1px solid var(--cos-panel-border);
+}
+
+body.cos-app .data-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--cos-panel-border);
+  color: var(--cos-ink);
+  vertical-align: top;
+}
+
+body.cos-app .data-table tr:hover td {
+  background: var(--cos-accent-soft);
+}
+
+body.cos-app .pill {
+  display: inline-block;
+  padding: 3px 10px;
+  font-size: 11px;
+  border-radius: var(--cos-radius-pill);
+  background: var(--cos-accent-soft);
+  color: var(--cos-accent);
+}
+
+body.cos-app .empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--cos-ink-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+body.cos-app .section { display: none; }
+body.cos-app .section.active { display: block; }
+
+body.cos-app .report-output {
+  background: var(--cos-panel-solid);
+  border: 1px solid var(--cos-panel-border);
+  border-radius: var(--cos-radius-sm);
+  padding: 20px;
+  font-size: 13px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  color: var(--cos-ink);
+  min-height: 200px;
+}
+
+body.cos-app .level-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+body.cos-app .level-btn {
+  padding: 6px 14px;
+  font-size: 12px;
+  border-radius: var(--cos-radius-pill);
+  border: 1px solid var(--cos-input-border);
+  background: var(--cos-input-bg);
+  color: var(--cos-ink-soft);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+body.cos-app .level-btn.on {
+  background: var(--cos-accent);
+  border-color: var(--cos-accent);
+  color: #fff;
+}
+
+/* ── Theme nav (bottom pill, matches rooms) ── */
+.cos-theme-nav {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  background: var(--cos-nav-pill-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--cos-nav-pill-border);
+  border-radius: var(--cos-radius-pill);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.cos-theme-nav a {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--cos-nav-link);
+  text-decoration: none;
+  border-radius: var(--cos-radius-pill);
+  transition: color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.cos-theme-nav a:hover {
+  color: var(--cos-nav-link-hover);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.cos-theme-nav a.active {
+  background: var(--cos-nav-active-bg);
+  color: #fff;
+}
+
+.cos-theme-nav .nav-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--cos-nav-pill-border);
+  margin: 0 4px;
+}
+
+/* ── Landing page (marketing) ── */
+body.cos-landing {
+  margin: 0;
+  font-family: var(--cos-font-sans);
+  color: var(--cos-ink);
+  background: var(--cos-bg-deep);
+  min-height: 100vh;
+}
+
+body.cos-landing::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: var(--cos-photo);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+body.cos-landing::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: var(--cos-bg-page);
+  opacity: 0.94;
+  pointer-events: none;
+}
+
+body.cos-landing > * {
+  position: relative;
+  z-index: 1;
+}
+
+body.cos-landing .hero,
+body.cos-landing section {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+body.cos-landing .hero {
+  padding-top: 80px;
+  padding-bottom: 48px;
+  text-align: center;
+}
+
+body.cos-landing h1 {
+  font-family: var(--cos-font-serif);
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: var(--cos-heading-on-dark);
+  margin: 0 0 16px;
+  letter-spacing: -0.02em;
+}
+
+body.cos-landing .hero p {
+  font-size: 18px;
+  color: var(--cos-muted-on-dark);
+  line-height: 1.6;
+  max-width: 560px;
+  margin: 0 auto 32px;
+}
+
+body.cos-landing .cta-row {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+body.cos-landing .cta {
+  display: inline-block;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: var(--cos-radius-pill);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+body.cos-landing .cta-primary {
+  background: var(--cos-accent);
+  color: #fff;
+  box-shadow: 0 4px 20px var(--cos-accent-glow);
+}
+
+body.cos-landing .cta-primary:hover {
+  transform: translateY(-2px);
+}
+
+body.cos-landing .cta-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--cos-heading-on-dark);
+  border: 1px solid var(--cos-nav-pill-border);
+}
+
+body.cos-landing section {
+  padding: 48px 24px;
+}
+
+body.cos-landing section h2 {
+  font-family: var(--cos-font-serif);
+  font-size: 1.5rem;
+  color: var(--cos-heading-on-dark);
+  margin-bottom: 16px;
+}
+
+body.cos-landing .feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+body.cos-landing .feature-card {
+  background: var(--cos-panel);
+  border: 1px solid var(--cos-panel-border);
+  border-radius: var(--cos-radius);
+  padding: 24px;
+  backdrop-filter: blur(8px);
+}
+
+body.cos-landing .feature-card h3 {
+  font-family: var(--cos-font-serif);
+  font-size: 1.1rem;
+  margin: 0 0 8px;
+  color: var(--cos-ink);
+}
+
+body.cos-landing .feature-card p {
+  font-size: 14px;
+  color: var(--cos-ink-soft);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ── Onboarding theme preview hook ── */
+body.cos-onboarding[data-archetype] .ob-card.selected {
+  border-color: var(--cos-accent);
+  box-shadow: 0 0 0 3px var(--cos-accent-soft);
+}
+
+/* ── Records page (panels, grids, modals) ── */
+body.cos-app .panel { display: none; }
+body.cos-app .panel.active { display: block; }
+
+body.cos-app .home-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+body.cos-app .home-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+@media (max-width: 900px) {
+  body.cos-app .home-grid { grid-template-columns: 1fr; }
+  body.cos-app .home-cols { grid-template-columns: 1fr; }
+}
+
+body.cos-app .student-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+body.cos-app .student-card {
+  background: var(--cos-panel);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--cos-panel-border);
+  border-radius: var(--cos-radius);
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  box-shadow: var(--cos-panel-shadow);
+}
+
+body.cos-app .student-card:hover {
+  border-color: var(--cos-accent);
+  box-shadow: 0 6px 24px var(--cos-accent-glow);
+  transform: translateY(-2px);
+}
+
+body.cos-app .student-name {
+  font-family: var(--cos-font-serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--cos-ink);
+  margin-bottom: 4px;
+}
+
+body.cos-app .student-meta {
+  font-size: 12px;
+  color: var(--cos-ink-muted);
+  margin-bottom: 10px;
+}
+
+body.cos-app .student-flags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+body.cos-app .flag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: var(--cos-radius-pill);
+  background: var(--cos-accent-soft);
+  color: var(--cos-accent);
+}
+
+body.cos-app .flag.iep { background: rgba(192, 57, 43, 0.12); color: #c0392b; }
+body.cos-app .flag.ell { background: rgba(37, 99, 235, 0.12); color: #2563eb; }
+body.cos-app .flag.gifted { background: rgba(39, 174, 96, 0.12); color: #27ae60; }
+
+body.cos-app .form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+body.cos-app .field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 160px;
+}
+
+body.cos-app .pathway-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+body.cos-app .signal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+body.cos-app .signal-row span {
+  flex: 1;
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--cos-ink);
+}
+
+body.cos-app .skills-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+body.cos-app .skills-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--cos-accent-soft);
+  border-radius: var(--cos-radius-pill);
+  overflow: hidden;
+}
+
+body.cos-app .skills-bar-fill {
+  height: 100%;
+  border-radius: var(--cos-radius-pill);
+  transition: width 0.2s;
+  background: var(--cos-accent);
+}
+
+body.cos-app .skills-bar-fill.low { background: #c0392b; }
+body.cos-app .skills-bar-fill.mid { background: var(--cos-accent); }
+body.cos-app .skills-bar-fill.high { background: #27ae60; }
+
+body.cos-app .meeting-item {
+  display: flex;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--cos-panel-border);
+  align-items: flex-start;
+}
+
+body.cos-app .meeting-item:last-child { border-bottom: none; }
+
+body.cos-app .meeting-date {
+  font-size: 12px;
+  color: var(--cos-ink-muted);
+  min-width: 84px;
+  line-height: 1.4;
+}
+
+body.cos-app .meeting-title {
+  font-family: var(--cos-font-serif);
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: var(--cos-ink);
+}
+
+body.cos-app .meeting-meta {
+  font-size: 12px;
+  color: var(--cos-ink-soft);
+}
+
+body.cos-app .obs-item,
+body.cos-app .feed-item {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--cos-panel-border);
+}
+
+body.cos-app .obs-item:last-child,
+body.cos-app .feed-item:last-child { border-bottom: none; }
+
+body.cos-app .obs-head,
+body.cos-app .feed-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+body.cos-app .obs-head strong,
+body.cos-app .feed-head strong {
+  font-family: var(--cos-font-serif);
+  color: var(--cos-ink);
+}
+
+body.cos-app .obs-meta,
+body.cos-app .feed-meta {
+  font-size: 12px;
+  color: var(--cos-ink-muted);
+  white-space: nowrap;
+}
+
+body.cos-app .obs-pathways,
+body.cos-app .feed-sub {
+  font-size: 12px;
+  color: var(--cos-ink-soft);
+  margin-bottom: 6px;
+}
+
+body.cos-app .obs-signal {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--cos-ink);
+  margin-bottom: 4px;
+  line-height: 1.45;
+}
+
+body.cos-app .obs-notes {
+  font-size: 13px;
+  color: var(--cos-ink-soft);
+}
+
+body.cos-app .empty {
+  color: var(--cos-ink-muted);
+  font-style: italic;
+  font-size: 14px;
+  padding: 12px 0;
+}
+
+body.cos-app .section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  gap: 12px;
+}
+
+body.cos-app .section-head h2 {
+  font-family: var(--cos-font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--cos-ink);
+  margin: 0;
+}
+
+body.cos-app .badge {
+  display: inline-block;
+  background: var(--cos-accent-soft);
+  color: var(--cos-accent);
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: var(--cos-radius-pill);
+  font-weight: 600;
+}
+
+body.cos-app .hint-text {
+  font-size: 13px;
+  color: var(--cos-ink-soft);
+  font-style: italic;
+  line-height: 1.55;
+  margin: 0;
+}
+
+body.cos-app .modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+body.cos-app .modal-overlay.open { display: flex; }
+
+body.cos-app .modal {
+  background: var(--cos-panel-solid);
+  border: 1px solid var(--cos-panel-border);
+  border-radius: var(--cos-radius);
+  padding: 28px 32px;
+  width: 100%;
+  max-width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--cos-panel-shadow);
+}
+
+body.cos-app .modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+body.cos-app .modal-head h2 {
+  font-family: var(--cos-font-serif);
+  font-size: 18px;
+  margin: 0;
+  color: var(--cos-ink);
+}
+
+body.cos-app .modal-close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--cos-ink-muted);
+  line-height: 1;
+  padding: 4px;
+}
+
+body.cos-app .modal-close:hover { color: var(--cos-accent); }
+
+body.cos-app .skills-level-label {
+  font-size: 12px;
+  min-width: 72px;
+  color: var(--cos-ink-muted);
+}
+
+body.cos-app .cell-muted {
+  font-size: 12px;
+  color: var(--cos-ink-muted);
+}
+
+body.cos-app .cell-notes {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--cos-ink-soft);
+}
+
+body.cos-app *,
+body.cos-app *::before,
+body.cos-app *::after {
+  box-sizing: border-box;
+}

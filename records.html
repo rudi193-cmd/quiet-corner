@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en" data-archetype="wren">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Records · Quiet Corner</title>
+  <link rel="stylesheet" href="cos-archetype-themes.css?v=3" />
+  <link rel="stylesheet" href="cos-app-shell.css?v=3" />
+  <link rel="stylesheet" href="cos-records.css?v=3" />
+  <script src="cos-data.js"></script>
+  <script src="cos-theme.js?v=3"></script>
+</head>
+<body class="cos-app">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-head">
+    <div class="wordmark">Quiet Corner</div>
+    <div class="school" id="school-name">My School</div>
+  </div>
+  <nav>
+    <a class="nav-item nav-link" href="classroom-os.html">
+      <span class="icon">◈</span> Hub
+    </a>
+    <div class="nav-item active" data-panel="home">
+      <span class="icon">⌂</span> Overview
+    </div>
+    <div class="nav-item" data-panel="students">
+      <span class="icon">◎</span> Students
+    </div>
+    <div class="nav-item" data-panel="observe">
+      <span class="icon">✦</span> Observe
+    </div>
+    <div class="nav-item" data-panel="skills">
+      <span class="icon">▦</span> Skills &amp; Standards
+    </div>
+    <div class="nav-item" data-panel="calendar">
+      <span class="icon">◫</span> Meetings
+    </div>
+    <div class="nav-item" data-panel="reports">
+      <span class="icon">⬚</span> Reports
+    </div>
+    <div class="nav-item" data-panel="data">
+      <span class="icon">↓</span> Data
+    </div>
+  </nav>
+  <div class="sidebar-foot">
+    Local · No account · <a href="landing.html">About</a>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <h1 id="panel-title">Overview</h1>
+    <div class="topbar-actions">
+      <button class="btn" onclick="showPanel('observe')">+ Observation</button>
+      <button class="btn btn-primary" onclick="openModal('student-modal')">+ Student</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- HOME -->
+    <div class="panel active" id="panel-home">
+      <div class="home-grid" id="home-stats"></div>
+      <div class="home-cols">
+        <div>
+          <div class="card">
+            <div class="card-title">Recent Observations</div>
+            <div id="home-recent-obs"><p class="empty">No observations yet.</p></div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-title">Upcoming Meetings</div>
+            <div id="home-meetings"><p class="empty">No meetings scheduled.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STUDENTS -->
+    <div class="panel" id="panel-students">
+      <div class="section-head">
+        <h2>Students</h2>
+        <button class="btn btn-primary" onclick="openModal('student-modal')">+ Add Student</button>
+      </div>
+      <div class="student-grid" id="student-grid"><p class="empty">No students added yet.</p></div>
+    </div>
+
+    <!-- OBSERVE -->
+    <div class="panel" id="panel-observe">
+      <div class="card">
+        <div class="card-title">New Observation</div>
+        <div class="form-row">
+          <div class="field">
+            <label>Student</label>
+            <select id="obs-student"><option value="">— select —</option></select>
+          </div>
+          <div class="field">
+            <label>Standard / Subject</label>
+            <input type="text" id="obs-standard" placeholder="e.g. NM Science 3-LS1-1" autocomplete="off">
+          </div>
+          <div class="field" style="max-width:150px;">
+            <label>Date</label>
+            <input type="date" id="obs-date">
+          </div>
+        </div>
+
+        <div class="field-label" style="margin-bottom:0.4rem;">Expressive Pathway — how understanding appeared</div>
+        <div class="pathway-buttons" id="obs-pathways">
+          <button class="pathway-btn" data-v="Verbal explanation">Verbal explanation</button>
+          <button class="pathway-btn" data-v="Embodied demonstration">Embodied demonstration</button>
+          <button class="pathway-btn" data-v="Narrative framing">Narrative framing</button>
+          <button class="pathway-btn" data-v="Drawing / diagram">Drawing / diagram</button>
+          <button class="pathway-btn" data-v="Peer teaching">Peer teaching</button>
+          <button class="pathway-btn" data-v="Written">Written</button>
+          <button class="pathway-btn" data-v="Reflective articulation">Reflective articulation</button>
+          <button class="pathway-btn" data-v="Other">Other</button>
+        </div>
+
+        <div class="field-label" style="margin-bottom:0.4rem;">Classroom Signal</div>
+        <div class="signal-list" id="obs-signals">
+          <label class="signal-row"><input type="checkbox" data-v="The student accurately represented the core concept through non-written expression."><span>The student accurately represented the core concept through non-written expression.</span></label>
+          <label class="signal-row"><input type="checkbox" data-v="The student demonstrated conceptual transfer by connecting ideas across contexts."><span>The student demonstrated conceptual transfer by connecting ideas across contexts.</span></label>
+          <label class="signal-row"><input type="checkbox" data-v="The student articulated understanding after reflection, indicating durable sense-making."><span>The student articulated understanding after reflection, indicating durable sense-making.</span></label>
+          <label class="signal-row"><input type="checkbox" data-v="The student identified an error in their own reasoning and self-corrected."><span>The student identified an error in their own reasoning and self-corrected.</span></label>
+          <label class="signal-row"><input type="checkbox" data-v="The student explained their process to a peer with sufficient accuracy for the peer to apply it."><span>The student explained their process to a peer with sufficient accuracy for the peer to apply it.</span></label>
+          <label class="signal-row"><input type="checkbox" data-v="The student's response showed understanding not captured in prior written assessment."><span>The student's response showed understanding not captured in prior written assessment.</span></label>
+        </div>
+
+        <div class="field" style="margin-bottom:1rem;">
+          <label>Notes</label>
+          <textarea id="obs-notes" placeholder="What did you observe?"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="saveObs()">Save Observation</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">All Observations</div>
+        <div id="obs-list"><p class="empty">No observations yet.</p></div>
+      </div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="panel" id="panel-skills">
+      <div class="section-head">
+        <h2>Skills &amp; Standards</h2>
+        <button class="btn btn-primary" onclick="openModal('skill-modal')">+ Log Score</button>
+      </div>
+      <div class="card">
+        <table class="data-table" id="skills-table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Standard</th>
+              <th>Proficiency</th>
+              <th>Date</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="skills-tbody">
+            <tr><td colspan="5" class="empty">No skill records yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MEETINGS -->
+    <div class="panel" id="panel-calendar">
+      <div class="section-head">
+        <h2>Meetings</h2>
+        <button class="btn btn-primary" onclick="openModal('meeting-modal')">+ Add Meeting</button>
+      </div>
+      <div class="card">
+        <div id="meeting-list"><p class="empty">No meetings scheduled.</p></div>
+      </div>
+    </div>
+
+    <!-- REPORTS -->
+    <div class="panel" id="panel-reports">
+      <div class="card">
+        <div class="card-title">Administrator Language — generate from observations</div>
+        <div class="form-row">
+          <div class="field">
+            <label>Student</label>
+            <select id="rpt-student"><option value="">— all students —</option></select>
+          </div>
+          <div class="field" style="max-width:200px;">
+            <label>Report type</label>
+            <select id="rpt-type">
+              <option value="equity">Equity / assessment visibility</option>
+              <option value="parent">Parent conference summary</option>
+              <option value="iep">IEP meeting support</option>
+              <option value="admin">Administrator briefing</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary" style="margin-bottom:1rem;" onclick="generateReport()">Generate</button>
+        <div class="report-output" id="report-output">Select a student and report type, then click Generate.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Posole Criterion check</div>
+        <p class="hint-text">Would this work for a teacher with 30 students and no prep time? — review your observation records against this standard before sharing with administration.</p>
+      </div>
+    </div>
+
+    <!-- DATA -->
+    <div class="panel" id="panel-data">
+      <div class="card">
+        <div class="card-title">Backup your classroom records</div>
+        <p class="hint-text" style="margin-bottom:1rem;">
+          Everything lives in this browser until you download a backup. Save the file somewhere safe (USB, drive, email). Use the same <code>./serve.sh</code> URL when you restore.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1rem;">
+          <button class="btn btn-primary" type="button" onclick="runExportBackup()">Download backup</button>
+          <label class="btn" style="cursor:pointer;margin:0;">
+            Import backup
+            <input type="file" id="backup-file" accept=".json,application/json" hidden onchange="runImportBackup(this)">
+          </label>
+        </div>
+        <p class="hint-text" id="backup-status">No backup action yet.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">What’s in a backup</div>
+        <p class="hint-text">Students, observations, meetings, skills, schedule, settings, and optional room background photos. Not sent to any server.</p>
+        <p class="hint-text" style="margin-top:0.5rem;"><a href="docs/TEACHER_GUIDE.md">Teacher guide</a> · <a href="README.md">README</a></p>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- MODAL: Add Student -->
+<div class="modal-overlay" id="student-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Add Student</h2>
+      <button class="modal-close" onclick="closeModal('student-modal')">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Name</label><input type="text" id="s-name" autocomplete="off"></div>
+      <div class="field" style="max-width:120px;"><label>Grade</label>
+        <select id="s-grade">
+          <option>K</option><option>1</option><option>2</option><option>3</option>
+          <option>4</option><option>5</option><option>6</option><option>7</option>
+          <option>8</option><option>9</option><option>10</option><option>11</option><option>12</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Pronouns (optional)</label><input type="text" id="s-pronouns" placeholder="e.g. she/her" autocomplete="off"></div>
+      <div class="field"><label>Guardian contact</label><input type="text" id="s-contact" placeholder="email or phone" autocomplete="off"></div>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Flags</label>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;padding-top:0.3rem;">
+          <label style="display:flex;align-items:center;gap:0.3rem;font-size:0.82rem;"><input type="checkbox" id="s-iep"> IEP</label>
+          <label style="display:flex;align-items:center;gap:0.3rem;font-size:0.82rem;"><input type="checkbox" id="s-504"> 504</label>
+          <label style="display:flex;align-items:center;gap:0.3rem;font-size:0.82rem;"><input type="checkbox" id="s-ell"> ELL</label>
+          <label style="display:flex;align-items:center;gap:0.3rem;font-size:0.82rem;"><input type="checkbox" id="s-gifted"> Gifted</label>
+          <label style="display:flex;align-items:center;gap:0.3rem;font-size:0.82rem;"><input type="checkbox" id="s-na"> Native American Studies</label>
+        </div>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:1rem;">
+      <label>Notes</label>
+      <textarea id="s-notes" placeholder="Learning profile, context, anything relevant..."></textarea>
+    </div>
+    <button class="btn btn-primary" onclick="saveStudent()">Save Student</button>
+  </div>
+</div>
+
+<!-- MODAL: Log Skill -->
+<div class="modal-overlay" id="skill-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Log Skill / Standard</h2>
+      <button class="modal-close" onclick="closeModal('skill-modal')">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Student</label><select id="sk-student"><option value="">— select —</option></select></div>
+      <div class="field"><label>Standard</label><input type="text" id="sk-standard" placeholder="e.g. NM CCSS ELA RI.3.1" autocomplete="off"></div>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Proficiency</label>
+        <select id="sk-level">
+          <option value="4">4 — Exceeds</option>
+          <option value="3" selected>3 — Meets</option>
+          <option value="2">2 — Approaching</option>
+          <option value="1">1 — Beginning</option>
+        </select>
+      </div>
+      <div class="field" style="max-width:150px;"><label>Date</label><input type="date" id="sk-date"></div>
+    </div>
+    <div class="field" style="margin-bottom:1rem;"><label>Notes</label><textarea id="sk-notes"></textarea></div>
+    <button class="btn btn-primary" onclick="saveSkill()">Save</button>
+  </div>
+</div>
+
+<!-- MODAL: Add Meeting -->
+<div class="modal-overlay" id="meeting-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Add Meeting</h2>
+      <button class="modal-close" onclick="closeModal('meeting-modal')">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Type</label>
+        <select id="mt-type">
+          <option>Parent conference</option>
+          <option>IEP review</option>
+          <option>Team meeting</option>
+          <option>Admin meeting</option>
+          <option>Student check-in</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field" style="max-width:160px;"><label>Date &amp; Time</label><input type="datetime-local" id="mt-dt"></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Student (if applicable)</label><select id="mt-student"><option value="">— none / group —</option></select></div>
+      <div class="field"><label>Attendees</label><input type="text" id="mt-attendees" placeholder="Names or roles" autocomplete="off"></div>
+    </div>
+    <div class="field" style="margin-bottom:1rem;"><label>Notes / Agenda</label><textarea id="mt-notes"></textarea></div>
+    <button class="btn btn-primary" onclick="saveMeeting()">Save Meeting</button>
+  </div>
+</div>
+
+<script>
+let students = [];
+let obs = [];
+let skills = [];
+let meetings = [];
+let appConfig = null;
+
+async function reloadData() {
+  [students, obs, skills, meetings, appConfig] = await Promise.all([
+    cosData.getStudents(),
+    cosData.getObservations(),
+    cosData.getSkills(),
+    cosData.getMeetings(),
+    cosData.getConfig(),
+  ]);
+}
+
+// ── NAVIGATION ──
+const PANEL_TITLES = {home:'Overview',students:'Students',observe:'Observe',skills:'Skills & Standards',calendar:'Meetings',reports:'Reports',data:'Data'};
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item[data-panel]').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  document.querySelector(`[data-panel="${id}"]`).classList.add('active');
+  document.getElementById('panel-title').textContent = PANEL_TITLES[id];
+  if (id === 'home')     renderHome();
+  if (id === 'students') renderStudents();
+  if (id === 'observe')  renderObs();
+  if (id === 'skills')   renderSkills();
+  if (id === 'calendar') renderMeetings();
+  if (id === 'reports')  populateReportSelects();
+}
+document.querySelectorAll('.nav-item[data-panel]').forEach(n => n.addEventListener('click', () => showPanel(n.dataset.panel)));
+
+// ── MODAL ──
+function openModal(id) { document.getElementById(id).classList.add('open'); populateSelects(); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
+
+function populateSelects() {
+  const opts = ['<option value="">— select —</option>', ...students.map(s => `<option value="${s.id}">${esc(s.name)}</option>`)].join('');
+  ['obs-student','sk-student','mt-student','rpt-student'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { const v = el.value; el.innerHTML = opts; el.value = v; }
+  });
+  const mt = document.getElementById('mt-student');
+  if (mt) mt.innerHTML = '<option value="">— none / group —</option>' + students.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
+  const rpt = document.getElementById('rpt-student');
+  if (rpt) rpt.innerHTML = '<option value="">— all students —</option>' + students.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
+}
+
+// ── PATHWAY BUTTONS ──
+document.querySelectorAll('.pathway-btn').forEach(b => b.addEventListener('click', () => b.classList.toggle('on')));
+
+// ── SIGNAL CHECKBOXES ──
+document.querySelectorAll('.signal-row input').forEach(cb => {
+  cb.addEventListener('change', () => cb.closest('.signal-row').classList.toggle('on', cb.checked));
+});
+
+// ── STUDENTS ──
+async function saveStudent() {
+  const name = document.getElementById('s-name').value.trim();
+  if (!name) return document.getElementById('s-name').focus();
+  await cosData.postStudent({
+    name,
+    grade: document.getElementById('s-grade').value,
+    pronouns: document.getElementById('s-pronouns').value.trim(),
+    contact: document.getElementById('s-contact').value.trim(),
+    flags: {
+      iep: document.getElementById('s-iep').checked,
+      s504: document.getElementById('s-504').checked,
+      ell: document.getElementById('s-ell').checked,
+      gifted: document.getElementById('s-gifted').checked,
+      na: document.getElementById('s-na').checked,
+    },
+    notes: document.getElementById('s-notes').value.trim(),
+  });
+  await reloadData();
+  closeModal('student-modal');
+  ['s-name','s-pronouns','s-contact','s-notes'].forEach(id => document.getElementById(id).value = '');
+  ['s-iep','s-504','s-ell','s-gifted','s-na'].forEach(id => document.getElementById(id).checked = false);
+  renderStudents();
+  renderHome();
+}
+function renderStudents() {
+  const g = document.getElementById('student-grid');
+  if (!students.length) { g.innerHTML = '<p class="empty">No students added yet.</p>'; return; }
+  g.innerHTML = students.map(s => {
+    const f = s.flags || {};
+    const flags = [
+      f.iep ? '<span class="flag iep">IEP</span>' : '',
+      f.s504 ? '<span class="flag iep">504</span>' : '',
+      f.ell ? '<span class="flag ell">ELL</span>' : '',
+      f.gifted ? '<span class="flag gifted">Gifted</span>' : '',
+      f.na ? '<span class="flag">NAS</span>' : '',
+    ].filter(Boolean).join('');
+    const obsCount = obs.filter(o => o.studentId === s.id).length;
+    return `<div class="student-card">
+      <div class="student-name">${esc(s.name)}</div>
+      <div class="student-meta">Grade ${esc(s.grade)}${s.pronouns ? ' · ' + esc(s.pronouns) : ''} · ${obsCount} observation${obsCount !== 1 ? 's' : ''}</div>
+      ${flags ? '<div class="student-flags">' + flags + '</div>' : ''}
+    </div>`;
+  }).join('');
+}
+
+// ── OBSERVATIONS ──
+async function saveObs() {
+  const studentId = parseInt(document.getElementById('obs-student').value);
+  if (!studentId) return document.getElementById('obs-student').focus();
+  const pathways = [...document.querySelectorAll('.pathway-btn.on')].map(b => b.dataset.v);
+  const signals  = [...document.querySelectorAll('.signal-row input:checked')].map(cb => cb.dataset.v);
+  const date = document.getElementById('obs-date').value;
+  await cosData.postObservation({
+    studentId,
+    standard: document.getElementById('obs-standard').value.trim(),
+    date,
+    observed_at: date,
+    pathways, signals,
+    notes: document.getElementById('obs-notes').value.trim(),
+  });
+  await reloadData();
+  document.getElementById('obs-student').value = '';
+  document.getElementById('obs-standard').value = '';
+  document.getElementById('obs-notes').value = '';
+  document.querySelectorAll('.pathway-btn.on').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('.signal-row input:checked').forEach(cb => { cb.checked = false; cb.closest('.signal-row').classList.remove('on'); });
+  document.getElementById('obs-date').valueAsDate = new Date();
+  renderObs();
+  renderHome();
+}
+function renderObs() {
+  const el = document.getElementById('obs-list');
+  if (!obs.length) { el.innerHTML = '<p class="empty">No observations yet.</p>'; return; }
+  el.innerHTML = obs.map(o => {
+    const s = students.find(st => st.id === o.studentId);
+    const date = o.date || (o.observed_at || '').slice(0, 10);
+    return `<div class="obs-item">
+      <div class="obs-head">
+        <strong>${s ? esc(s.name) : 'Unknown'}</strong>
+        <span class="obs-meta">${esc(date)}${o.standard ? ' · ' + esc(o.standard) : ''}</span>
+      </div>
+      ${o.pathways?.length ? `<div class="obs-pathways">${o.pathways.map(esc).join(', ')}</div>` : ''}
+      ${(o.signals || []).map(sg => `<div class="obs-signal">${esc(sg)}</div>`).join('')}
+      ${o.notes ? `<div class="obs-notes">${esc(o.notes)}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ── SKILLS ──
+async function saveSkill() {
+  const studentId = parseInt(document.getElementById('sk-student').value);
+  if (!studentId) return document.getElementById('sk-student').focus();
+  const standard = document.getElementById('sk-standard').value.trim();
+  if (!standard) return document.getElementById('sk-standard').focus();
+  await cosData.postSkill({
+    studentId, standard,
+    level: parseInt(document.getElementById('sk-level').value),
+    date: document.getElementById('sk-date').value,
+    notes: document.getElementById('sk-notes').value.trim(),
+  });
+  await reloadData();
+  closeModal('skill-modal');
+  renderSkills();
+}
+const LEVEL_LABEL = {4:'Exceeds',3:'Meets',2:'Approaching',1:'Beginning'};
+function renderSkills() {
+  const tb = document.getElementById('skills-tbody');
+  if (!skills.length) { tb.innerHTML = '<tr><td colspan="5" class="empty">No skill records yet.</td></tr>'; return; }
+  tb.innerHTML = skills.map(sk => {
+    const s = students.find(st => st.id === sk.studentId);
+    const pct = (sk.level / 4) * 100;
+    const cls = sk.level >= 3 ? 'high' : sk.level === 2 ? 'mid' : 'low';
+    return `<tr>
+      <td>${s ? esc(s.name) : '—'}</td>
+      <td>${esc(sk.standard)}</td>
+      <td>
+        <div class="skills-bar-wrap">
+          <div class="skills-bar"><div class="skills-bar-fill ${cls}" style="width:${pct}%"></div></div>
+          <span class="skills-level-label">${sk.level} — ${LEVEL_LABEL[sk.level]}</span>
+        </div>
+      </td>
+      <td class="cell-muted">${esc(sk.date)}</td>
+      <td class="cell-notes">${esc(sk.notes || '')}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── MEETINGS ──
+async function saveMeeting() {
+  const dt = document.getElementById('mt-dt').value;
+  if (!dt) return document.getElementById('mt-dt').focus();
+  await cosData.postMeeting({
+    type: document.getElementById('mt-type').value,
+    dt,
+    studentId: parseInt(document.getElementById('mt-student').value) || null,
+    attendees: document.getElementById('mt-attendees').value.trim(),
+    notes: document.getElementById('mt-notes').value.trim(),
+  });
+  await reloadData();
+  closeModal('meeting-modal');
+  renderMeetings();
+  renderHome();
+}
+function renderMeetings() {
+  const el = document.getElementById('meeting-list');
+  const sorted = [...meetings].sort((a,b) => a.dt > b.dt ? 1 : -1);
+  if (!sorted.length) { el.innerHTML = '<p class="empty">No meetings scheduled.</p>'; return; }
+  el.innerHTML = sorted.map(m => {
+    const s = m.studentId ? students.find(st => st.id === m.studentId) : null;
+    const d = new Date(m.dt);
+    const dateStr = d.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+    const timeStr = d.toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit'});
+    return `<div class="meeting-item">
+      <div class="meeting-date">${dateStr}<br>${timeStr}</div>
+      <div class="meeting-body">
+        <div class="meeting-title">${esc(m.type)}${s ? ' — ' + esc(s.name) : ''}</div>
+        ${m.attendees ? `<div class="meeting-meta">${esc(m.attendees)}</div>` : ''}
+        ${m.notes ? `<div class="meeting-meta">${esc(m.notes)}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── HOME ──
+function renderHome() {
+  const today = new Date().toISOString().slice(0,10);
+  if (appConfig?.teacher_name && appConfig.teacher_name !== 'Your Name') {
+    document.getElementById('school-name').textContent = appConfig.teacher_name;
+  }
+  document.getElementById('home-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${students.length}</div><div class="stat-label">Students</div></div>
+    <div class="stat-card"><div class="stat-num">${obs.length}</div><div class="stat-label">Observations</div></div>
+    <div class="stat-card"><div class="stat-num">${meetings.filter(m => m.dt >= today).length}</div><div class="stat-label">Upcoming meetings</div></div>
+  `;
+
+  const recentObs = obs.slice(0, 5);
+  const roEl = document.getElementById('home-recent-obs');
+  if (!recentObs.length) { roEl.innerHTML = '<p class="empty">No observations yet.</p>'; }
+  else roEl.innerHTML = recentObs.map(o => {
+    const s = students.find(st => st.id === o.studentId);
+    const date = o.date || (o.observed_at || '').slice(0, 10);
+    return `<div class="feed-item">
+      <div class="feed-head"><strong>${s ? esc(s.name) : '—'}</strong> <span class="feed-meta">${esc(date)}</span></div>
+      ${o.pathways?.length ? '<div class="feed-sub">' + o.pathways.slice(0,2).map(esc).join(', ') + '</div>' : ''}
+    </div>`;
+  }).join('');
+
+  const upcoming = [...meetings].filter(m => m.dt >= today).sort((a,b) => a.dt > b.dt ? 1 : -1).slice(0,4);
+  const mtEl = document.getElementById('home-meetings');
+  if (!upcoming.length) { mtEl.innerHTML = '<p class="empty">No upcoming meetings.</p>'; }
+  else mtEl.innerHTML = upcoming.map(m => {
+    const s = m.studentId ? students.find(st => st.id === m.studentId) : null;
+    const d = new Date(m.dt);
+    return `<div class="feed-item">
+      <div class="feed-head"><strong>${esc(m.type)}</strong>${s ? ' — ' + esc(s.name) : ''}</div>
+      <span class="feed-meta">${d.toLocaleDateString('en-US',{month:'short',day:'numeric'})} at ${d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── REPORTS ──
+function populateReportSelects() { populateSelects(); }
+function generateReport() {
+  const sid = parseInt(document.getElementById('rpt-student').value);
+  const type = document.getElementById('rpt-type').value;
+  const student = sid ? students.find(s => s.id === sid) : null;
+  const studentObs = sid ? obs.filter(o => o.studentId === sid) : obs;
+  const studentSkills = sid ? skills.filter(s => s.studentId === sid) : skills;
+
+  if (!studentObs.length && !studentSkills.length) {
+    document.getElementById('report-output').textContent = 'No observations or skill records found for this student.';
+    return;
+  }
+
+  const name = student ? student.name : 'students in this class';
+  const pathwaysSeen = [...new Set(studentObs.flatMap(o => o.pathways || []))];
+  const signalsSeen  = [...new Set(studentObs.flatMap(o => o.signals || []))];
+  const standards    = [...new Set(studentObs.map(o => o.standard).filter(Boolean))];
+
+  let text = '';
+  if (type === 'equity') {
+    text = `Assessment Visibility Summary — ${name}\n\n`;
+    text += `This record documents ${studentObs.length} classroom observation${studentObs.length !== 1 ? 's' : ''} in which understanding was demonstrated through non-written expressive pathways. `;
+    if (pathwaysSeen.length) text += `Observed pathways include: ${pathwaysSeen.join('; ')}. `;
+    text += `\n\nIn accordance with the assessment visibility framework and New Mexico's obligations under Yazzie/Martinez, the following professional indicators were documented:\n\n`;
+    signalsSeen.slice(0,4).forEach(sg => text += `• ${sg}\n`);
+    if (standards.length) text += `\nStandards addressed: ${standards.join(', ')}.`;
+    text += `\n\nThese records demonstrate that the student's capacity exceeds what is captured by conventional assessment formats. Under-performance on standardized measures does not indicate under-capability; it indicates an assessment visibility gap that this documentation is designed to address.`;
+  } else if (type === 'parent') {
+    text = `Parent Conference Summary — ${name}\n\n`;
+    text += `During the observed period, ${name} demonstrated understanding through a range of expressive pathways, including ${pathwaysSeen.join(', ') || 'multiple formats'}. `;
+    text += `\n\nKey observations:\n`;
+    signalsSeen.slice(0,3).forEach(sg => text += `• ${sg}\n`);
+    if (studentSkills.length) {
+      text += `\nSkills and standards tracked:\n`;
+      studentSkills.slice(0,5).forEach(sk => text += `• ${sk.standard}: ${LEVEL_LABEL[sk.level]}\n`);
+    }
+  } else if (type === 'iep') {
+    text = `IEP Meeting Support — ${name}\n\n`;
+    text += `Observation records indicate that ${name} demonstrates grade-level conceptual understanding through non-written expressive pathways. `;
+    text += `These observations are documented against NM academic standards and are suitable for inclusion in IEP progress reports.\n\n`;
+    signalsSeen.forEach(sg => text += `• ${sg}\n`);
+    if (standards.length) text += `\nStandards evidenced: ${standards.join(', ')}.`;
+  } else {
+    text = `Administrator Briefing — ${name}\n\n`;
+    text += `This briefing documents classroom-level assessment evidence that extends beyond standardized test data. `;
+    text += `${studentObs.length} observation${studentObs.length !== 1 ? 's' : ''} recorded across ${standards.length || 'multiple'} standards area${standards.length !== 1 ? 's' : ''}.\n\n`;
+    text += `Expressive pathways documented: ${pathwaysSeen.join(', ') || 'see full record'}.\n\n`;
+    text += `This data is consistent with ESSA's multiple-measures provisions and New Mexico's Yazzie/Martinez equity obligations. Teacher professional judgment, documented using standardized classroom signals language, is the evidentiary basis for this record.`;
+  }
+  document.getElementById('report-output').textContent = text;
+}
+
+// ── BACKUP ──
+function runExportBackup() {
+  const payload = cosData.downloadBackup();
+  const n = (payload.data.students || []).length;
+  const o = (payload.data.observations || []).length;
+  document.getElementById('backup-status').textContent =
+    `Downloaded quiet-corner-backup — ${n} student${n !== 1 ? 's' : ''}, ${o} observation${o !== 1 ? 's' : ''}.`;
+}
+
+async function runImportBackup(input) {
+  const file = input.files?.[0];
+  input.value = '';
+  if (!file) return;
+  const merge = !confirm(
+    'Import backup?\n\nOK = merge (keep existing data, only fill empty slots)\nCancel = replace keys from file'
+  );
+  const replace = !merge;
+  try {
+    const result = await cosData.importBackup(file, { merge: !replace });
+    document.getElementById('backup-status').textContent =
+      `Imported ${result.keys.length} data key(s) (${replace ? 'replaced' : 'merged'}). Reloading…`;
+    await reloadData();
+    renderHome();
+    renderStudents();
+    renderObs();
+    populateSelects();
+  } catch (e) {
+    document.getElementById('backup-status').textContent = 'Import failed: ' + (e.message || e);
+  }
+}
+
+// ── UTILS ──
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── INIT ──
+(async () => {
+  await cosTheme.bootApp();
+  document.getElementById('obs-date').valueAsDate = new Date();
+  document.getElementById('sk-date').valueAsDate = new Date();
+  await reloadData();
+  populateSelects();
+  renderHome();
+  renderStudents();
+  renderObs();
+  renderSkills();
+  renderMeetings();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Teachers Tool · Design exploration</title>
+<link rel="stylesheet" href="safe/ui-kit.css" />
+<style>
+  /* Artboard-local resets that should NOT leak into design-canvas chrome. */
+  .ab { font-family: var(--font-sans); color: var(--fg); background: var(--bg);
+        line-height: var(--lh-body); -webkit-font-smoothing: antialiased; }
+  .ab * { box-sizing: border-box; }
+  .ab.term { background: var(--term-bg); color: var(--term-fg);
+             font-family: var(--font-mono); }
+  .ab a { color: inherit; text-decoration: none; }
+  .ab ul, .ab ol { list-style: none; padding: 0; margin: 0; }
+  /* Wider columns are allowed for data-dense desktop surfaces — SAFE guide says so. */
+</style>
+<subtitle>Six artboards exploring the classroom OS across Paper and Terminal surfaces.</subtitle>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="artboards/session-auth.jsx"></script>
+<script type="text/babel" src="artboards/workspace-grid.jsx"></script>
+<script type="text/babel" src="artboards/workspace-editorial.jsx"></script>
+<script type="text/babel" src="artboards/lesson-composer.jsx"></script>
+<script type="text/babel" src="artboards/multi-agent.jsx"></script>
+<script type="text/babel" src="artboards/live-mode.jsx"></script>
+<script type="text/babel" src="artboards/knowledge-graph.jsx"></script>
+
+<script type="text/babel">
+// Guard: if a component hasn't loaded yet (rare Babel timing race),
+// substitute a transparent placeholder so the rest of the canvas still renders.
+function safe(name) {
+  return window[name] || (() => React.createElement('div', { style: { padding: '2rem', color: '#999', fontFamily: 'monospace', fontSize: 12 } }, `// ${name} not yet loaded — refresh`));
+}
+const SessionAuthArtboard      = safe('SessionAuthArtboard');
+const WorkspaceGridArtboard    = safe('WorkspaceGridArtboard');
+const WorkspaceEditorialArtboard = safe('WorkspaceEditorialArtboard');
+const LessonComposerArtboard   = safe('LessonComposerArtboard');
+const MultiAgentArtboard       = safe('MultiAgentArtboard');
+const LiveModeArtboard         = safe('LiveModeArtboard');
+const KnowledgeGraphArtboard   = safe('KnowledgeGraphArtboard');
+
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection
+        id="session-start"
+        title="Session start"
+        subtitle="The SAFE moment, adapted: per-period consent for student data tiers. Permissions expire when the period ends.">
+        <DCArtboard id="auth" label="Period authorization" width={1280} height={1240}>
+          <SessionAuthArtboard />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection
+        id="workspace"
+        title="Today's workspace"
+        subtitle="The central hub. Two layouts of the same Tuesday morning.">
+        <DCArtboard id="ws-grid" label="A · Structured grid" width={1440} height={1100}>
+          <WorkspaceGridArtboard />
+        </DCArtboard>
+        <DCArtboard id="ws-edit" label="B · Editorial column" width={1440} height={1100}>
+          <WorkspaceEditorialArtboard />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection
+        id="ai"
+        title="AI lesson engine"
+        subtitle="Paper composer; terminal sidecar reports the agent stream and what the model is grounded in.">
+        <DCArtboard id="composer" label="Lesson composer" width={1600} height={1050}>
+          <LessonComposerArtboard />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection
+        id="agents"
+        title="Multi-agent workflows"
+        subtitle="One teacher request, ten agents. The work-tape is intentionally Terminal — it should feel like watching a build run.">
+        <DCArtboard id="multi" label="Civil Rights unit · build run" width={1600} height={1050}>
+          <MultiAgentArtboard />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection
+        id="live"
+        title="Live classroom mode"
+        subtitle="What the projector shows the class. Big Courier; nothing to read except what matters now.">
+        <DCArtboard id="projector" label="Projector view · States of matter" width={1920} height={1080}>
+          <LiveModeArtboard />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection
+        id="kg"
+        title="Student knowledge graph"
+        subtitle="Natural-language query, grounded in this teacher's own classroom data.">
+        <DCArtboard id="kg-query" label="Who needs lower-stim today?" width={1440} height={1050}>
+          <KnowledgeGraphArtboard />
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

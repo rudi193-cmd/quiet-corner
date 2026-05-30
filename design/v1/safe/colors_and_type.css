@@ -1,0 +1,177 @@
+/* ============================================================
+   SAFE Design System — Colors & Type
+   Two surfaces:
+   1. "Paper" — marketing/app (index, dashboard, shiva)
+      warm cream + forest green, editorial system-font feel
+   2. "Terminal" — OS chrome (login, status bars, OS)
+      black + orange, Courier monospace
+   ============================================================ */
+
+:root {
+  /* ── Paper surface (default) ───────────────────────────── */
+  --bg:              #f9f9f7;        /* warm off-white cream */
+  --fg:              #1c1c1a;        /* near-black */
+  --fg-muted:        #6b6b64;        /* warm grey */
+  --fg-muted-soft:   #555550;        /* slightly darker muted for hero */
+  --accent:          #2d6a4f;        /* forest green — the primary */
+  --accent-hover:    #1e4d38;        /* darker forest */
+  --accent-light:    #e8f4ee;        /* pale mint tint */
+  --border:          #e2e2de;        /* warm hairline */
+  --surface-white:   #ffffff;        /* input backgrounds */
+  --surface-sunken:  #f3f3f1;        /* disabled inputs */
+
+  /* ── Semantic status ──────────────────────────────────── */
+  --ok:              #22c55e;
+  --ok-soft-bg:      #e8f4ee;
+  --ok-soft-fg:      #2d6a4f;
+  --warn:            #a0720a;
+  --warn-soft-bg:    #fef9e7;
+  --warn-soft-fg:    #854d0e;
+  --warn-soft-bg-2:  #fef9c3;
+  --info-soft-bg:    #e0f2fe;
+  --info-soft-fg:    #0369a1;
+  --err:             #c0392b;
+  --err-alt:         #ef4444;
+  --err-soft-bg:     #fdf2f1;
+  --err-soft-border: #e8c4c0;
+  --neutral-soft-bg: #f0f0f0;
+  --neutral-soft-fg: #555555;
+
+  /* ── Terminal surface ─────────────────────────────────── */
+  --term-bg:         #0d0d0d;
+  --term-panel:      #111111;
+  --term-input:      #1a1a1a;
+  --term-border:     #2a2a2a;
+  --term-fg:         #f5f5f0;
+  --term-fg-muted:   #888888;
+  --term-accent:     #f97316;        /* orange */
+  --term-accent-dim: #c2590f;
+  --term-ok:         #22c55e;
+  --term-err:        #ef4444;
+
+  /* ── Layout ──────────────────────────────────────────── */
+  --max-width:       680px;          /* signature narrow editorial column */
+  --radius-sm:       3px;
+  --radius:          4px;
+  --radius-md:       6px;
+
+  /* ── Spacing scale (rem-based, editorial rhythm) ─────── */
+  --sp-1:  0.25rem;
+  --sp-2:  0.5rem;
+  --sp-3:  0.75rem;
+  --sp-4:  1rem;
+  --sp-5:  1.25rem;
+  --sp-6:  1.5rem;
+  --sp-8:  2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+  --sp-20: 5rem;
+
+  /* ── Type families ───────────────────────────────────── */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'Courier New', Courier, monospace;
+
+  /* ── Type scale ──────────────────────────────────────── */
+  --fs-micro:   10px;   /* smallest — badge/caps */
+  --fs-caps:    11px;   /* eyebrow/section label */
+  --fs-meta:    12px;   /* card label, field hint */
+  --fs-ui:      13px;   /* nav, footer, small UI */
+  --fs-ui-md:   14px;   /* body-small, form labels */
+  --fs-input:   15px;   /* form inputs, button text */
+  --fs-body:    16px;   /* base body text */
+  --fs-body-lg: 17px;   /* hero body / index.html base */
+  --fs-lead:    19px;   /* hero sub */
+  --fs-h2:      1.6rem;
+  --fs-account: 2rem;
+  --fs-price:   2.5rem;
+  --fs-hero:    clamp(2rem, 5vw, 3rem);
+
+  /* ── Line heights ────────────────────────────────────── */
+  --lh-tight:   1.2;
+  --lh-snug:    1.4;
+  --lh-body:    1.6;
+  --lh-relaxed: 1.65;
+  --lh-loose:   1.75;
+
+  /* ── Tracking (letter-spacing) ───────────────────────── */
+  --tr-display:  -0.02em;   /* hero headlines */
+  --tr-h2:       -0.01em;   /* section h2 */
+  --tr-base:      0;
+  --tr-wordmark:  0.04em;
+  --tr-label-sm:  0.06em;
+  --tr-label:     0.1em;
+  --tr-nav:       0.12em;   /* uppercase nav wordmark */
+  --tr-caps:      0.14em;   /* section eyebrow */
+  --tr-loud:      0.16em;   /* biggest caps */
+
+  /* ── Weights ─────────────────────────────────────────── */
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semi:     600;
+  --fw-bold:     700;
+
+  /* ── Transitions ─────────────────────────────────────── */
+  --dur-fast:   0.15s;
+  --dur:        0.2s;
+  --dur-slow:   0.3s;
+}
+
+/* ============================================================
+   Semantic element defaults — opt in via `.safe-prose`
+   ============================================================ */
+.safe-prose {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-loose);
+  color: var(--fg);
+  background: var(--bg);
+}
+
+.safe-prose h1 {
+  font-size: var(--fs-hero);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tr-display);
+}
+
+.safe-prose h2 {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tr-h2);
+  margin-bottom: var(--sp-4);
+}
+
+.safe-prose p {
+  margin-bottom: var(--sp-4);
+  color: var(--fg-muted);
+}
+
+.safe-prose strong { color: var(--fg); font-weight: var(--fw-semi); }
+
+.safe-prose .eyebrow {
+  font-size: var(--fs-caps);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tr-loud);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.safe-prose .wordmark {
+  font-size: var(--fs-ui-md);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tr-nav);
+  text-transform: uppercase;
+}
+
+.safe-prose code,
+.safe-prose .mono { font-family: var(--font-mono); }
+
+/* ── Terminal mode ─────────────────────────────────────── */
+.safe-terminal {
+  font-family: var(--font-mono);
+  background: var(--term-bg);
+  color: var(--term-fg);
+}
+.safe-terminal .term-accent { color: var(--term-accent); }
+.safe-terminal .term-muted  { color: var(--term-fg-muted); }

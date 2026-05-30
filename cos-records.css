@@ -1,0 +1,126 @@
+/*
+  Records page — room aesthetic (glass on photo, accent buttons)
+  Load after cos-app-shell.css
+*/
+
+body.cos-app::before {
+  opacity: 0.38;
+}
+
+body.cos-app::after {
+  opacity: 0.68;
+}
+
+body.cos-app .sidebar {
+  margin: 18px 0 18px 18px;
+  border-radius: var(--cos-radius);
+  border: 1px solid var(--cos-sidebar-border);
+  height: calc(100vh - 36px);
+  position: sticky;
+  top: 18px;
+  align-self: flex-start;
+  box-shadow: var(--cos-panel-shadow);
+}
+
+body.cos-app .sidebar-head .wordmark {
+  font-family: var(--cos-font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--cos-heading-on-dark);
+  letter-spacing: -0.01em;
+  text-transform: none;
+}
+
+body.cos-app .school {
+  font-size: 13px;
+  color: var(--cos-muted-on-dark);
+  font-style: italic;
+}
+
+body.cos-app .main {
+  background: transparent;
+  min-width: 0;
+}
+
+body.cos-app .topbar {
+  margin: 18px 18px 0 0;
+  border-radius: var(--cos-radius);
+  border: 1px solid var(--cos-panel-border);
+  box-shadow: var(--cos-panel-shadow);
+}
+
+body.cos-app .topbar h1 {
+  font-size: 1.65rem;
+}
+
+body.cos-app .content {
+  padding: 20px 18px 48px 0;
+}
+
+body.cos-app .section-head h2 {
+  display: none;
+}
+
+body.cos-app .section-head {
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+body.cos-app .card {
+  border-radius: var(--cos-radius);
+}
+
+body.cos-app .card-title {
+  font-family: var(--cos-font-serif);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--cos-ink-soft);
+}
+
+body.cos-app label,
+body.cos-app .field-label {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-weight: 600;
+}
+
+body.cos-app .btn-primary {
+  background: var(--cos-accent);
+  color: #fff;
+  border-color: var(--cos-accent);
+  box-shadow: 0 2px 14px var(--cos-accent-glow);
+}
+
+body.cos-app .btn-primary:hover {
+  background: var(--cos-accent-hover);
+  border-color: var(--cos-accent-hover);
+}
+
+body.cos-app .nav-item.active {
+  border-left-width: 3px;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  body.cos-app {
+    flex-direction: column;
+  }
+
+  body.cos-app .sidebar {
+    width: auto;
+    height: auto;
+    margin: 12px;
+    position: relative;
+    top: 0;
+  }
+
+  body.cos-app .topbar {
+    margin: 0 12px;
+  }
+
+  body.cos-app .content {
+    padding: 16px 12px 48px;
+  }
+}

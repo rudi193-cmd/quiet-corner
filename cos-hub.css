@@ -1,0 +1,103 @@
+/*
+  Classroom OS hub — themed backdrop + bottom nav spacing
+*/
+
+body.cos-hub {
+  font-family: var(--cos-font-sans);
+  background: var(--cos-bg-deep);
+  color: var(--cos-heading-on-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  padding: 3rem 2rem 6rem;
+  position: relative;
+}
+
+body.cos-hub::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: var(--cos-photo);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body.cos-hub::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: var(--cos-bg-page);
+  opacity: 0.88;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body.cos-hub > * {
+  position: relative;
+  z-index: 1;
+}
+
+body.cos-hub .hub-eyebrow {
+  color: var(--cos-muted-on-dark);
+}
+
+body.cos-hub .hub-h {
+  color: var(--cos-heading-on-dark);
+}
+
+body.cos-hub .hub-sub {
+  color: var(--cos-muted-on-dark);
+}
+
+body.cos-hub .hub-sub em {
+  color: var(--cos-heading-on-dark);
+}
+
+body.cos-hub .hub-footer {
+  color: var(--cos-nav-link);
+}
+
+body.cos-hub .hub-footer a:first-child {
+  margin-right: 1.5rem;
+}
+
+body.cos-hub .hub-footer a {
+  color: var(--cos-muted-on-dark);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+body.cos-hub .hub-footer a:hover {
+  color: var(--cos-heading-on-dark);
+  border-bottom-color: var(--cos-accent);
+}
+
+/* In-flow nav below room cards (not fixed to viewport corner) */
+body.cos-hub .cos-theme-nav--flow {
+  position: static;
+  transform: none;
+  left: auto;
+  bottom: auto;
+  margin: 2.5rem auto 0;
+  width: fit-content;
+  max-width: min(1200px, calc(100vw - 2rem));
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+}
+
+body.cos-hub .cos-theme-nav--flow .nav-sep {
+  display: none;
+}
+
+body.cos-hub .hub-footer {
+  margin-top: 2rem;
+}

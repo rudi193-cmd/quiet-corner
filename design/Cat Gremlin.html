@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Room 214 · Organized Chaos</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: #1a0528;
+  background-image: url('https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=1920&q=80');
+  background-size: cover;
+  background-position: center 40%;
+  background-attachment: fixed;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: rgba(30, 5, 50, 0.45);
+  pointer-events: none; z-index: 0;
+}
+.layer { position: relative; z-index: 1; }
+
+/* Nav */
+.nav {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem; height: 58px;
+  background: rgba(30, 5, 55, 0.85);
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  border-bottom: 1px solid rgba(219, 39, 119, 0.3);
+}
+.nav-name {
+  font-size: 17px; font-weight: 700;
+  color: #fdf0ff; letter-spacing: 0.02em;
+}
+.nav-room { font-size: 13px; color: rgba(219, 120, 200, 0.85); margin-left: 0.75rem; }
+.nav-center { font-size: 14px; color: rgba(230, 180, 220, 0.85); }
+.nav-center strong { color: #fdf0ff; font-weight: 500; }
+.nav-right { display: flex; align-items: center; gap: 0.6rem;
+             font-size: 13px; color: rgba(219, 120, 200, 0.85); }
+.companion-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #db2777;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+/* Quote zone */
+.quote-zone {
+  text-align: center; padding: 3.5rem 4rem 3rem;
+  background: rgba(30, 5, 50, 0.32);
+  backdrop-filter: blur(2px);
+  border-bottom: 1px solid rgba(219, 39, 119, 0.18);
+}
+.quote-text {
+  font-size: 1.95rem; line-height: 1.4;
+  color: #fdf0ff; letter-spacing: -0.01em;
+  max-width: 820px; margin: 0 auto 1.1rem;
+  text-shadow: 0 1px 12px rgba(30, 5, 50, 0.7);
+  font-style: italic;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+.quote-attr { font-size: 13px; color: rgba(219, 120, 200, 0.85); letter-spacing: 0.06em; text-transform: uppercase; }
+.quote-attr em { font-style: normal; color: rgba(253, 220, 240, 0.75); }
+
+/* Morning */
+.morning { padding: 2.5rem 2.5rem 0; max-width: 1320px; margin: 0 auto; }
+.morning-h {
+  font-size: 2.8rem; font-weight: 700; color: #fdf0ff;
+  letter-spacing: -0.025em; line-height: 1.1;
+  text-shadow: 0 1px 16px rgba(30, 5, 50, 0.6);
+}
+.morning-sub { font-size: 17px; color: rgba(253, 220, 240, 0.78); margin-top: 0.5rem; line-height: 1.6; }
+.morning-sub em { color: #fdf0ff; font-style: italic; }
+.feral-tag {
+  display: inline-block; margin-top: 0.5rem;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  background: rgba(219, 39, 119, 0.2); color: #f9a8d4;
+  padding: 2px 8px; border-radius: 4px; text-transform: uppercase;
+  border: 1px solid rgba(219, 39, 119, 0.35);
+}
+
+/* Body */
+.body {
+  display: grid; grid-template-columns: 1fr 390px;
+  gap: 2rem; padding: 2rem 2.5rem 4rem;
+  max-width: 1320px; margin: 0 auto;
+}
+.panel {
+  background: rgba(255, 242, 255, 0.87);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  border: 1px solid rgba(219, 39, 119, 0.28);
+  border-radius: 12px;
+  box-shadow: 0 4px 32px rgba(30, 5, 50, 0.28);
+}
+
+/* Plan */
+.plan-wrap { padding: 1.5rem 1.75rem; margin-bottom: 1.5rem; }
+.section-tag {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase; color: #db2777; margin-bottom: 1rem;
+}
+.period {
+  display: grid; grid-template-columns: 14px 88px 1fr;
+  gap: 0 1rem; align-items: start;
+  padding: 0.6rem 0; border-bottom: 1px dashed rgba(219, 39, 119, 0.18);
+}
+.period:last-child { border-bottom: none; }
+.period--now { background: rgba(219, 39, 119, 0.08); margin: 0 -0.75rem; padding: 0.65rem 0.75rem; border-radius: 6px; border-bottom: none; }
+.period--break { opacity: 0.4; }
+.period-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid #e9c0d8; background: transparent; margin-top: 4px; }
+.period--now .period-dot { background: #db2777; border-color: #db2777; }
+.period-time { font-size: 12px; color: #7a4060; font-variant-numeric: tabular-nums; line-height: 1.6; }
+.period-info strong { display: block; font-size: 14px; font-weight: 600; color: #2d0a1f; line-height: 1.5; }
+.period--now .period-info strong { color: #db2777; }
+.period-info span { font-size: 12px; color: #7a4060; }
+
+/* Next up */
+.next { padding: 1.75rem; }
+.next-h { font-size: 1.65rem; font-weight: 700; color: #2d0a1f; letter-spacing: -0.01em; margin: 0.5rem 0 0.6rem; line-height: 1.25; }
+.next-p { font-size: 15px; line-height: 1.65; color: #5a2040; margin-bottom: 1.25rem; }
+.next-p em { color: #2d0a1f; font-style: italic; }
+.mats { border-top: 1px dashed rgba(219, 39, 119, 0.2); padding-top: 1rem; margin-bottom: 1.1rem; display: flex; flex-direction: column; gap: 0.45rem; }
+.mat { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; }
+.mat-name { color: #2d0a1f; }
+.mat-meta { font-size: 12px; color: #9a6080; }
+.mat-meta em { color: #db2777; font-style: normal; }
+.actions { display: flex; gap: 0.6rem; border-top: 1px dashed rgba(219, 39, 119, 0.2); padding-top: 1rem; }
+.btn { font-family: inherit; font-size: 14px; font-weight: 600; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; }
+.btn--pri { background: #db2777; color: #fff; }
+.btn--pri:hover { background: #be185d; }
+.btn--sec { background: transparent; border-color: rgba(219, 39, 119, 0.4); color: #7a4060; }
+.btn--sec:hover { border-color: #db2777; color: #db2777; }
+
+/* Sidebar */
+.sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+/* Patches */
+.companion-panel { padding: 1.5rem; }
+.companion-head {
+  display: flex; align-items: center; gap: 0.6rem;
+  margin-bottom: 1.25rem; padding-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(219, 39, 119, 0.2);
+}
+.companion-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(219, 39, 119, 0.15); border: 1px solid #e9c0d8;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: #db2777; font-weight: 700; flex-shrink: 0;
+}
+.companion-name { font-size: 13px; font-weight: 600; color: #2d0a1f; }
+.companion-name small { display: block; font-size: 11px; color: #9a6080; font-weight: 400; }
+.companion-item { padding: 0.85rem 0; border-bottom: 1px dashed rgba(219, 39, 119, 0.18); }
+.companion-item:last-child { border-bottom: none; padding-bottom: 0; }
+.companion-text { font-size: 14px; line-height: 1.65; color: #3d1030; }
+.companion-text em { color: #db2777; font-style: normal; font-weight: 600; }
+.companion-action { margin-top: 0.35rem; font-size: 12px; color: #db2777; cursor: pointer; text-decoration: underline; text-decoration-color: rgba(219, 39, 119, 0.3); }
+
+/* Reading tracker */
+.tracker { padding: 1.25rem 1.5rem; }
+.panel-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #7a4060; margin-bottom: 0.75rem; }
+.book-title { font-size: 1.05rem; font-weight: 700; color: #2d0a1f; margin-bottom: 0.2rem; }
+.book-author { font-size: 12px; color: #9a6080; margin-bottom: 0.85rem; }
+.book-track { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+.book-bar { flex: 1; height: 5px; background: rgba(219, 39, 119, 0.18); border-radius: 2px; overflow: hidden; }
+.book-bar > span { display: block; height: 100%; background: #db2777; width: 36%; }
+.book-pct { font-size: 12px; color: #7a4060; white-space: nowrap; }
+.book-chapter { font-size: 13px; color: #3d1030; margin-bottom: 0.6rem; }
+.book-prompt { font-size: 13px; color: #5a2040; line-height: 1.6; padding: 0.6rem 0.85rem; border-left: 2px solid rgba(219, 39, 119, 0.4); font-style: italic; background: rgba(219, 39, 119, 0.05); border-radius: 0 4px 4px 0; }
+.book-prompt strong { display: block; color: #db2777; font-style: normal; font-size: 10px; letter-spacing: 0.12em; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem; }
+
+/* Basket */
+.basket { padding: 1.25rem 1.5rem; }
+.basket-item { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; padding: 0.65rem 0; border-bottom: 1px dashed rgba(219, 39, 119, 0.18); }
+.basket-item:last-child { border-bottom: none; padding-bottom: 0; }
+.basket-item strong { display: block; font-size: 13px; font-weight: 500; color: #2d0a1f; margin-bottom: 0.15rem; }
+.basket-item span { font-size: 12px; color: #7a4060; line-height: 1.45; }
+.basket-status { font-size: 11px; color: #9a6080; white-space: nowrap; flex-shrink: 0; padding-top: 2px; }
+.basket-status.open { color: #db2777; font-weight: 600; }
+
+/* theme nav strip */
+.theme-nav {
+  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 0.5rem; z-index: 20;
+  background: rgba(20, 5, 35, 0.85); backdrop-filter: blur(12px);
+  padding: 0.6rem 1rem; border-radius: 100px;
+  border: 1px solid rgba(219, 39, 119, 0.25);
+}
+.theme-nav a {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+  text-decoration: none; padding: 0.3rem 0.7rem; border-radius: 100px;
+  color: rgba(253, 220, 240, 0.7); transition: all 0.15s;
+}
+.theme-nav a:hover { color: #fdf0ff; background: rgba(219, 39, 119, 0.2); }
+.theme-nav a.active { color: #fdf0ff; background: #db2777; }
+body.cos-drop-active::after {
+  content: 'Drop your classroom photo';
+  position: fixed; inset: 0; z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; font-weight: 600; color: #fdf0ff;
+  background: rgba(30,5,55,0.75); border: 3px dashed rgba(219,39,119,0.6);
+  pointer-events: none; font-style: italic;
+}
+.cos-bg-btn {
+  background: transparent; border: 1px solid rgba(219,39,119,0.3);
+  color: rgba(219,120,200,0.7); font-size: 12px; font-weight: 600;
+  padding: 0.25rem 0.65rem; border-radius: 4px; cursor: pointer;
+  font-family: inherit; transition: all 0.15s;
+}
+.cos-bg-btn:hover { color: #fdf0ff; border-color: rgba(219,39,119,0.7); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div style="display:flex;align-items:baseline;gap:.75rem">
+    <span class="nav-name">Room 214</span>
+    <span class="nav-room">· Organized Chaos</span>
+  </div>
+  <div class="nav-center">Period 1 begins in <strong>14 minutes</strong></div>
+  <div class="nav-right">
+    <span class="companion-dot"></span>
+    <span>Patches is here</span>
+    <button class="cos-bg-btn" onclick="cosPickBackground()">your room</button>
+  </div>
+</nav>
+
+<div class="layer">
+  <div class="quote-zone">
+    <div class="quote-text">"Education is not the filling of a pail, but the lighting of a fire."</div>
+    <div class="quote-attr">— W.B. Yeats · <em>pinned to the bulletin board since September</em></div>
+  </div>
+
+  <div class="morning">
+    <div class="morning-h">Tuesday. Let's go.</div>
+    <div class="morning-sub">
+      October 14. <em>26 students expected.</em> Three things need your eyes before the bell.
+    </div>
+    <div class="feral-tag">Feral Friday in 3 days</div>
+  </div>
+
+  <div class="body">
+    <div>
+      <div class="panel plan-wrap">
+        <div class="section-tag">Today's plan</div>
+        <div class="period period--now">
+          <div class="period-dot"></div>
+          <div class="period-time">8:15 — 9:05</div>
+          <div class="period-info"><strong>Math · Fractions on a number line</strong><span>P1 · Rm 214 · 14 min out</span></div>
+        </div>
+        <div class="period"><div class="period-dot"></div><div class="period-time">9:10 — 10:00</div><div class="period-info"><strong>Reading · Bridge to Terabithia, Ch. 4–5</strong><span>P2 · read-aloud</span></div></div>
+        <div class="period period--break"><div class="period-dot"></div><div class="period-time">10:00 — 10:20</div><div class="period-info"><strong>Recess</strong></div></div>
+        <div class="period"><div class="period-dot"></div><div class="period-time">10:20 — 11:10</div><div class="period-info"><strong>Science · States of matter lab</strong><span>P3 · Lab B</span></div></div>
+        <div class="period"><div class="period-dot"></div><div class="period-time">11:15 — 12:05</div><div class="period-info"><strong>Social Studies · Civil Rights, Day 2</strong><span>P4</span></div></div>
+        <div class="period period--break"><div class="period-dot"></div><div class="period-time">12:10 — 12:55</div><div class="period-info"><strong>Lunch + prep</strong></div></div>
+        <div class="period"><div class="period-dot"></div><div class="period-time">1:00 — 1:30</div><div class="period-info"><strong>Math intervention · small group</strong><span>6 students</span></div></div>
+        <div class="period"><div class="period-dot"></div><div class="period-time">1:35 — 3:15</div><div class="period-info"><strong>Writing workshop + close</strong><span>P5 + P6</span></div></div>
+      </div>
+
+      <div class="panel next">
+        <div class="section-tag">Next up · Period 1</div>
+        <div class="next-h">Fractions on a number line.</div>
+        <p class="next-p">Lesson 14. Same denominator misconception from Monday — <em>Jaylen and four others still counting tick marks instead of equal parts</em>. Warm-up hits it directly. Mia's audio is queued. Marcus's catchup deck is ready.</p>
+        <div class="mats">
+          <div class="mat"><span class="mat-name">Warm-up · 8 slides</span><span class="mat-meta">last edited <em>11:02 PM</em></span></div>
+          <div class="mat"><span class="mat-name">Exit ticket · 4 problems</span><span class="mat-meta">printable · 1 page</span></div>
+          <div class="mat"><span class="mat-name">Mia L. · audio version</span><span class="mat-meta"><em>IEP · 4:12</em></span></div>
+          <div class="mat"><span class="mat-name">Marcus T. · catchup</span><span class="mat-meta"><em>12 min</em></span></div>
+        </div>
+        <div class="actions">
+          <button class="btn btn--pri">Open lesson</button>
+          <button class="btn btn--sec">Project</button>
+          <button class="btn btn--sec">Edit warm-up</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="panel companion-panel">
+        <div class="companion-head">
+          <div class="companion-avatar">P</div>
+          <div class="companion-name">Patches<small>your chaos coordinator · local only</small></div>
+        </div>
+        <div class="companion-item">
+          <div class="companion-text">"Diego's morning was rough. His mom texted at 7:14 — rough start at home. Solo lab path is already set up. He can bail gracefully without making it a whole thing."</div>
+          <div class="companion-action">Open Diego's quiet alt →</div>
+        </div>
+        <div class="companion-item">
+          <div class="companion-text">"Jaylen's been stuck in the same <em>denominator spiral</em> since Monday. Not a mystery. Keep an eye on his face when he hits problem 3 in the warm-up."</div>
+          <div class="companion-action">See Jaylen's graph →</div>
+        </div>
+        <div class="companion-item">
+          <div class="companion-text">"Marcus missed the intro. 12-min catchup is in his folder. Hand it to him or leave it — whatever works."</div>
+          <div class="companion-action">Preview deck →</div>
+        </div>
+        <div class="companion-item">
+          <div class="companion-text">"Friday sub packet. You're at a PD on classroom management while running organized chaos every day. <em>Extremely on brand.</em> I'll finish the draft at lunch."</div>
+          <div class="companion-action">Open draft →</div>
+        </div>
+      </div>
+
+      <div class="panel tracker">
+        <div class="panel-tag">Class read-aloud</div>
+        <div class="book-title">Bridge to Terabithia</div>
+        <div class="book-author">Katherine Paterson · 1977</div>
+        <div class="book-track"><div class="book-bar"><span></span></div><span class="book-pct">36% · Ch. 4 of 13</span></div>
+        <div class="book-chapter">Today: Ch. 4–5 · first visit to Terabithia</div>
+        <div class="book-prompt"><strong>Discussion prompt</strong>"Jesse and Leslie's secret world gives them something. What is it — and who needs it more?"</div>
+      </div>
+
+      <div class="panel basket">
+        <div class="panel-tag">In the basket</div>
+        <div class="basket-item"><div><strong>Civil Rights · Day 3</strong><span>5 of 9 agents done · paused</span></div><div class="basket-status open">Resume</div></div>
+        <div class="basket-item"><div><strong>Parent letter · Jaylen's family</strong><span>Patches drafted · needs your edit</span></div><div class="basket-status">Draft</div></div>
+        <div class="basket-item"><div><strong>States of matter quiz</strong><span>22 of 27 graded · 5 pending</span></div><div class="basket-status">5 left</div></div>
+        <div class="basket-item"><div><strong>Friday sub packet</strong><span>Patches finishing at lunch</span></div><div class="basket-status">Due Thu</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="theme-nav">
+  <a href="Book Nook.html">Book Nook</a>
+  <a href="Cat Gremlin.html" class="active">Cat Gremlin</a>
+  <a href="Cottagecore.html">Cottagecore</a>
+  <a href="STEM Commander.html">STEM</a>
+  <a href="Retro Academia.html">Retro Academia</a>
+</nav>
+
+<script src="classroom-os-bg.js"></script>
+</body>
+</html>

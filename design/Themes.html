@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Teachers Tool · Themes</title>
+<link rel="stylesheet" href="safe/ui-kit.css" />
+<link rel="stylesheet" href="themes.css" />
+<style>
+  .ab { font-family: var(--font-sans); color: var(--fg); background: var(--bg);
+        line-height: var(--lh-body); -webkit-font-smoothing: antialiased; }
+  .ab * { box-sizing: border-box; }
+  .ab.term { background: var(--term-bg); color: var(--term-fg);
+             font-family: var(--font-mono); }
+  .ab a { color: inherit; text-decoration: none; }
+  .ab ul, .ab ol { list-style: none; padding: 0; margin: 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="artboards/workspace-grid.jsx"></script>
+<script type="text/babel" src="artboards/live-mode.jsx"></script>
+
+<script type="text/babel">
+function T({ theme, children }) {
+  return (
+    <div className={`theme-${theme}`} style={{ width: '100%', height: '100%' }}>
+      {children}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <DesignCanvas>
+
+      <DCSection
+        id="workspace"
+        title="Today's workspace — four skins"
+        subtitle="Same screen. Same data. Same components. Only the CSS changes — colors, radius, font.">
+
+        <DCArtboard id="ws-elem" label="Elementary warmth" width={1440} height={1100}>
+          <T theme="elementary"><WorkspaceGridArtboard /></T>
+        </DCArtboard>
+
+        <DCArtboard id="ws-stem" label="STEM" width={1440} height={1100}>
+          <T theme="stem"><WorkspaceGridArtboard /></T>
+        </DCArtboard>
+
+        <DCArtboard id="ws-steam" label="STEAM · maker" width={1440} height={1100}>
+          <T theme="steam"><WorkspaceGridArtboard /></T>
+        </DCArtboard>
+
+        <DCArtboard id="ws-hum" label="Humanities" width={1440} height={1100}>
+          <T theme="humanities"><WorkspaceGridArtboard /></T>
+        </DCArtboard>
+
+      </DCSection>
+
+      <DCSection
+        id="live"
+        title="Live classroom mode — four skins"
+        subtitle="The projector the class sees. Terminal palette adapts per theme; the teacher overlay stays consistent.">
+
+        <DCArtboard id="lm-elem" label="Elementary warmth" width={1920} height={1080}>
+          <T theme="elementary"><LiveModeArtboard /></T>
+        </DCArtboard>
+
+        <DCArtboard id="lm-stem" label="STEM" width={1920} height={1080}>
+          <T theme="stem"><LiveModeArtboard /></T>
+        </DCArtboard>
+
+        <DCArtboard id="lm-steam" label="STEAM · maker" width={1920} height={1080}>
+          <T theme="steam"><LiveModeArtboard /></T>
+        </DCArtboard>
+
+        <DCArtboard id="lm-hum" label="Humanities" width={1920} height={1080}>
+          <T theme="humanities"><LiveModeArtboard /></T>
+        </DCArtboard>
+
+      </DCSection>
+
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

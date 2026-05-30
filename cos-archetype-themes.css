@@ -1,0 +1,167 @@
+/*
+  Classroom OS — archetype theme tokens
+  Set via html[data-archetype="wren|patches|sage|apex|archivist"]
+  Used by cos-app-shell.css on records, onboarding, landing, hub utilities.
+*/
+
+:root,
+[data-archetype="wren"] {
+  --cos-bg-deep: #2a1a0e;
+  --cos-bg-mid: #3d2b1f;
+  --cos-bg-page: linear-gradient(165deg, #2a1a0e 0%, #1f1208 48%, #2a1a0e 100%);
+  --cos-panel: rgba(253, 246, 227, 0.88);
+  --cos-panel-solid: #fdf6e3;
+  --cos-panel-border: rgba(221, 200, 152, 0.55);
+  --cos-panel-shadow: 0 4px 32px rgba(39, 22, 10, 0.22);
+  --cos-ink: #3d2b1f;
+  --cos-ink-soft: #6a4a35;
+  --cos-ink-muted: #8a6a50;
+  --cos-ink-faint: #b89a7a;
+  --cos-heading-on-dark: #fdf6e3;
+  --cos-muted-on-dark: rgba(200, 168, 122, 0.88);
+  --cos-accent: #b5622a;
+  --cos-accent-hover: #9e5524;
+  --cos-accent-soft: rgba(181, 98, 42, 0.14);
+  --cos-accent-glow: rgba(181, 98, 42, 0.28);
+  --cos-sidebar: rgba(39, 22, 10, 0.88);
+  --cos-sidebar-border: rgba(221, 200, 152, 0.22);
+  --cos-topbar: rgba(253, 246, 227, 0.82);
+  --cos-input-bg: rgba(255, 255, 255, 0.72);
+  --cos-input-border: rgba(181, 98, 42, 0.28);
+  --cos-radius-sm: 8px;
+  --cos-radius: 12px;
+  --cos-radius-pill: 100px;
+  --cos-font-serif: Georgia, 'Times New Roman', serif;
+  --cos-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --cos-nav-pill-bg: rgba(39, 22, 10, 0.88);
+  --cos-nav-pill-border: rgba(221, 200, 152, 0.25);
+  --cos-nav-link: rgba(200, 168, 122, 0.72);
+  --cos-nav-link-hover: #fdf6e3;
+  --cos-nav-active-bg: #b5622a;
+  --cos-photo: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1920&q=80');
+}
+
+[data-archetype="patches"] {
+  --cos-bg-deep: #1a0528;
+  --cos-bg-mid: #2d0a45;
+  --cos-bg-page: linear-gradient(165deg, #1a0528 0%, #12021c 50%, #1a0528 100%);
+  --cos-panel: rgba(253, 240, 255, 0.9);
+  --cos-panel-solid: #fdf0ff;
+  --cos-panel-border: rgba(249, 168, 212, 0.35);
+  --cos-panel-shadow: 0 4px 32px rgba(30, 5, 55, 0.35);
+  --cos-ink: #2d1038;
+  --cos-ink-soft: #5a2868;
+  --cos-ink-muted: #7a4088;
+  --cos-ink-faint: #a060b0;
+  --cos-heading-on-dark: #fdf0ff;
+  --cos-muted-on-dark: rgba(249, 168, 212, 0.82);
+  --cos-accent: #db2777;
+  --cos-accent-hover: #be185d;
+  --cos-accent-soft: rgba(219, 39, 119, 0.14);
+  --cos-accent-glow: rgba(219, 39, 119, 0.3);
+  --cos-sidebar: rgba(30, 5, 55, 0.9);
+  --cos-sidebar-border: rgba(249, 168, 212, 0.18);
+  --cos-topbar: rgba(253, 240, 255, 0.84);
+  --cos-input-bg: rgba(255, 255, 255, 0.78);
+  --cos-input-border: rgba(219, 39, 119, 0.25);
+  --cos-nav-pill-bg: rgba(30, 5, 55, 0.9);
+  --cos-nav-pill-border: rgba(249, 168, 212, 0.22);
+  --cos-nav-link: rgba(249, 168, 212, 0.65);
+  --cos-nav-link-hover: #fdf0ff;
+  --cos-nav-active-bg: #db2777;
+  --cos-photo: url('https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=1920&q=70');
+}
+
+[data-archetype="sage"] {
+  --cos-bg-deep: #0d1f0a;
+  --cos-bg-mid: #1a3314;
+  --cos-bg-page: linear-gradient(165deg, #0d1f0a 0%, #081408 50%, #0d1f0a 100%);
+  --cos-panel: rgba(240, 252, 232, 0.9);
+  --cos-panel-solid: #f0fce8;
+  --cos-panel-border: rgba(163, 208, 138, 0.4);
+  --cos-panel-shadow: 0 4px 32px rgba(15, 35, 10, 0.28);
+  --cos-ink: #1a3314;
+  --cos-ink-soft: #3d5c32;
+  --cos-ink-muted: #5c7a48;
+  --cos-ink-faint: #7a9860;
+  --cos-heading-on-dark: #f0fce8;
+  --cos-muted-on-dark: rgba(163, 208, 138, 0.88);
+  --cos-accent: #5c8b4a;
+  --cos-accent-hover: #4a7038;
+  --cos-accent-soft: rgba(92, 139, 74, 0.16);
+  --cos-accent-glow: rgba(92, 139, 74, 0.28);
+  --cos-sidebar: rgba(15, 35, 10, 0.9);
+  --cos-sidebar-border: rgba(163, 208, 138, 0.18);
+  --cos-topbar: rgba(240, 252, 232, 0.84);
+  --cos-input-bg: rgba(255, 255, 255, 0.75);
+  --cos-input-border: rgba(92, 139, 74, 0.28);
+  --cos-nav-pill-bg: rgba(15, 35, 10, 0.9);
+  --cos-nav-pill-border: rgba(163, 208, 138, 0.22);
+  --cos-nav-link: rgba(160, 210, 120, 0.7);
+  --cos-nav-link-hover: #f0fce8;
+  --cos-nav-active-bg: #5c8b4a;
+  --cos-photo: url('https://images.unsplash.com/photo-1466781783364-36c955e42a7f?w=1920&q=70');
+}
+
+[data-archetype="apex"] {
+  --cos-bg-deep: #050a18;
+  --cos-bg-mid: #0c1428;
+  --cos-bg-page: linear-gradient(165deg, #050a18 0%, #030610 50%, #050a18 100%);
+  --cos-panel: rgba(232, 240, 255, 0.92);
+  --cos-panel-solid: #e8f0ff;
+  --cos-panel-border: rgba(96, 165, 250, 0.28);
+  --cos-panel-shadow: 0 4px 32px rgba(3, 8, 25, 0.45);
+  --cos-ink: #0a1220;
+  --cos-ink-soft: #1e3a5f;
+  --cos-ink-muted: #3d5a80;
+  --cos-ink-faint: #5a7898;
+  --cos-heading-on-dark: #e8f0ff;
+  --cos-muted-on-dark: rgba(96, 165, 250, 0.82);
+  --cos-accent: #2563eb;
+  --cos-accent-hover: #1d4ed8;
+  --cos-accent-soft: rgba(37, 99, 235, 0.14);
+  --cos-accent-glow: rgba(96, 165, 250, 0.32);
+  --cos-sidebar: rgba(3, 8, 25, 0.92);
+  --cos-sidebar-border: rgba(96, 165, 250, 0.16);
+  --cos-topbar: rgba(232, 240, 255, 0.86);
+  --cos-input-bg: rgba(255, 255, 255, 0.82);
+  --cos-input-border: rgba(37, 99, 235, 0.25);
+  --cos-font-serif: 'Courier New', Courier, monospace;
+  --cos-nav-pill-bg: rgba(3, 8, 25, 0.92);
+  --cos-nav-pill-border: rgba(96, 165, 250, 0.2);
+  --cos-nav-link: rgba(96, 165, 250, 0.62);
+  --cos-nav-link-hover: #e8f0ff;
+  --cos-nav-active-bg: #1d4ed8;
+  --cos-photo: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=70');
+}
+
+[data-archetype="archivist"] {
+  --cos-bg-deep: #1e0f04;
+  --cos-bg-mid: #2a1808;
+  --cos-bg-page: linear-gradient(165deg, #1e0f04 0%, #140a02 50%, #1e0f04 100%);
+  --cos-panel: rgba(245, 232, 200, 0.9);
+  --cos-panel-solid: #f5e8c8;
+  --cos-panel-border: rgba(212, 176, 112, 0.42);
+  --cos-panel-shadow: 0 4px 32px rgba(28, 14, 4, 0.32);
+  --cos-ink: #2a1808;
+  --cos-ink-soft: #5a4020;
+  --cos-ink-muted: #7a5830;
+  --cos-ink-faint: #9a7848;
+  --cos-heading-on-dark: #f5e8c8;
+  --cos-muted-on-dark: rgba(212, 176, 112, 0.88);
+  --cos-accent: #8a5a10;
+  --cos-accent-hover: #6f480c;
+  --cos-accent-soft: rgba(138, 90, 16, 0.14);
+  --cos-accent-glow: rgba(138, 90, 16, 0.28);
+  --cos-sidebar: rgba(28, 14, 4, 0.9);
+  --cos-sidebar-border: rgba(212, 176, 112, 0.2);
+  --cos-topbar: rgba(245, 232, 200, 0.84);
+  --cos-input-bg: rgba(255, 255, 255, 0.72);
+  --cos-input-border: rgba(138, 90, 16, 0.28);
+  --cos-nav-pill-bg: rgba(28, 14, 4, 0.9);
+  --cos-nav-pill-border: rgba(212, 176, 112, 0.22);
+  --cos-nav-link: rgba(180, 140, 80, 0.68);
+  --cos-nav-link-hover: #f5e8c8;
+  --cos-nav-active-bg: #8a5a10;
+  --cos-photo: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1920&q=70');
+}

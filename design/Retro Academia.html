@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Archive · Room 214</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: #1e0f04;
+  background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1920&q=80');
+  background-size: cover;
+  background-position: center 40%;
+  background-attachment: fixed;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background: rgba(28, 14, 4, 0.52);
+  pointer-events: none; z-index: 0;
+}
+.layer { position: relative; z-index: 1; }
+
+.nav {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem; height: 58px;
+  background: rgba(28, 14, 4, 0.88);
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  border-bottom: 1px solid rgba(180, 140, 80, 0.28);
+}
+.nav-name { font-size: 17px; font-weight: 700; color: #f5e8c8; letter-spacing: 0.04em; }
+.nav-room { font-size: 13px; color: rgba(180, 140, 80, 0.8); margin-left: 0.75rem; letter-spacing: 0.04em; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.nav-center { font-size: 14px; color: rgba(210, 170, 110, 0.85); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.nav-center strong { color: #f5e8c8; font-weight: 500; }
+.nav-right { display: flex; align-items: center; gap: 0.6rem; font-size: 13px; color: rgba(180, 140, 80, 0.8); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.companion-dot { width: 7px; height: 7px; border-radius: 50%; background: #b4830a; animation: pulse 2.8s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+.quote-zone {
+  text-align: center; padding: 3.5rem 4rem 3rem;
+  background: rgba(28, 14, 4, 0.32); backdrop-filter: blur(2px);
+  border-bottom: 1px solid rgba(180, 140, 80, 0.18);
+}
+.quote-text {
+  font-size: 1.95rem; font-style: italic; color: #f5e8c8;
+  line-height: 1.45; letter-spacing: -0.01em;
+  max-width: 820px; margin: 0 auto 1.1rem;
+  text-shadow: 0 2px 16px rgba(28, 14, 4, 0.7);
+}
+.quote-attr { font-size: 13px; color: rgba(180, 140, 80, 0.8); letter-spacing: 0.06em; text-transform: uppercase; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.quote-attr em { font-style: normal; color: rgba(240, 210, 150, 0.7); }
+
+.morning { padding: 2.5rem 2.5rem 0; max-width: 1320px; margin: 0 auto; }
+.morning-h {
+  font-size: 2.8rem; font-weight: 700; color: #f5e8c8;
+  letter-spacing: -0.02em; line-height: 1.1;
+  text-shadow: 0 2px 20px rgba(28, 14, 4, 0.65);
+  font-style: italic;
+}
+.morning-sub { font-size: 17px; color: rgba(240, 210, 150, 0.75); margin-top: 0.5rem; line-height: 1.6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.morning-sub em { color: #f5e8c8; font-style: italic; }
+
+.body {
+  display: grid; grid-template-columns: 1fr 390px; gap: 2rem;
+  padding: 2rem 2.5rem 4rem; max-width: 1320px; margin: 0 auto;
+}
+.panel {
+  background: rgba(245, 230, 190, 0.88);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  border: 1px solid rgba(180, 140, 80, 0.45);
+  border-radius: 4px;
+  box-shadow: 0 4px 32px rgba(28, 14, 4, 0.30);
+  color: #2a1508;
+}
+
+.plan-wrap { padding: 1.5rem 1.75rem; margin-bottom: 1.5rem; }
+.section-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #8a5a10; margin-bottom: 1rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.period { display: grid; grid-template-columns: 14px 88px 1fr; gap: 0 1rem; align-items: start; padding: 0.6rem 0; border-bottom: 1px dashed rgba(180, 140, 80, 0.3); }
+.period:last-child { border-bottom: none; }
+.period--now { background: rgba(180, 140, 80, 0.1); margin: 0 -0.75rem; padding: 0.65rem 0.75rem; border-radius: 2px; border-bottom: none; }
+.period--break { opacity: 0.4; }
+.period-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid #d4b070; background: transparent; margin-top: 4px; }
+.period--now .period-dot { background: #b4830a; border-color: #b4830a; }
+.period-time { font-size: 12px; color: #8a6030; font-variant-numeric: tabular-nums; line-height: 1.6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.period-info strong { display: block; font-size: 14px; font-weight: 700; color: #2a1508; line-height: 1.5; font-style: italic; }
+.period--now .period-info strong { color: #8a5a10; }
+.period-info span { font-size: 12px; color: #7a5020; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+
+.next { padding: 1.75rem; }
+.next-h { font-size: 1.65rem; font-weight: 700; color: #2a1508; letter-spacing: -0.01em; margin: 0.5rem 0 0.6rem; line-height: 1.25; font-style: italic; }
+.next-p { font-size: 15px; line-height: 1.7; color: #4a2808; margin-bottom: 1.25rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.next-p em { color: #2a1508; font-style: italic; }
+.mats { border-top: 1px dashed rgba(180, 140, 80, 0.35); padding-top: 1rem; margin-bottom: 1.1rem; display: flex; flex-direction: column; gap: 0.45rem; }
+.mat { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; }
+.mat-name { color: #2a1508; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.mat-meta { font-size: 12px; color: #9a7040; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.mat-meta em { color: #b4830a; font-style: normal; }
+.actions { display: flex; gap: 0.6rem; border-top: 1px dashed rgba(180, 140, 80, 0.35); padding-top: 1rem; }
+.btn { font-size: 14px; font-weight: 600; padding: 0.6rem 1.2rem; border-radius: 2px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.btn--pri { background: #8a5a10; color: #f5e8c8; }
+.btn--pri:hover { background: #6a4008; }
+.btn--sec { background: transparent; border-color: rgba(180, 140, 80, 0.5); color: #7a5020; }
+.btn--sec:hover { border-color: #b4830a; color: #8a5a10; }
+
+.sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+.companion-panel { padding: 1.5rem; }
+.companion-head { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.25rem; padding-bottom: 0.85rem; border-bottom: 1px solid rgba(180, 140, 80, 0.28); }
+.companion-avatar { width: 32px; height: 32px; border-radius: 2px; background: rgba(180, 140, 80, 0.15); border: 1px solid #d4b070; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #8a5a10; font-weight: 700; flex-shrink: 0; letter-spacing: 0.06em; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.companion-name { font-size: 13px; font-weight: 700; color: #2a1508; font-style: italic; }
+.companion-name small { display: block; font-size: 11px; color: #8a6030; font-weight: 400; font-style: normal; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.companion-item { padding: 0.9rem 0; border-bottom: 1px dashed rgba(180, 140, 80, 0.25); }
+.companion-item:last-child { border-bottom: none; padding-bottom: 0; }
+.companion-text { font-size: 14px; line-height: 1.7; color: #3a1e08; font-style: italic; }
+.companion-text em { color: #8a5a10; font-style: normal; font-weight: 700; }
+.companion-action { margin-top: 0.4rem; font-size: 12px; color: #b4830a; cursor: pointer; text-decoration: underline; text-decoration-color: rgba(180, 140, 80, 0.4); font-style: normal; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+
+.tracker { padding: 1.25rem 1.5rem; }
+.panel-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6030; margin-bottom: 0.75rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.book-title { font-size: 1.1rem; font-weight: 700; font-style: italic; color: #2a1508; margin-bottom: 0.2rem; }
+.book-author { font-size: 12px; color: #9a7040; margin-bottom: 0.85rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.book-track { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+.book-bar { flex: 1; height: 4px; background: rgba(180, 140, 80, 0.25); border-radius: 1px; overflow: hidden; }
+.book-bar > span { display: block; height: 100%; background: #b4830a; width: 36%; }
+.book-pct { font-size: 12px; color: #8a6030; white-space: nowrap; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.book-chapter { font-size: 13px; color: #4a2808; margin-bottom: 0.6rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.book-prompt { font-size: 13px; color: #4a2808; line-height: 1.65; padding: 0.6rem 0.85rem; border-left: 2px solid rgba(180, 140, 80, 0.5); font-style: italic; background: rgba(180, 140, 80, 0.07); border-radius: 0 2px 2px 0; }
+.book-prompt strong { display: block; color: #8a5a10; font-style: normal; font-size: 10px; letter-spacing: 0.12em; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+
+.basket { padding: 1.25rem 1.5rem; }
+.basket-item { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; padding: 0.65rem 0; border-bottom: 1px dashed rgba(180, 140, 80, 0.25); }
+.basket-item:last-child { border-bottom: none; padding-bottom: 0; }
+.basket-item strong { display: block; font-size: 13px; font-weight: 700; color: #2a1508; margin-bottom: 0.15rem; font-style: italic; }
+.basket-item span { font-size: 12px; color: #7a5020; line-height: 1.45; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.basket-status { font-size: 11px; color: #9a7040; white-space: nowrap; flex-shrink: 0; padding-top: 2px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.basket-status.open { color: #b4830a; font-weight: 600; }
+
+.theme-nav {
+  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 0.5rem; z-index: 20;
+  background: rgba(28, 14, 4, 0.90); backdrop-filter: blur(12px);
+  padding: 0.6rem 1rem; border-radius: 100px;
+  border: 1px solid rgba(180, 140, 80, 0.25);
+}
+.theme-nav a { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-decoration: none; padding: 0.3rem 0.7rem; border-radius: 100px; color: rgba(180, 140, 80, 0.65); transition: all 0.15s; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+.theme-nav a:hover { color: #f5e8c8; background: rgba(180, 140, 80, 0.2); }
+.theme-nav a.active { color: #f5e8c8; background: #8a5a10; }
+body.cos-drop-active::after {
+  content: 'Drop your classroom photo';
+  position: fixed; inset: 0; z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; font-weight: 700; color: #f5e8c8;
+  background: rgba(28,14,4,0.78); border: 3px dashed rgba(180,140,80,0.55);
+  pointer-events: none; font-family: Georgia, serif; font-style: italic;
+}
+.cos-bg-btn {
+  background: transparent; border: 1px solid rgba(180,140,80,0.28);
+  color: rgba(180,140,80,0.65); font-size: 12px; font-weight: 600;
+  padding: 0.25rem 0.65rem; border-radius: 2px; cursor: pointer;
+  font-family: inherit; transition: all 0.15s;
+}
+.cos-bg-btn:hover { color: #f5e8c8; border-color: rgba(180,140,80,0.65); }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div style="display:flex;align-items:baseline;gap:.75rem">
+    <span class="nav-name">The Archive</span>
+    <span class="nav-room">· Room 214 · Ms. Chen</span>
+  </div>
+  <div class="nav-center">Period 1 begins in <strong>14 minutes</strong></div>
+  <div class="nav-right"><span class="companion-dot"></span><span>The Archivist is here</span>
+    <button class="cos-bg-btn" onclick="cosPickBackground()">your room</button>
+  </div>
+</nav>
+
+<div class="layer">
+  <div class="quote-zone">
+    <div class="quote-text">"History is not a burden on the memory but an illumination of the soul."</div>
+    <div class="quote-attr">— Lord Acton · <em>printed and taped beside the classroom map since year one</em></div>
+  </div>
+
+  <div class="morning">
+    <div class="morning-h">Good morning.</div>
+    <div class="morning-sub">Tuesday, October 14. <em>26 students in the record.</em> The day holds three things worth examining before the bell.</div>
+  </div>
+
+  <div class="body">
+    <div>
+      <div class="panel plan-wrap">
+        <div class="section-tag">Today's chronicle</div>
+        <div class="period period--now"><div class="period-dot"></div><div class="period-time">8:15 — 9:05</div><div class="period-info"><strong>Math · Fractions on a number line</strong><span>P1 · Rm 214 · 14 minutes hence</span></div></div>
+        <div class="period"><div class="period-dot"></div><div class="period-time">9:10 — 10:00</div><div class="period-info"><strong>Reading · Bridge to Terabithia, Ch. 4–5</strong><span>P2 · read-aloud</span></div></div>
+        <div class="period period--break"><div class="period-dot"></div><div class="period-time">10:00 — 10:20</div><div class="period-info"><strong>Recess</strong></div></div>
+        <div class="period"><div class="period-dot"></div><div class="period-time">10:20 — 11:10</div><div class="period-info"><strong>Science · States of matter lab</strong><span>P3 · Lab B · safety review complete</span></div></div>
+        <div class="period"><div class="period-dot"></div><div class="period-time">11:15 — 12:05</div><div class="period-info"><strong>Social Studies · Civil Rights, Day 2</strong><span>P4 · three reading variants prepared</span></div></div>
+        <div class="period period--break"><div class="period-dot"></div><div class="period-time">12:10 — 12:55</div><div class="period-info"><strong>Lunch and preparation</strong></div></div>
+        <div class="period"><div class="period-dot"></div><div class="period-time">1:00 — 1:30</div><div class="period-info"><strong>Math intervention · small company</strong><span>6 students · targeted</span></div></div>
+        <div class="period"><div class="period-dot"></div><div class="period-time">1:35 — 3:15</div><div class="period-info"><strong>Writing workshop, then closing</strong><span>P5 and P6</span></div></div>
+      </div>
+
+      <div class="panel next">
+        <div class="section-tag">Next up · Period 1</div>
+        <div class="next-h">Fractions on a number line.</div>
+        <p class="next-p">Lesson the fourteenth. Students place mixed numbers on a stretched number line and compare distances. <em>Yesterday's record shows Jaylen and four others still locating fractions by numerator count — a recurring error, documented across three sessions.</em> Today's warm-up addresses the root. Mia's audio variant is prepared; Marcus's recovery document stands ready.</p>
+        <div class="mats">
+          <div class="mat"><span class="mat-name">Warm-up · 8 slides</span><span class="mat-meta">last amended <em>11:02 PM Mon</em></span></div>
+          <div class="mat"><span class="mat-name">Exit ticket · 4 questions · printable</span><span class="mat-meta">one page</span></div>
+          <div class="mat"><span class="mat-name">Mia L. · audio narration</span><span class="mat-meta"><em>IEP accommodation · 4:12</em></span></div>
+          <div class="mat"><span class="mat-name">Marcus T. · recovery document</span><span class="mat-meta"><em>12 minutes · self-directed</em></span></div>
+        </div>
+        <div class="actions">
+          <button class="btn btn--pri">Open lesson</button>
+          <button class="btn btn--sec">Project to board</button>
+          <button class="btn btn--sec">Amend warm-up</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="panel companion-panel">
+        <div class="companion-head">
+          <div class="companion-avatar">ARC</div>
+          <div class="companion-name">The Archivist<small>classroom companion · all records local</small></div>
+        </div>
+        <div class="companion-item">
+          <div class="companion-text">"The record shows Diego's morning was difficult. His mother sent word at 7:14. <em>History teaches us that the conditions for learning require a certain equanimity.</em> I have prepared a quieter path through today's laboratory."</div>
+          <div class="companion-action">Open Diego's quiet variant →</div>
+        </div>
+        <div class="companion-item">
+          <div class="companion-text">"Jaylen has returned to the same misconception across three consecutive sessions. The pattern is clear and documented. <em>Today's exercise targets the root directly</em> — this may be the session it resolves."</div>
+          <div class="companion-action">Consult Jaylen's record →</div>
+        </div>
+        <div class="companion-item">
+          <div class="companion-text">"Marcus's file shows a gap — he missed the foundational lesson yesterday. The recovery document covers the essential ground in twelve minutes, at his own pace."</div>
+          <div class="companion-action">Preview the document →</div>
+        </div>
+        <div class="companion-item">
+          <div class="companion-text">"The Friday dispatch remains in draft. You will be away at a professional convening that afternoon. I can complete the filing at midday, should you wish."</div>
+          <div class="companion-action">Open the draft →</div>
+        </div>
+      </div>
+
+      <div class="panel tracker">
+        <div class="panel-tag">Class read-aloud</div>
+        <div class="book-title">Bridge to Terabithia</div>
+        <div class="book-author">Katherine Paterson · 1977</div>
+        <div class="book-track"><div class="book-bar"><span></span></div><span class="book-pct">36% · Ch. 4 of 13</span></div>
+        <div class="book-chapter">Today: Chapters 4–5 · the kingdom is established</div>
+        <div class="book-prompt"><strong>Today's inquiry</strong>"Jesse and Leslie build a world with its own laws and mythology. What do people need before they can build something that endures?"</div>
+      </div>
+
+      <div class="panel basket">
+        <div class="panel-tag">Pending matters</div>
+        <div class="basket-item"><div><strong>Civil Rights · Day 3 lesson</strong><span>5 of 9 agents complete · paused for review</span></div><div class="basket-status open">Resume</div></div>
+        <div class="basket-item"><div><strong>Letter to Jaylen's family</strong><span>Archivist drafted · awaiting your revision</span></div><div class="basket-status">Draft</div></div>
+        <div class="basket-item"><div><strong>States of matter assessment</strong><span>22 of 27 reviewed · 5 remaining</span></div><div class="basket-status">5 left</div></div>
+        <div class="basket-item"><div><strong>Friday dispatch packet</strong><span>Archivist completes at midday</span></div><div class="basket-status">Due Thu</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="theme-nav">
+  <a href="Book Nook.html">Book Nook</a>
+  <a href="Cat Gremlin.html">Cat Gremlin</a>
+  <a href="Cottagecore.html">Cottagecore</a>
+  <a href="STEM Commander.html">STEM</a>
+  <a href="Retro Academia.html" class="active">Retro Academia</a>
+</nav>
+<script src="classroom-os-bg.js"></script>
+</body>
+</html>

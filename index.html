@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Room</title>
+  <script src="cos-data.js"></script>
+</head>
+<body>
+<script>
+(async () => {
+  await cosData.applyOnboardingFromUrl();
+  const config = await cosData.getConfig();
+  if (!cosData.isOnboardingComplete(config)) {
+    window.location.replace('onboarding.html');
+    return;
+  }
+  window.location.replace('classroom-os.html');
+})();
+</script>
+</body>
+</html>

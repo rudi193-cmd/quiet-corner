@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="cos-data.js"></script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Book Nook · Room 214</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+
+/*
+  The classroom IS the background.
+  The tool floats on top of it.
+  Teacher drops their own classroom photo here — this Unsplash
+  library image stands in for the real room during design.
+*/
+body {
+  min-height: 100vh;
+  color: #3d2b1f;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: #2a1a0e;
+  background-image: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1920&q=80');
+  background-size: cover;
+  background-position: center 30%;
+  background-attachment: fixed;
+}
+
+/* Warm toning overlay — darkens + warms the photo */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: rgba(39, 22, 10, 0.42);
+  pointer-events: none; z-index: 0;
+}
+
+/* All content floats above the room */
+.bn-layer { position: relative; z-index: 1; }
+
+/* ── Nav ──────────────────────────────────────────────── */
+.bn-nav {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem; height: 58px;
+  background: rgba(39, 22, 10, 0.80);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  border-bottom: 1px solid rgba(221, 200, 152, 0.25);
+}
+.bn-nav-id { display: flex; align-items: baseline; gap: 0.75rem; }
+.bn-nav-name {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 17px; font-weight: 700;
+  color: #fdf6e3; letter-spacing: 0.02em;
+}
+.bn-nav-room { font-size: 13px; color: rgba(200, 168, 122, 0.9); letter-spacing: 0.04em; }
+.bn-nav-center { font-size: 14px; color: rgba(200, 168, 122, 0.85); }
+.bn-nav-center strong { color: #fdf6e3; font-weight: 500; }
+.bn-nav-right {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 13px; color: rgba(200, 168, 122, 0.85);
+}
+.bn-wren-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #c8a87a;
+  animation: bn-pulse 2.4s ease-in-out infinite;
+}
+@keyframes bn-pulse {
+  0%, 100% { opacity: 0.4; } 50% { opacity: 1; }
+}
+
+/* ── Quote zone ───────────────────────────────────────── */
+/* Very transparent — the bookshelves show through */
+.bn-quote-zone {
+  text-align: center;
+  padding: 3.5rem 4rem 3rem;
+  background: rgba(39, 22, 10, 0.28);
+  backdrop-filter: blur(2px);
+  border-bottom: 1px solid rgba(221, 200, 152, 0.18);
+}
+.bn-quote-text {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.1rem; font-style: italic;
+  color: #fdf6e3; line-height: 1.4;
+  letter-spacing: -0.01em;
+  max-width: 820px; margin: 0 auto 1.1rem;
+  text-shadow: 0 1px 12px rgba(39, 22, 10, 0.6);
+}
+.bn-quote-attr {
+  font-size: 13px; color: rgba(200, 168, 122, 0.9);
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.bn-quote-attr em { font-style: normal; color: rgba(253, 246, 227, 0.75); }
+
+/* ── Morning header ───────────────────────────────────── */
+.bn-morning {
+  padding: 2.5rem 2.5rem 0;
+  max-width: 1320px; margin: 0 auto;
+}
+.bn-morning-h {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.8rem; font-weight: 700;
+  color: #fdf6e3; letter-spacing: -0.025em;
+  line-height: 1.1;
+  text-shadow: 0 1px 16px rgba(39, 22, 10, 0.5);
+}
+.bn-morning-sub {
+  font-size: 17px; line-height: 1.6; margin-top: 0.5rem;
+  color: rgba(253, 246, 227, 0.78);
+}
+.bn-morning-sub em { color: #fdf6e3; font-style: italic; }
+
+/* ── Body ─────────────────────────────────────────────── */
+.bn-body {
+  display: grid; grid-template-columns: 1fr 390px;
+  gap: 2rem;
+  padding: 2rem 2.5rem 4rem;
+  max-width: 1320px; margin: 0 auto;
+}
+
+/* Shared panel base */
+.bn-panel {
+  background: rgba(253, 246, 227, 0.86);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  border: 1px solid rgba(221, 200, 152, 0.55);
+  border-radius: 12px;
+  box-shadow: 0 4px 32px rgba(39, 22, 10, 0.22);
+}
+
+/* ── Plan ─────────────────────────────────────────────── */
+.bn-plan-wrap { padding: 1.5rem 1.75rem; margin-bottom: 1.5rem; }
+.bn-plan-head {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase; color: #b5622a; margin-bottom: 1rem;
+}
+
+.bn-period {
+  display: grid; grid-template-columns: 14px 88px 1fr;
+  gap: 0 1rem; align-items: start;
+  padding: 0.6rem 0; border-bottom: 1px dashed rgba(181, 98, 42, 0.18);
+}
+.bn-period:last-child { border-bottom: none; }
+.bn-period--now {
+  background: rgba(181, 98, 42, 0.09);
+  margin: 0 -0.75rem; padding: 0.65rem 0.75rem; border-radius: 6px;
+  border-bottom: none;
+}
+.bn-period--break { opacity: 0.45; }
+.bn-period-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 1.5px solid #ddc898; background: transparent;
+  margin-top: 4px;
+}
+.bn-period--now .bn-period-dot { background: #b5622a; border-color: #b5622a; }
+.bn-period-time { font-size: 12px; color: #8a6a50; font-variant-numeric: tabular-nums; line-height: 1.6; }
+.bn-period-info strong { display: block; font-size: 14px; font-weight: 600; color: #3d2b1f; line-height: 1.5; }
+.bn-period--now .bn-period-info strong { color: #b5622a; }
+.bn-period-info span { font-size: 12px; color: #8a6a50; }
+
+/* ── Next up ──────────────────────────────────────────── */
+.bn-next { padding: 1.75rem; }
+.bn-next-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.16em;
+               text-transform: uppercase; color: #b5622a; margin-bottom: 0.5rem; }
+.bn-next-h {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.65rem; font-weight: 700;
+  color: #3d2b1f; letter-spacing: -0.01em;
+  margin-bottom: 0.6rem; line-height: 1.25;
+}
+.bn-next-p { font-size: 15px; line-height: 1.65; color: #6a4a35; margin-bottom: 1.25rem; }
+.bn-next-p em { color: #3d2b1f; font-style: italic; }
+
+.bn-mats { border-top: 1px dashed rgba(181, 98, 42, 0.25);
+           padding-top: 1rem; margin-bottom: 1.1rem;
+           display: flex; flex-direction: column; gap: 0.45rem; }
+.bn-mat { display: flex; justify-content: space-between;
+          align-items: baseline; font-size: 14px; }
+.bn-mat-name { color: #3d2b1f; }
+.bn-mat-meta { font-size: 12px; color: #b89a7a; }
+.bn-mat-meta em { color: #b5622a; font-style: normal; }
+
+.bn-actions { display: flex; gap: 0.6rem;
+              border-top: 1px dashed rgba(181, 98, 42, 0.25);
+              padding-top: 1rem; }
+.bn-btn {
+  font-family: inherit; font-size: 14px; font-weight: 600;
+  padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer;
+  border: 1px solid transparent; transition: all 0.15s;
+}
+.bn-btn--pri { background: #b5622a; color: #fdf6e3; }
+.bn-btn--pri:hover { background: #8a4a1f; }
+.bn-btn--sec { background: transparent; border-color: rgba(181, 98, 42, 0.4); color: #8a6a50; }
+.bn-btn--sec:hover { border-color: #b5622a; color: #b5622a; }
+
+/* ── Sidebar panels ───────────────────────────────────── */
+.bn-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+/* Wren */
+.bn-wren-panel { padding: 1.5rem; }
+.bn-wren-head {
+  display: flex; align-items: center; gap: 0.6rem;
+  margin-bottom: 1.25rem; padding-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(181, 98, 42, 0.2);
+}
+.bn-wren-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(181, 98, 42, 0.15); border: 1px solid #ddc898;
+  display: flex; align-items: center; justify-content: center;
+  font-family: Georgia, serif; font-size: 14px;
+  color: #b5622a; font-style: italic; font-weight: 700; flex-shrink: 0;
+}
+.bn-wren-name { font-size: 13px; font-weight: 600; color: #3d2b1f; }
+.bn-wren-name small { display: block; font-size: 11px; color: #b89a7a; font-weight: 400; }
+
+.bn-wren-item { padding: 0.85rem 0; border-bottom: 1px dashed rgba(181, 98, 42, 0.18); }
+.bn-wren-item:last-child { border-bottom: none; padding-bottom: 0; }
+.bn-wren-text { font-size: 14px; line-height: 1.65; color: #5a3d2b; font-style: italic; }
+.bn-wren-text em { color: #b5622a; font-style: normal; font-weight: 600; }
+.bn-wren-action {
+  margin-top: 0.35rem; font-size: 12px; color: #b5622a; font-style: normal;
+  cursor: pointer; text-decoration: underline; text-decoration-color: rgba(181, 98, 42, 0.35);
+}
+
+/* Reading tracker */
+.bn-reading { padding: 1.25rem 1.5rem; }
+.bn-panel-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+                text-transform: uppercase; color: #8a6a50; margin-bottom: 0.75rem; }
+.bn-book-title { font-family: Georgia, serif; font-size: 1.1rem;
+                  font-style: italic; color: #3d2b1f; font-weight: 700; margin-bottom: 0.2rem; }
+.bn-book-author { font-size: 12px; color: #b89a7a; margin-bottom: 0.85rem; }
+.bn-book-track { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+.bn-book-bar { flex: 1; height: 5px; background: rgba(181, 98, 42, 0.18); border-radius: 2px; overflow: hidden; }
+.bn-book-bar > span { display: block; height: 100%; background: #b5622a; width: 36%; }
+.bn-book-pct { font-size: 12px; color: #8a6a50; white-space: nowrap; }
+.bn-book-chapter { font-size: 13px; color: #5a3d2b; margin-bottom: 0.6rem; }
+.bn-book-prompt {
+  font-size: 13px; color: #6a4a35; line-height: 1.6;
+  padding: 0.6rem 0.85rem; border-left: 2px solid rgba(181, 98, 42, 0.4);
+  font-style: italic; background: rgba(181, 98, 42, 0.05); border-radius: 0 4px 4px 0;
+}
+.bn-book-prompt strong { display: block; color: #b5622a; font-style: normal;
+                          font-size: 10px; letter-spacing: 0.12em; font-weight: 700;
+                          text-transform: uppercase; margin-bottom: 0.3rem; }
+
+/* Basket */
+.bn-basket { padding: 1.25rem 1.5rem; }
+.bn-basket-item {
+  display: flex; justify-content: space-between; gap: 1rem;
+  align-items: flex-start; padding: 0.65rem 0;
+  border-bottom: 1px dashed rgba(181, 98, 42, 0.18);
+}
+.bn-basket-item:last-child { border-bottom: none; padding-bottom: 0; }
+.bn-basket-item strong { display: block; font-size: 13px; font-weight: 500; color: #3d2b1f; margin-bottom: 0.15rem; }
+.bn-basket-item span { font-size: 12px; color: #8a6a50; line-height: 1.45; }
+.bn-basket-status { font-size: 11px; color: #b89a7a; white-space: nowrap; flex-shrink: 0; padding-top: 2px; }
+.bn-basket-status.open { color: #b5622a; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="bn-nav">
+  <div class="bn-nav-id">
+    <span class="bn-nav-name">Book Nook</span>
+    <span class="bn-nav-room" id="nav-teacher">· Ms. Chen · Room 214</span>
+  </div>
+  <div class="bn-nav-center">
+    Period 1 begins in <strong>14 minutes</strong>
+  </div>
+  <div class="bn-nav-right">
+    <span class="bn-wren-dot"></span>
+    <span id="companion-label">Wren is here</span>
+    <button class="cos-bg-btn" onclick="cosPickBackground()">your room</button>
+  </div>
+</nav>
+
+<div class="bn-layer">
+
+  <!-- Quote zone — very transparent, room shows through -->
+  <div class="bn-quote-zone">
+    <div class="bn-quote-text">
+      "He showed her the eeriness of the place — the way mist was rising from the creek in little wisps, as if the earth were breathing."
+    </div>
+    <div class="bn-quote-attr">
+      — <em>Bridge to Terabithia</em> · Ch. 4 · today's read-aloud · P2 at 9:10
+    </div>
+  </div>
+
+  <!-- Morning -->
+  <div class="bn-morning">
+    <div class="bn-morning-h">Good morning.</div>
+    <div class="bn-morning-sub">
+      Tuesday, October 14. <em>26 students expected.</em>
+      Math first, then reading. You'll be in the lab by 10:20.
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="bn-body">
+
+    <!-- Left -->
+    <div>
+      <!-- Plan -->
+      <div class="bn-panel bn-plan-wrap">
+        <div class="bn-plan-head">Today's plan</div>
+
+        <div class="bn-period bn-period--now">
+          <div class="bn-period-dot"></div>
+          <div class="bn-period-time">8:15 — 9:05</div>
+          <div class="bn-period-info">
+            <strong>Math · Fractions on a number line</strong>
+            <span>P1 · Rm 214 · begins in 14 min</span>
+          </div>
+        </div>
+        <div class="bn-period">
+          <div class="bn-period-dot"></div>
+          <div class="bn-period-time">9:10 — 10:00</div>
+          <div class="bn-period-info">
+            <strong>Reading · Bridge to Terabithia, Ch. 4–5</strong>
+            <span>P2 · read-aloud + discussion</span>
+          </div>
+        </div>
+        <div class="bn-period bn-period--break">
+          <div class="bn-period-dot"></div>
+          <div class="bn-period-time">10:00 — 10:20</div>
+          <div class="bn-period-info"><strong>Recess</strong></div>
+        </div>
+        <div class="bn-period">
+          <div class="bn-period-dot"></div>
+          <div class="bn-period-time">10:20 — 11:10</div>
+          <div class="bn-period-info">
+            <strong>Science · States of matter lab</strong>
+            <span>P3 · Lab B · dry ice demo</span>
+          </div>
+        </div>
+        <div class="bn-period">
+          <div class="bn-period-dot"></div>
+          <div class="bn-period-time">11:15 — 12:05</div>
+          <div class="bn-period-info">
+            <strong>Social Studies · Civil Rights, Day 2</strong>
+            <span>P4 · differentiated readings ready</span>
+          </div>
+        </div>
+        <div class="bn-period bn-period--break">
+          <div class="bn-period-dot"></div>
+          <div class="bn-period-time">12:10 — 12:55</div>
+          <div class="bn-period-info"><strong>Lunch + prep</strong></div>
+        </div>
+        <div class="bn-period">
+          <div class="bn-period-dot"></div>
+          <div class="bn-period-time">1:00 — 1:30</div>
+          <div class="bn-period-info">
+            <strong>Math intervention · small group</strong>
+            <span>Jaylen, Marcus, Sofia, Tobias, Lin, Emmy</span>
+          </div>
+        </div>
+        <div class="bn-period">
+          <div class="bn-period-dot"></div>
+          <div class="bn-period-time">1:35 — 3:15</div>
+          <div class="bn-period-info">
+            <strong>Writing workshop, then closing</strong>
+            <span>P5 + P6</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Next up -->
+      <div class="bn-panel bn-next">
+        <div class="bn-next-tag">Next up · Period 1</div>
+        <div class="bn-next-h">Fractions on a number line.</div>
+        <p class="bn-next-p">
+          Lesson 14. Students place mixed numbers on a stretched number line
+          and compare distances. <em>Jaylen and four others are still locating
+          fractions by numerator alone</em> — the warm-up targets that directly.
+          Mia's audio version is queued. Marcus's catchup deck is ready.
+        </p>
+        <div class="bn-mats">
+          <div class="bn-mat">
+            <span class="bn-mat-name">Number-line warm-up · 8 slides</span>
+            <span class="bn-mat-meta">last edited <em>11:02 PM Mon</em></span>
+          </div>
+          <div class="bn-mat">
+            <span class="bn-mat-name">Exit ticket · 4 problems · printable</span>
+            <span class="bn-mat-meta">1 page</span>
+          </div>
+          <div class="bn-mat">
+            <span class="bn-mat-name">Mia L. · audio-narrated version</span>
+            <span class="bn-mat-meta"><em>IEP · 4:12</em></span>
+          </div>
+          <div class="bn-mat">
+            <span class="bn-mat-name">Marcus T. · catchup deck</span>
+            <span class="bn-mat-meta"><em>12 min · self-paced</em></span>
+          </div>
+        </div>
+        <div class="bn-actions">
+          <button class="bn-btn bn-btn--pri">Open lesson</button>
+          <button class="bn-btn bn-btn--sec">Project to board</button>
+          <button class="bn-btn bn-btn--sec">Edit warm-up</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right sidebar -->
+    <div class="bn-sidebar">
+
+      <!-- Wren -->
+      <div class="bn-panel bn-wren-panel">
+        <div class="bn-wren-head">
+          <div class="bn-wren-avatar">W</div>
+          <div class="bn-wren-name">Wren
+            <small>classroom companion · always local</small>
+          </div>
+        </div>
+        <div class="bn-wren-item">
+          <div class="bn-wren-text">"Diego's morning was hard. His mom left a note at 7:14 — rough start at home. I've set aside a solo version of the lab so he can step back without drawing attention to himself."</div>
+          <div class="bn-wren-action">Open Diego's quiet alt →</div>
+        </div>
+        <div class="bn-wren-item">
+          <div class="bn-wren-text">"Marcus missed the intro. The catchup deck is ready — 12 minutes, self-paced. You could hand it to him before the bell or save it for recess."</div>
+          <div class="bn-wren-action">Preview catchup deck →</div>
+        </div>
+        <div class="bn-wren-item">
+          <div class="bn-wren-text">"Jaylen's been carrying something since yesterday's exit ticket. Five wrong in a row on the same problem lands hard. A softer first ten minutes might help."</div>
+          <div class="bn-wren-action">See Jaylen's graph →</div>
+        </div>
+        <div class="bn-wren-item">
+          <div class="bn-wren-text">"The Friday sub packet needs you by Thursday. <em>I can finish it at lunch</em> if that helps."</div>
+          <div class="bn-wren-action">Open draft →</div>
+        </div>
+      </div>
+
+      <!-- Reading tracker -->
+      <div class="bn-panel bn-reading">
+        <div class="bn-panel-tag">Class read-aloud</div>
+        <div class="bn-book-title">Bridge to Terabithia</div>
+        <div class="bn-book-author">Katherine Paterson · 1977</div>
+        <div class="bn-book-track">
+          <div class="bn-book-bar"><span></span></div>
+          <span class="bn-book-pct">36% · Ch. 4 of 13</span>
+        </div>
+        <div class="bn-book-chapter">Today: Ch. 4–5 · first visit to Terabithia</div>
+        <div class="bn-book-prompt">
+          <strong>Today's discussion prompt</strong>
+          "Jesse and Leslie's secret world gives them something real. What is it — and who do you think needs it more?"
+        </div>
+      </div>
+
+      <!-- Basket -->
+      <div class="bn-panel bn-basket">
+        <div class="bn-panel-tag">In the basket</div>
+        <div class="bn-basket-item">
+          <div>
+            <strong>Civil Rights · Day 3 lesson</strong>
+            <span>5 of 9 agents done · paused for your review</span>
+          </div>
+          <div class="bn-basket-status open">Resume</div>
+        </div>
+        <div class="bn-basket-item">
+          <div>
+            <strong>Parent letter · Jaylen's family</strong>
+            <span>Wren drafted · awaiting your edit</span>
+          </div>
+          <div class="bn-basket-status">Draft</div>
+        </div>
+        <div class="bn-basket-item">
+          <div>
+            <strong>States of matter quiz</strong>
+            <span>auto-graded · 22 of 27 reviewed</span>
+          </div>
+          <div class="bn-basket-status">5 left</div>
+        </div>
+        <div class="bn-basket-item">
+          <div>
+            <strong>Friday sub packet</strong>
+            <span>Wren can finish this at lunch</span>
+          </div>
+          <div class="bn-basket-status">Due Thu</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<style>
+.theme-nav {
+  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 0.5rem; z-index: 20;
+  background: rgba(39, 22, 10, 0.88); backdrop-filter: blur(12px);
+  padding: 0.6rem 1rem; border-radius: 100px;
+  border: 1px solid rgba(221, 200, 152, 0.25);
+}
+.theme-nav a {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+  text-decoration: none; padding: 0.3rem 0.7rem; border-radius: 100px;
+  color: rgba(200, 168, 122, 0.7); transition: all 0.15s;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+.theme-nav a:hover { color: #fdf6e3; background: rgba(181, 98, 42, 0.2); }
+.theme-nav a.active { color: #fdf6e3; background: #b5622a; }
+/* Drop indicator */
+body.cos-drop-active::after {
+  content: 'Drop your classroom photo';
+  position: fixed; inset: 0; z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; font-weight: 600; color: #fdf6e3;
+  background: rgba(39,22,10,0.72); border: 3px dashed rgba(181,98,42,0.6);
+  pointer-events: none; font-family: Georgia, serif; font-style: italic;
+}
+.cos-bg-btn {
+  background: transparent; border: 1px solid rgba(221,200,152,0.3);
+  color: rgba(200,168,122,0.7); font-size: 12px; font-weight: 600;
+  padding: 0.25rem 0.65rem; border-radius: 4px; cursor: pointer;
+  font-family: inherit; transition: all 0.15s;
+}
+.cos-bg-btn:hover { color: #fdf6e3; border-color: rgba(181,98,42,0.6); }
+</style>
+
+<nav class="theme-nav">
+  <a href="classroom-os.html">Hub</a>
+  <a href="book-nook.html" class="active">Book Nook</a>
+  <a href="cat-gremlin.html">Cat Gremlin</a>
+  <a href="cottagecore.html">Cottagecore</a>
+  <a href="stem-commander.html">STEM</a>
+  <a href="retro-academia.html">Retro Academia</a>
+
+  <a href="records.html">Records</a></nav>
+
+
+<script src="room-wiring.js"></script>
+<script>bootRoom('wren');</script>
+<script src="classroom-os-bg.js"></script>
+</body>
+</html>

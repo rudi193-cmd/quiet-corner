@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="cos-data.js"></script>
+<link rel="stylesheet" href="cos-archetype-themes.css" />
+<link rel="stylesheet" href="cos-app-shell.css" />
+<link rel="stylesheet" href="cos-hub.css" />
+<script src="cos-theme.js"></script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Quiet Corner · Choose your room</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+/* backdrop + palette: cos-hub.css + cos-archetype-themes.css */
+
+.hub-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(200, 170, 120, 0.7);
+  margin-bottom: 1rem; text-align: center;
+}
+.hub-h {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2rem, 4vw, 3rem); font-weight: 700;
+  color: #f5f0e8; letter-spacing: -0.02em;
+  text-align: center; line-height: 1.15;
+  margin-bottom: 0.75rem;
+}
+.hub-sub {
+  font-size: 17px; color: rgba(200, 170, 120, 0.75);
+  text-align: center; line-height: 1.6; max-width: 540px;
+  margin: 0 auto 3.5rem;
+}
+.hub-sub em { color: rgba(240, 210, 160, 0.9); font-style: italic; }
+
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.25rem;
+  max-width: 1200px; width: 100%;
+}
+
+.hub-card {
+  text-decoration: none;
+  border-radius: 10px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  display: flex; flex-direction: column;
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background-size: cover; background-position: center;
+}
+.hub-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.45);
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* Individual card backgrounds */
+.hub-card--booknook {
+  background-color: #2a1a0e;
+  background-image: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&q=70');
+}
+.hub-card--catgremlin {
+  background-color: #1a0528;
+  background-image: url('https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=600&q=70');
+}
+.hub-card--cottagecore {
+  background-color: #0d1f0a;
+  background-image: url('https://images.unsplash.com/photo-1466781783364-36c955e42a7f?w=600&q=70');
+}
+.hub-card--stem {
+  background-color: #050a18;
+  background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=70');
+}
+.hub-card--retro {
+  background-color: #1e0f04;
+  background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=600&q=70');
+}
+
+.hub-card-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 1.5rem;
+}
+
+/* Per-card overlay gradients */
+.hub-card--booknook .hub-card-overlay { background: linear-gradient(to top, rgba(39,22,10,0.92) 0%, rgba(39,22,10,0.2) 60%, transparent 100%); }
+.hub-card--catgremlin .hub-card-overlay { background: linear-gradient(to top, rgba(30,5,55,0.92) 0%, rgba(30,5,55,0.2) 60%, transparent 100%); }
+.hub-card--cottagecore .hub-card-overlay { background: linear-gradient(to top, rgba(15,35,10,0.92) 0%, rgba(15,35,10,0.2) 60%, transparent 100%); }
+.hub-card--stem .hub-card-overlay { background: linear-gradient(to top, rgba(3,8,25,0.95) 0%, rgba(3,8,25,0.3) 60%, transparent 100%); }
+.hub-card--retro .hub-card-overlay { background: linear-gradient(to top, rgba(28,14,4,0.92) 0%, rgba(28,14,4,0.2) 60%, transparent 100%); }
+
+.hub-card-companion {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; margin-bottom: 0.4rem;
+  opacity: 0.7;
+}
+.hub-card--booknook .hub-card-companion { color: #c8a87a; }
+.hub-card--catgremlin .hub-card-companion { color: #f9a8d4; }
+.hub-card--cottagecore .hub-card-companion { color: #a3d08a; }
+.hub-card--stem .hub-card-companion { color: #60a5fa; font-family: 'Courier New', monospace; }
+.hub-card--retro .hub-card-companion { color: #d4b070; font-family: Georgia, serif; }
+
+.hub-card-name {
+  font-size: 1.2rem; font-weight: 700; line-height: 1.2;
+  margin-bottom: 0.4rem;
+}
+.hub-card--booknook .hub-card-name { color: #fdf6e3; font-family: Georgia, serif; }
+.hub-card--catgremlin .hub-card-name { color: #fdf0ff; }
+.hub-card--cottagecore .hub-card-name { color: #f0fce8; font-family: Georgia, serif; font-style: italic; }
+.hub-card--stem .hub-card-name { color: #e8f0ff; letter-spacing: 0.06em; text-transform: uppercase; font-size: 1rem; font-family: 'Courier New', monospace; }
+.hub-card--retro .hub-card-name { color: #f5e8c8; font-family: Georgia, serif; font-style: italic; }
+
+.hub-card-desc {
+  font-size: 12px; line-height: 1.55; opacity: 0.65;
+}
+.hub-card--booknook .hub-card-desc { color: #fdf6e3; }
+.hub-card--catgremlin .hub-card-desc { color: #fdf0ff; }
+.hub-card--cottagecore .hub-card-desc { color: #f0fce8; }
+.hub-card--stem .hub-card-desc { color: #c8dcff; font-family: 'Courier New', monospace; font-size: 11px; }
+.hub-card--retro .hub-card-desc { color: #f5e8c8; font-family: Georgia, serif; font-style: italic; }
+
+.hub-card-arrow {
+  position: absolute; top: 1.25rem; right: 1.25rem;
+  font-size: 16px; opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.hub-card--booknook .hub-card-arrow { color: #c8a87a; }
+.hub-card--catgremlin .hub-card-arrow { color: #f9a8d4; }
+.hub-card--cottagecore .hub-card-arrow { color: #a3d08a; }
+.hub-card--stem .hub-card-arrow { color: #60a5fa; }
+.hub-card--retro .hub-card-arrow { color: #d4b070; }
+.hub-card:hover .hub-card-arrow { opacity: 1; }
+
+.hub-footer {
+  margin-top: 3rem; text-align: center;
+  font-size: 13px; color: rgba(200, 170, 120, 0.45);
+  letter-spacing: 0.04em;
+}
+.hub-footer em { font-style: normal; color: rgba(200, 170, 120, 0.65); }
+</style>
+</head>
+<body class="cos-hub">
+
+<div class="hub-eyebrow">Quiet Corner · Ms. Chen · Room 214</div>
+<h1 class="hub-h">Choose your room.</h1>
+<p class="hub-sub">
+  Every archetype is the <em>same tool</em> — same data, same AI, same local-first principles.
+  The room changes. The companion changes. The way information speaks to you changes.
+</p>
+<p style="text-align:center;margin:-2rem auto 2.5rem;">
+  <a href="records.html" style="display:inline-block;padding:0.85rem 1.75rem;background:rgba(240,210,160,0.95);color:#2a1a0e;font-weight:700;text-decoration:none;border-radius:999px;font-size:15px;box-shadow:0 4px 24px rgba(0,0,0,0.25);">Go to Records — observations &amp; backup</a>
+</p>
+
+<div class="hub-grid">
+
+  <a href="book-nook.html" class="hub-card hub-card--booknook" data-archetype="wren">
+    <span class="hub-card-arrow">→</span>
+    <div class="hub-card-overlay">
+      <div class="hub-card-companion">Companion · Wren</div>
+      <div class="hub-card-name">Book Nook</div>
+      <div class="hub-card-desc">Warm amber, Georgia type, literary companion. The room smells like old paper.</div>
+    </div>
+  </a>
+
+  <a href="cat-gremlin.html" class="hub-card hub-card--catgremlin" data-archetype="patches">
+    <span class="hub-card-arrow">→</span>
+    <div class="hub-card-overlay">
+      <div class="hub-card-companion">Companion · Patches</div>
+      <div class="hub-card-name">Cat Gremlin</div>
+      <div class="hub-card-desc">Hot pink, controlled chaos, feral Friday mode. Patches gets it done.</div>
+    </div>
+  </a>
+
+  <a href="cottagecore.html" class="hub-card hub-card--cottagecore" data-archetype="sage">
+    <span class="hub-card-arrow">→</span>
+    <div class="hub-card-overlay">
+      <div class="hub-card-companion">Companion · Sage</div>
+      <div class="hub-card-name">Cottagecore</div>
+      <div class="hub-card-desc">Sage green, botanical calm, everything grows at its own pace.</div>
+    </div>
+  </a>
+
+  <a href="stem-commander.html" class="hub-card hub-card--stem" data-archetype="apex">
+    <span class="hub-card-arrow">→</span>
+    <div class="hub-card-overlay">
+      <div class="hub-card-companion">Companion · Apex</div>
+      <div class="hub-card-name">STEM COMMAND</div>
+      <div class="hub-card-desc">Dark mode. Mission control. Every flag logged and tracked.</div>
+    </div>
+  </a>
+
+  <a href="retro-academia.html" class="hub-card hub-card--retro" data-archetype="archivist">
+    <span class="hub-card-arrow">→</span>
+    <div class="hub-card-overlay">
+      <div class="hub-card-companion">Companion · The Archivist</div>
+      <div class="hub-card-name">The Archive</div>
+      <div class="hub-card-desc">Parchment, Georgia serif, scholarly narrator. The record is always kept.</div>
+    </div>
+  </a>
+
+</div>
+
+<nav class="cos-theme-nav cos-theme-nav--flow" id="cos-theme-nav" aria-label="Room navigation"></nav>
+
+<div class="hub-footer"><a href="records.html">Records</a>
+  All data local. No cloud. No subscription. <em>Your classroom, your corner.</em>
+</div>
+
+
+<script>
+(async () => {
+  await cosTheme.bootApp({ nav: 'hub' });
+  await cosData.applyOnboardingFromUrl();
+  const config = await cosData.getConfig();
+  if (!cosData.isOnboardingComplete(config)) {
+    window.location.replace('onboarding.html');
+    return;
+  }
+  const name = config.teacher_name;
+  if (name && name !== 'Your Name') {
+    document.querySelector('.hub-eyebrow').textContent = 'Quiet Corner · ' + name;
+  }
+  document.querySelectorAll('[data-archetype]').forEach(card => {
+    card.addEventListener('click', () => {
+      const arch = card.dataset.archetype;
+      if (arch) cosData.patchConfig({ preferences: { archetype: arch } });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

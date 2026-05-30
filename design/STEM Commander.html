@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>COMMAND · Room 214</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: #050a18;
+  background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80');
+  background-size: cover;
+  background-position: center 50%;
+  background-attachment: fixed;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background: rgba(3, 8, 22, 0.60);
+  pointer-events: none; z-index: 0;
+}
+.layer { position: relative; z-index: 1; }
+
+.nav {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem; height: 58px;
+  background: rgba(3, 8, 25, 0.90);
+  backdrop-filter: blur(14px) saturate(1.5);
+  -webkit-backdrop-filter: blur(14px) saturate(1.5);
+  border-bottom: 1px solid rgba(96, 165, 250, 0.25);
+}
+.nav-name { font-size: 14px; font-weight: 700; color: #e8f0ff; letter-spacing: 0.14em; text-transform: uppercase; }
+.nav-room { font-size: 12px; color: rgba(96, 165, 250, 0.75); margin-left: 0.75rem; letter-spacing: 0.08em; font-family: 'Courier New', monospace; }
+.nav-center { font-size: 13px; color: rgba(148, 190, 255, 0.85); font-family: 'Courier New', monospace; letter-spacing: 0.04em; }
+.nav-center strong { color: #60a5fa; font-weight: 400; }
+.nav-right { display: flex; align-items: center; gap: 0.6rem; font-size: 12px; color: rgba(96, 165, 250, 0.7); font-family: 'Courier New', monospace; }
+.companion-dot { width: 7px; height: 7px; border-radius: 50%; background: #60a5fa; animation: pulse 1.8s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+.quote-zone {
+  text-align: center; padding: 3.5rem 4rem 3rem;
+  background: rgba(3, 8, 25, 0.38); backdrop-filter: blur(2px);
+  border-bottom: 1px solid rgba(96, 165, 250, 0.15);
+}
+.quote-text {
+  font-size: 1.95rem; line-height: 1.4; color: #e8f0ff;
+  letter-spacing: -0.01em; max-width: 820px; margin: 0 auto 1.1rem;
+  text-shadow: 0 1px 16px rgba(3, 8, 25, 0.7);
+  font-style: italic;
+}
+.quote-attr { font-size: 13px; color: rgba(96, 165, 250, 0.75); letter-spacing: 0.1em; text-transform: uppercase; font-family: 'Courier New', monospace; }
+.quote-attr em { font-style: normal; color: rgba(180, 210, 255, 0.65); }
+
+.morning { padding: 2.5rem 2.5rem 0; max-width: 1320px; margin: 0 auto; }
+.morning-h {
+  font-size: 2.8rem; font-weight: 700; color: #e8f0ff;
+  letter-spacing: -0.025em; line-height: 1.1;
+  text-shadow: 0 1px 20px rgba(3, 8, 25, 0.6);
+}
+.morning-sub { font-size: 17px; color: rgba(180, 210, 255, 0.75); margin-top: 0.5rem; line-height: 1.6; font-family: 'Courier New', monospace; font-size: 14px; letter-spacing: 0.02em; }
+.morning-sub em { color: #60a5fa; font-style: normal; }
+.status-chips { display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap; }
+.chip {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 3px; font-family: 'Courier New', monospace;
+  background: rgba(96, 165, 250, 0.12); color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.25);
+}
+.chip.ok { color: #4ade80; background: rgba(74, 222, 128, 0.1); border-color: rgba(74, 222, 128, 0.2); }
+.chip.warn { color: #fbbf24; background: rgba(251, 191, 36, 0.1); border-color: rgba(251, 191, 36, 0.2); }
+
+.body {
+  display: grid; grid-template-columns: 1fr 390px; gap: 2rem;
+  padding: 2rem 2.5rem 4rem; max-width: 1320px; margin: 0 auto;
+}
+/* Dark panels for STEM */
+.panel {
+  background: rgba(8, 18, 45, 0.82);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  border: 1px solid rgba(96, 165, 250, 0.22);
+  border-radius: 6px;
+  box-shadow: 0 4px 32px rgba(3, 8, 25, 0.35), 0 0 0 0 transparent;
+  color: #c8dcff;
+}
+
+.plan-wrap { padding: 1.5rem 1.75rem; margin-bottom: 1.5rem; }
+.section-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #60a5fa; margin-bottom: 1rem; font-family: 'Courier New', monospace; }
+.period { display: grid; grid-template-columns: 14px 88px 1fr; gap: 0 1rem; align-items: start; padding: 0.6rem 0; border-bottom: 1px solid rgba(96, 165, 250, 0.1); }
+.period:last-child { border-bottom: none; }
+.period--now { background: rgba(96, 165, 250, 0.08); margin: 0 -0.75rem; padding: 0.65rem 0.75rem; border-radius: 4px; border-bottom: none; }
+.period--break { opacity: 0.35; }
+.period-dot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid rgba(96, 165, 250, 0.4); background: transparent; margin-top: 5px; }
+.period--now .period-dot { background: #60a5fa; border-color: #60a5fa; box-shadow: 0 0 6px rgba(96, 165, 250, 0.5); }
+.period-time { font-size: 11px; color: rgba(96, 165, 250, 0.6); font-variant-numeric: tabular-nums; line-height: 1.6; font-family: 'Courier New', monospace; }
+.period-info strong { display: block; font-size: 13px; font-weight: 600; color: #e8f0ff; line-height: 1.5; }
+.period--now .period-info strong { color: #60a5fa; }
+.period-info span { font-size: 11px; color: rgba(148, 180, 230, 0.6); font-family: 'Courier New', monospace; }
+
+.next { padding: 1.75rem; }
+.next-h { font-size: 1.55rem; font-weight: 700; color: #e8f0ff; letter-spacing: -0.01em; margin: 0.5rem 0 0.6rem; line-height: 1.25; }
+.next-p { font-size: 14px; line-height: 1.65; color: rgba(180, 210, 255, 0.8); margin-bottom: 1.25rem; }
+.next-p em { color: #60a5fa; font-style: normal; font-weight: 500; }
+.mats { border-top: 1px solid rgba(96, 165, 250, 0.15); padding-top: 1rem; margin-bottom: 1.1rem; display: flex; flex-direction: column; gap: 0.45rem; }
+.mat { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; }
+.mat-name { color: #c8dcff; }
+.mat-meta { font-size: 11px; color: rgba(96, 165, 250, 0.6); font-family: 'Courier New', monospace; }
+.mat-meta em { color: #60a5fa; font-style: normal; }
+.actions { display: flex; gap: 0.6rem; border-top: 1px solid rgba(96, 165, 250, 0.15); padding-top: 1rem; }
+.btn { font-family: inherit; font-size: 13px; font-weight: 600; padding: 0.55rem 1.1rem; border-radius: 4px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; letter-spacing: 0.02em; }
+.btn--pri { background: #1d4ed8; color: #e8f0ff; border-color: #2563eb; }
+.btn--pri:hover { background: #2563eb; }
+.btn--sec { background: transparent; border-color: rgba(96, 165, 250, 0.3); color: rgba(148, 180, 230, 0.8); }
+.btn--sec:hover { border-color: #60a5fa; color: #60a5fa; }
+
+.sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+.companion-panel { padding: 1.5rem; }
+.companion-head { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.25rem; padding-bottom: 0.85rem; border-bottom: 1px solid rgba(96, 165, 250, 0.18); }
+.companion-avatar { width: 32px; height: 32px; border-radius: 4px; background: rgba(96, 165, 250, 0.12); border: 1px solid rgba(96, 165, 250, 0.3); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #60a5fa; font-weight: 700; flex-shrink: 0; letter-spacing: 0.06em; font-family: 'Courier New', monospace; }
+.companion-name { font-size: 13px; font-weight: 600; color: #e8f0ff; }
+.companion-name small { display: block; font-size: 11px; color: rgba(96, 165, 250, 0.6); font-weight: 400; font-family: 'Courier New', monospace; }
+.companion-item { padding: 0.8rem 0; border-bottom: 1px solid rgba(96, 165, 250, 0.1); }
+.companion-item:last-child { border-bottom: none; padding-bottom: 0; }
+.companion-text { font-size: 13px; line-height: 1.6; color: rgba(180, 210, 255, 0.85); font-family: 'Courier New', monospace; }
+.companion-text .key { color: #60a5fa; font-weight: 700; }
+.companion-text .flag { color: #fbbf24; }
+.companion-text .ok { color: #4ade80; }
+.companion-action { margin-top: 0.35rem; font-size: 11px; color: #60a5fa; cursor: pointer; text-decoration: underline; text-decoration-color: rgba(96, 165, 250, 0.3); font-family: 'Courier New', monospace; }
+
+.tracker { padding: 1.25rem 1.5rem; }
+.panel-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(96, 165, 250, 0.6); margin-bottom: 0.75rem; font-family: 'Courier New', monospace; }
+.book-title { font-size: 1rem; font-weight: 700; color: #e8f0ff; margin-bottom: 0.2rem; }
+.book-author { font-size: 11px; color: rgba(96, 165, 250, 0.55); margin-bottom: 0.85rem; font-family: 'Courier New', monospace; }
+.book-track { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+.book-bar { flex: 1; height: 4px; background: rgba(96, 165, 250, 0.15); border-radius: 2px; overflow: hidden; }
+.book-bar > span { display: block; height: 100%; background: #60a5fa; width: 36%; box-shadow: 0 0 8px rgba(96, 165, 250, 0.5); }
+.book-pct { font-size: 11px; color: rgba(96, 165, 250, 0.6); white-space: nowrap; font-family: 'Courier New', monospace; }
+.book-chapter { font-size: 12px; color: rgba(180, 210, 255, 0.75); margin-bottom: 0.6rem; font-family: 'Courier New', monospace; }
+.book-prompt { font-size: 13px; color: rgba(180, 210, 255, 0.8); line-height: 1.6; padding: 0.6rem 0.85rem; border-left: 2px solid rgba(96, 165, 250, 0.4); background: rgba(96, 165, 250, 0.06); border-radius: 0 3px 3px 0; }
+.book-prompt strong { display: block; color: #60a5fa; font-style: normal; font-size: 10px; letter-spacing: 0.12em; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem; font-family: 'Courier New', monospace; }
+
+.basket { padding: 1.25rem 1.5rem; }
+.basket-item { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; padding: 0.6rem 0; border-bottom: 1px solid rgba(96, 165, 250, 0.1); }
+.basket-item:last-child { border-bottom: none; padding-bottom: 0; }
+.basket-item strong { display: block; font-size: 13px; font-weight: 500; color: #c8dcff; margin-bottom: 0.15rem; }
+.basket-item span { font-size: 11px; color: rgba(96, 165, 250, 0.55); line-height: 1.45; font-family: 'Courier New', monospace; }
+.basket-status { font-size: 10px; color: rgba(96, 165, 250, 0.5); white-space: nowrap; flex-shrink: 0; padding-top: 3px; font-family: 'Courier New', monospace; letter-spacing: 0.06em; text-transform: uppercase; }
+.basket-status.open { color: #60a5fa; font-weight: 700; }
+
+.theme-nav {
+  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 0.5rem; z-index: 20;
+  background: rgba(3, 8, 25, 0.90); backdrop-filter: blur(12px);
+  padding: 0.6rem 1rem; border-radius: 100px;
+  border: 1px solid rgba(96, 165, 250, 0.2);
+}
+.theme-nav a { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-decoration: none; padding: 0.3rem 0.7rem; border-radius: 100px; color: rgba(96, 165, 250, 0.6); transition: all 0.15s; }
+.theme-nav a:hover { color: #e8f0ff; background: rgba(96, 165, 250, 0.15); }
+.theme-nav a.active { color: #e8f0ff; background: #1d4ed8; }
+body.cos-drop-active::after {
+  content: '// drop.classroom.photo';
+  position: fixed; inset: 0; z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; font-weight: 700; color: #60a5fa;
+  background: rgba(3,8,25,0.80); border: 3px dashed rgba(96,165,250,0.5);
+  pointer-events: none; font-family: 'Courier New', monospace; letter-spacing: 0.06em;
+}
+.cos-bg-btn {
+  background: transparent; border: 1px solid rgba(96,165,250,0.25);
+  color: rgba(96,165,250,0.6); font-size: 11px; font-weight: 600;
+  padding: 0.25rem 0.65rem; border-radius: 3px; cursor: pointer;
+  font-family: 'Courier New', monospace; transition: all 0.15s; letter-spacing: 0.04em;
+}
+.cos-bg-btn:hover { color: #60a5fa; border-color: rgba(96,165,250,0.6); }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div style="display:flex;align-items:baseline;gap:.75rem">
+    <span class="nav-name">COMMAND</span>
+    <span class="nav-room">:: room-214 :: sector-science</span>
+  </div>
+  <div class="nav-center">T-<strong>14:00</strong> to period start</div>
+  <div class="nav-right"><span class="companion-dot"></span><span>apex :: active</span>
+    <button class="cos-bg-btn" onclick="cosPickBackground()">// bg</button>
+  </div>
+</nav>
+
+<div class="layer">
+  <div class="quote-zone">
+    <div class="quote-text">"The important thing is not to stop questioning. Curiosity has its own reason for existing."</div>
+    <div class="quote-attr">— Albert Einstein · <em>whiteboard, left side, permanent marker</em></div>
+  </div>
+
+  <div class="morning">
+    <div class="morning-h">Systems online.</div>
+    <div class="morning-sub">
+      Tue Oct 14 · 08:01:14 · 26 students expected · <em>3 flags active</em>
+    </div>
+    <div class="status-chips">
+      <span class="chip ok">tier-2 · gpu · ready</span>
+      <span class="chip ok">local-model · loaded</span>
+      <span class="chip warn">3 flags · review needed</span>
+      <span class="chip">p1 · t-14:00</span>
+    </div>
+  </div>
+
+  <div class="body">
+    <div>
+      <div class="panel plan-wrap">
+        <div class="section-tag">// schedule · 2026-10-14</div>
+        <div class="period period--now"><div class="period-dot"></div><div class="period-time">08:15-09:05</div><div class="period-info"><strong>Math · Fractions on a number line</strong><span>p1 · rm-214 · t-14:00</span></div></div>
+        <div class="period"><div class="period-dot"></div><div class="period-time">09:10-10:00</div><div class="period-info"><strong>Reading · Bridge to Terabithia ch.4-5</strong><span>p2 · read-aloud</span></div></div>
+        <div class="period period--break"><div class="period-dot"></div><div class="period-time">10:00-10:20</div><div class="period-info"><strong>Recess</strong><span>standby</span></div></div>
+        <div class="period"><div class="period-dot"></div><div class="period-time">10:20-11:10</div><div class="period-info"><strong>Science · States of matter lab</strong><span>p3 · lab-b · safety-check: clear</span></div></div>
+        <div class="period"><div class="period-dot"></div><div class="period-time">11:15-12:05</div><div class="period-info"><strong>Social Studies · Civil Rights day-2</strong><span>p4 · 3 reading variants loaded</span></div></div>
+        <div class="period period--break"><div class="period-dot"></div><div class="period-time">12:10-12:55</div><div class="period-info"><strong>Lunch + prep</strong><span>standby</span></div></div>
+        <div class="period"><div class="period-dot"></div><div class="period-time">13:00-13:30</div><div class="period-info"><strong>Math intervention · 6 students</strong><span>small-group · targeted</span></div></div>
+        <div class="period"><div class="period-dot"></div><div class="period-time">13:35-15:15</div><div class="period-info"><strong>Writing workshop + close</strong><span>p5-p6</span></div></div>
+      </div>
+
+      <div class="panel next">
+        <div class="section-tag">// mission · p1 · active</div>
+        <div class="next-h">Fractions on a number line.</div>
+        <p class="next-p">Lesson 14 · CCSS 5.NF.A.2 · 50 min. Root cause identified: <em>5 students locating by numerator count, not equal-partition model</em>. Warm-up item 2 targets directly. IEP variant queued for Mia. Catchup module preloaded for Marcus.</p>
+        <div class="mats">
+          <div class="mat"><span class="mat-name">warm-up · 8 slides</span><span class="mat-meta"><em>rev 14 · 23:02 Mon</em></span></div>
+          <div class="mat"><span class="mat-name">exit-ticket · 4 items · print</span><span class="mat-meta">1 page</span></div>
+          <div class="mat"><span class="mat-name">mia-l · audio-narrated · IEP</span><span class="mat-meta"><em>04:12 · queued</em></span></div>
+          <div class="mat"><span class="mat-name">marcus-t · catchup · self-paced</span><span class="mat-meta"><em>12:00 · preloaded</em></span></div>
+        </div>
+        <div class="actions">
+          <button class="btn btn--pri">Launch lesson</button>
+          <button class="btn btn--sec">Project</button>
+          <button class="btn btn--sec">Edit warm-up</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="panel companion-panel">
+        <div class="companion-head">
+          <div class="companion-avatar">APX</div>
+          <div class="companion-name">Apex<small>// mission-control · local-only · always on</small></div>
+        </div>
+        <div class="companion-item">
+          <div class="companion-text"><span class="key">DIEGO-R</span> <span class="flag">[FLAG]</span> low-stim · parent msg 07:14 · <span class="ok">solo-alt preloaded station-2</span> · no peer disruption · recommend: no cold-call</div>
+          <div class="companion-action">// open solo alt →</div>
+        </div>
+        <div class="companion-item">
+          <div class="companion-text"><span class="key">JAYLEN-W</span> <span class="flag">[WATCH]</span> denominator-model error · 5/5 exit items · warm-up item 2 targets root · recommend: monitor item-3 response in real time</div>
+          <div class="companion-action">// see knowledge graph →</div>
+        </div>
+        <div class="companion-item">
+          <div class="companion-text"><span class="key">MARCUS-T</span> attendance gap · <span class="flag">38% unit missed</span> · catchup module ready · 12:00 · recommend: pre-class deploy or recess</div>
+          <div class="companion-action">// preview module →</div>
+        </div>
+        <div class="companion-item">
+          <div class="companion-text"><span class="key">SUB-PACKET</span> status: draft · <span class="flag">deadline Thu EOD</span> · Apex can complete at 12:10 · <span class="ok">awaiting your go</span></div>
+          <div class="companion-action">// open draft →</div>
+        </div>
+      </div>
+
+      <div class="panel tracker">
+        <div class="panel-tag">// read-aloud · current unit</div>
+        <div class="book-title">Bridge to Terabithia</div>
+        <div class="book-author">paterson-k · 1977 · read-aloud</div>
+        <div class="book-track"><div class="book-bar"><span></span></div><span class="book-pct">36% · ch.4</span></div>
+        <div class="book-chapter">mission: ch.4-5 · terabithia-discovered</div>
+        <div class="book-prompt"><strong>// discussion-prompt · p2</strong>"Jesse and Leslie build a system together — rules, language, mythology. What makes a system worth building?"</div>
+      </div>
+
+      <div class="panel basket">
+        <div class="panel-tag">// queue · active items</div>
+        <div class="basket-item"><div><strong>Civil Rights · Day 3</strong><span>5/9 agents done · paused-for-review</span></div><div class="basket-status open">Resume</div></div>
+        <div class="basket-item"><div><strong>parent-comm · jaylen-family</strong><span>apex-draft · awaiting edit</span></div><div class="basket-status">draft</div></div>
+        <div class="basket-item"><div><strong>states-of-matter · quiz</strong><span>22/27 graded · 5 pending</span></div><div class="basket-status">5 open</div></div>
+        <div class="basket-item"><div><strong>sub-packet · friday</strong><span>apex completes at 12:10</span></div><div class="basket-status">due thu</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="theme-nav">
+  <a href="Book Nook.html">Book Nook</a>
+  <a href="Cat Gremlin.html">Cat Gremlin</a>
+  <a href="Cottagecore.html">Cottagecore</a>
+  <a href="STEM Commander.html" class="active">STEM</a>
+  <a href="Retro Academia.html">Retro Academia</a>
+</nav>
+<script src="classroom-os-bg.js"></script>
+</body>
+</html>

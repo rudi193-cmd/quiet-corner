@@ -1,0 +1,342 @@
+/*
+  Teachers Tool — CSS theme skins
+  Applied as wrapper classes: .theme-elementary, .theme-stem, .theme-steam, .theme-humanities
+  Each overrides the SAFE CSS custom properties via cascade; artboard components
+  pick up the correct values automatically via var(--*).
+  SAFE session-auth is excluded from theming — it stays SAFE-austere by design.
+*/
+
+/* ─────────────────────────────────────────────
+   1. ELEMENTARY WARMTH
+   Coral-red accent. Warm cream. Rounded corners.
+   The teacher who has a cat poster and wavy border trim.
+   ───────────────────────────────────────────── */
+.theme-elementary {
+  /* Paper palette */
+  --bg:              #fffbec;
+  --fg:              #2d1600;
+  --fg-muted:        #8a6030;
+  --fg-muted-soft:   #7a5020;
+  --accent:          #dc3000;
+  --accent-hover:    #b82600;
+  --accent-light:    #fff0e0;
+  --border:          #f0d0a0;
+  --surface-white:   #ffffff;
+  --surface-sunken:  #fff8e8;
+
+  /* Status */
+  --ok-soft-bg:      #f0fff4;
+  --ok-soft-fg:      #166534;
+  --warn-soft-bg:    #fffbeb;
+  --warn-soft-fg:    #92400e;
+  --info-soft-bg:    #eff6ff;
+  --info-soft-fg:    #1e40af;
+  --neutral-soft-bg: #fdf0e0;
+  --neutral-soft-fg: #7a4020;
+  --err-soft-bg:     #fff1f0;
+
+  /* Geometry */
+  --radius-sm:       6px;
+  --radius:          10px;
+  --radius-md:       14px;
+}
+
+/* Slightly heavier type — warmer feel */
+.theme-elementary .ws-a,
+.theme-elementary .ws-b,
+.theme-elementary .kg,
+.theme-elementary .lc-center,
+.theme-elementary .lc-left {
+  font-size: 16px;
+}
+
+/* Rounder buttons */
+.theme-elementary .ws-a-btn,
+.theme-elementary .ws-a-quick button,
+.theme-elementary .lc-btn,
+.theme-elementary .kg-next-btn,
+.theme-elementary .ws-b-btn,
+.theme-elementary .ws-b-quick button {
+  border-radius: 10px !important;
+}
+
+/* Rounder chips */
+.theme-elementary .lc-chip { border-radius: 8px !important; }
+
+/* Bolder nav */
+.theme-elementary .ws-a-nav,
+.theme-elementary .ws-b-nav,
+.theme-elementary .kg-nav {
+  border-bottom-width: 2px !important;
+  border-bottom-color: var(--accent) !important;
+}
+
+/* Warmer strip */
+.theme-elementary .ws-a-slot--now { background: var(--accent-light) !important; }
+
+/* Live classroom: warm dark amber Terminal */
+.theme-elementary .lm {
+  --term-bg:         #1c0800;
+  --term-panel:      #260f00;
+  --term-border:     #4d2200;
+  --term-fg:         #fdf0e0;
+  --term-fg-muted:   #aa7050;
+  --term-accent:     #ff6a30;
+  --term-accent-dim: #cc4a18;
+  --term-input:      #2d1200;
+  --term-ok:         #4ade80;
+  --term-err:        #f87171;
+}
+
+/* ─────────────────────────────────────────────
+   2. STEM
+   Electric blue. Cold white. Tight radius.
+   Mono labels. The circuit-diagram-on-the-wall teacher.
+   ───────────────────────────────────────────── */
+.theme-stem {
+  --bg:              #ffffff;
+  --fg:              #0d1117;
+  --fg-muted:        #515a6a;
+  --fg-muted-soft:   #3d4555;
+  --accent:          #2563eb;
+  --accent-hover:    #1d4ed8;
+  --accent-light:    #eff6ff;
+  --border:          #d8dde6;
+  --surface-white:   #f6f8fb;
+  --surface-sunken:  #eef1f6;
+
+  --ok-soft-bg:      #f0fdf4;
+  --ok-soft-fg:      #166534;
+  --warn-soft-bg:    #fefce8;
+  --warn-soft-fg:    #854d0e;
+  --info-soft-bg:    #eff6ff;
+  --info-soft-fg:    #1d4ed8;
+  --neutral-soft-bg: #f1f3f6;
+  --neutral-soft-fg: #4a5568;
+
+  --radius-sm:       2px;
+  --radius:          3px;
+  --radius-md:       4px;
+}
+
+/* Tighter, more precise */
+.theme-stem .ws-a-btn,
+.theme-stem .ws-a-quick button,
+.theme-stem .lc-btn,
+.theme-stem .kg-next-btn {
+  border-radius: 3px !important;
+  letter-spacing: 0.04em;
+}
+
+/* Mono labels throughout */
+.theme-stem .ws-a-label,
+.theme-stem .ws-a-card-label,
+.theme-stem .ws-a-dash-card-label,
+.theme-stem .ws-a-stat-lbl,
+.theme-stem .ws-a-slot-time,
+.theme-stem .ws-b-date,
+.theme-stem .ws-b-eyebrow,
+.theme-stem .kg-ans-eyebrow,
+.theme-stem .kg-h-l,
+.theme-stem .lc-section-label,
+.theme-stem .lc-h2 {
+  font-family: var(--font-mono) !important;
+  letter-spacing: 0.06em;
+}
+
+/* Cold nav border */
+.theme-stem .ws-a-nav,
+.theme-stem .ws-b-nav,
+.theme-stem .kg-nav {
+  border-bottom-color: var(--border) !important;
+}
+
+/* Live classroom: dark navy Terminal */
+.theme-stem .lm {
+  --term-bg:         #070b14;
+  --term-panel:      #0c1120;
+  --term-border:     #1e2d50;
+  --term-fg:         #e8f0ff;
+  --term-fg-muted:   #5a7080;
+  --term-accent:     #60a5fa;
+  --term-accent-dim: #3b82f6;
+  --term-input:      #10182c;
+  --term-ok:         #4ade80;
+  --term-err:        #f87171;
+}
+
+/* Blue task text in live mode */
+.theme-stem .lm-task em,
+.theme-stem .lm-task .acc { color: #60a5fa !important; }
+.theme-stem .lm-top .title { color: #60a5fa !important; }
+.theme-stem .lm-poll-track > span { background: #60a5fa !important; }
+.theme-stem .lm-timer-num { color: #60a5fa !important; }
+.theme-stem .lm-timer-bar > span { background: #60a5fa !important; }
+.theme-stem .lm-progress-fill { background: #60a5fa !important; }
+.theme-stem .lm-pick-name .acc { color: #60a5fa !important; }
+
+/* ─────────────────────────────────────────────
+   3. STEAM / MAKER
+   Amber-saffron. Warm off-white. Medium radius.
+   Art supply warmth + lab precision.
+   ───────────────────────────────────────────── */
+.theme-steam {
+  --bg:              #fef9f0;
+  --fg:              #1a1100;
+  --fg-muted:        #7a6020;
+  --fg-muted-soft:   #5a4510;
+  --accent:          #d97706;
+  --accent-hover:    #b45309;
+  --accent-light:    #fffbeb;
+  --border:          #e8d090;
+  --surface-white:   #ffffff;
+  --surface-sunken:  #fdf6da;
+
+  --ok-soft-bg:      #f0fdf4;
+  --ok-soft-fg:      #166534;
+  --warn-soft-bg:    #fefce8;
+  --warn-soft-fg:    #854d0e;
+  --info-soft-bg:    #eff6ff;
+  --info-soft-fg:    #1d4ed8;
+  --neutral-soft-bg: #fdf4d8;
+  --neutral-soft-fg: #7a5020;
+
+  --radius-sm:       4px;
+  --radius:          7px;
+  --radius-md:       10px;
+}
+
+.theme-steam .ws-a-btn,
+.theme-steam .ws-a-quick button,
+.theme-steam .lc-btn,
+.theme-steam .kg-next-btn {
+  border-radius: 7px !important;
+}
+.theme-steam .lc-chip { border-radius: 6px !important; }
+
+/* Warmer nav border */
+.theme-steam .ws-a-nav,
+.theme-steam .ws-b-nav,
+.theme-steam .kg-nav {
+  border-bottom-color: var(--border) !important;
+  border-bottom-width: 1.5px !important;
+}
+
+/* Live classroom: dark amber Terminal */
+.theme-steam .lm {
+  --term-bg:         #160f00;
+  --term-panel:      #1e1500;
+  --term-border:     #3d2e00;
+  --term-fg:         #fdf7e0;
+  --term-fg-muted:   #a08040;
+  --term-accent:     #fbbf24;
+  --term-accent-dim: #d97706;
+  --term-input:      #251c00;
+  --term-ok:         #4ade80;
+  --term-err:        #f87171;
+}
+
+.theme-steam .lm-task em,
+.theme-steam .lm-task .acc { color: #fbbf24 !important; }
+.theme-steam .lm-top .title { color: #fbbf24 !important; }
+.theme-steam .lm-poll-track > span { background: #fbbf24 !important; }
+.theme-steam .lm-timer-num { color: #fbbf24 !important; }
+.theme-steam .lm-timer-bar > span { background: #fbbf24 !important; }
+.theme-steam .lm-pick-name .acc { color: #fbbf24 !important; }
+
+/* ─────────────────────────────────────────────
+   4. HUMANITIES
+   Parchment. Burgundy. Georgia serif headings.
+   Annotation margins. The worn-paperback teacher.
+   ───────────────────────────────────────────── */
+.theme-humanities {
+  --font-sans:       Georgia, 'Times New Roman', Times, serif;
+  --bg:              #f7f3ed;
+  --fg:              #1a0e08;
+  --fg-muted:        #6b5040;
+  --fg-muted-soft:   #5a4030;
+  --accent:          #7c2d12;
+  --accent-hover:    #6b1e08;
+  --accent-light:    #fdf0e8;
+  --border:          #d8c8b0;
+  --surface-white:   #faf7f2;
+  --surface-sunken:  #f0ebe0;
+
+  --ok-soft-bg:      #f0fff4;
+  --ok-soft-fg:      #166534;
+  --warn-soft-bg:    #fefce8;
+  --warn-soft-fg:    #854d0e;
+  --info-soft-bg:    #eff6ff;
+  --info-soft-fg:    #1d4ed8;
+  --neutral-soft-bg: #f0ebe0;
+  --neutral-soft-fg: #6b5040;
+  --err-soft-bg:     #fdf2f1;
+
+  --radius-sm:       2px;
+  --radius:          2px;
+  --radius-md:       3px;
+}
+
+/* Mono labels back to sans (since --font-sans is now Georgia) */
+.theme-humanities .ws-a-slot-time,
+.theme-humanities .ws-a-session,
+.theme-humanities .ws-b-session,
+.theme-humanities .kg-session,
+.theme-humanities .ws-a-tier,
+.theme-humanities .ws-a-card-meta,
+.theme-humanities .lc-bar-state,
+.theme-humanities .kg-ans-cite,
+.theme-humanities .kg-q-foot,
+.theme-humanities .ws-b-date,
+.theme-humanities .ws-b-rail-mono {
+  font-family: var(--font-mono) !important;
+}
+
+/* Serif headings */
+.theme-humanities .ws-a-h1,
+.theme-humanities .ws-a-next-h,
+.theme-humanities .ws-b-h1,
+.theme-humanities .kg-ans,
+.theme-humanities .lc-title,
+.theme-humanities .ws-a-stat-num { font-style: italic; }
+
+/* Tight buttons — like typeset print */
+.theme-humanities .ws-a-btn,
+.theme-humanities .ws-a-quick button,
+.theme-humanities .lc-btn,
+.theme-humanities .kg-next-btn {
+  border-radius: 2px !important;
+}
+.theme-humanities .lc-chip { border-radius: 1px !important; }
+
+/* Hairline nav — no thick stripe */
+.theme-humanities .ws-a-nav,
+.theme-humanities .ws-b-nav,
+.theme-humanities .kg-nav {
+  border-bottom-color: var(--border) !important;
+}
+
+/* The slot strip on the humanities workspace: sepia feel */
+.theme-humanities .ws-a-slot--now { background: var(--accent-light) !important; }
+
+/* Live classroom: deep sepia Terminal */
+.theme-humanities .lm {
+  --term-bg:         #100908;
+  --term-panel:      #180d0c;
+  --term-border:     #2e1a18;
+  --term-fg:         #f5ede0;
+  --term-fg-muted:   #906050;
+  --term-accent:     #e07030;
+  --term-accent-dim: #b85020;
+  --term-input:      #1e1210;
+  --term-ok:         #4ade80;
+  --term-err:        #f87171;
+}
+
+.theme-humanities .lm-task em,
+.theme-humanities .lm-task .acc { color: #e07030 !important; }
+.theme-humanities .lm-top .title { color: #e07030 !important; }
+.theme-humanities .lm-poll-track > span { background: #e07030 !important; }
+.theme-humanities .lm-timer-num { color: #e07030 !important; }
+.theme-humanities .lm-timer-bar > span { background: #e07030 !important; }
+.theme-humanities .lm-pick-name .acc { color: #e07030 !important; }
