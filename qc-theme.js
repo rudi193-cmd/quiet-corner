@@ -1,6 +1,6 @@
 /**
  * Quiet Corner — apply archetype theme from cosData config.
- * Include after cos-data.js on any app page.
+ * Include after qc-data.js on any app page.
  */
 (function (global) {
   const ARCHETYPE_ROOMS = {

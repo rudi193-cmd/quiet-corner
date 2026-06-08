@@ -1,6 +1,6 @@
 /*
   Records page — room aesthetic (glass on photo, accent buttons)
-  Load after cos-app-shell.css
+  Load after qc-app-shell.css
 */
 
 body.cos-app::before {

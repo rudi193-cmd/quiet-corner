@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <title>Records · Quiet Corner</title>
-  <link rel="stylesheet" href="cos-archetype-themes.css?v=3" />
-  <link rel="stylesheet" href="cos-app-shell.css?v=3" />
-  <link rel="stylesheet" href="cos-records.css?v=3" />
-  <script src="cos-data.js"></script>
-  <script src="cos-theme.js?v=3"></script>
+  <link rel="stylesheet" href="qc-archetype-themes.css?v=3" />
+  <link rel="stylesheet" href="qc-app-shell.css?v=3" />
+  <link rel="stylesheet" href="qc-records.css?v=3" />
+  <script src="qc-data.js"></script>
+  <script src="qc-theme.js?v=3"></script>
 </head>
 <body class="cos-app">
 
@@ -395,20 +395,22 @@ document.querySelectorAll('.signal-row input').forEach(cb => {
 async function saveStudent() {
   const name = document.getElementById('s-name').value.trim();
   if (!name) return document.getElementById('s-name').focus();
-  await cosData.postStudent({
-    name,
-    grade: document.getElementById('s-grade').value,
-    pronouns: document.getElementById('s-pronouns').value.trim(),
-    contact: document.getElementById('s-contact').value.trim(),
-    flags: {
-      iep: document.getElementById('s-iep').checked,
-      s504: document.getElementById('s-504').checked,
-      ell: document.getElementById('s-ell').checked,
-      gifted: document.getElementById('s-gifted').checked,
-      na: document.getElementById('s-na').checked,
-    },
-    notes: document.getElementById('s-notes').value.trim(),
-  });
+  try {
+    await cosData.postStudent({
+      name,
+      grade: document.getElementById('s-grade').value,
+      pronouns: document.getElementById('s-pronouns').value.trim(),
+      contact: document.getElementById('s-contact').value.trim(),
+      flags: {
+        iep: document.getElementById('s-iep').checked,
+        s504: document.getElementById('s-504').checked,
+        ell: document.getElementById('s-ell').checked,
+        gifted: document.getElementById('s-gifted').checked,
+        na: document.getElementById('s-na').checked,
+      },
+      notes: document.getElementById('s-notes').value.trim(),
+    });
+  } catch (e) { alert(e.message || 'Could not save this student.'); return; }
   await reloadData();
   closeModal('student-modal');
   ['s-name','s-pronouns','s-contact','s-notes'].forEach(id => document.getElementById(id).value = '');
@@ -444,14 +446,16 @@ async function saveObs() {
   const pathways = [...document.querySelectorAll('.pathway-btn.on')].map(b => b.dataset.v);
   const signals  = [...document.querySelectorAll('.signal-row input:checked')].map(cb => cb.dataset.v);
   const date = document.getElementById('obs-date').value;
-  await cosData.postObservation({
-    studentId,
-    standard: document.getElementById('obs-standard').value.trim(),
-    date,
-    observed_at: date,
-    pathways, signals,
-    notes: document.getElementById('obs-notes').value.trim(),
-  });
+  try {
+    await cosData.postObservation({
+      studentId,
+      standard: document.getElementById('obs-standard').value.trim(),
+      date,
+      observed_at: date,
+      pathways, signals,
+      notes: document.getElementById('obs-notes').value.trim(),
+    });
+  } catch (e) { alert(e.message || 'Could not save this observation.'); return; }
   await reloadData();
   document.getElementById('obs-student').value = '';
   document.getElementById('obs-standard').value = '';
@@ -486,12 +490,14 @@ async function saveSkill() {
   if (!studentId) return document.getElementById('sk-student').focus();
   const standard = document.getElementById('sk-standard').value.trim();
   if (!standard) return document.getElementById('sk-standard').focus();
-  await cosData.postSkill({
-    studentId, standard,
-    level: parseInt(document.getElementById('sk-level').value),
-    date: document.getElementById('sk-date').value,
-    notes: document.getElementById('sk-notes').value.trim(),
-  });
+  try {
+    await cosData.postSkill({
+      studentId, standard,
+      level: parseInt(document.getElementById('sk-level').value),
+      date: document.getElementById('sk-date').value,
+      notes: document.getElementById('sk-notes').value.trim(),
+    });
+  } catch (e) { alert(e.message || 'Could not save this skill record.'); return; }
   await reloadData();
   closeModal('skill-modal');
   renderSkills();
@@ -523,13 +529,15 @@ function renderSkills() {
 async function saveMeeting() {
   const dt = document.getElementById('mt-dt').value;
   if (!dt) return document.getElementById('mt-dt').focus();
-  await cosData.postMeeting({
-    type: document.getElementById('mt-type').value,
-    dt,
-    studentId: parseInt(document.getElementById('mt-student').value) || null,
-    attendees: document.getElementById('mt-attendees').value.trim(),
-    notes: document.getElementById('mt-notes').value.trim(),
-  });
+  try {
+    await cosData.postMeeting({
+      type: document.getElementById('mt-type').value,
+      dt,
+      studentId: parseInt(document.getElementById('mt-student').value) || null,
+      attendees: document.getElementById('mt-attendees').value.trim(),
+      notes: document.getElementById('mt-notes').value.trim(),
+    });
+  } catch (e) { alert(e.message || 'Could not save this meeting.'); return; }
   await reloadData();
   closeModal('meeting-modal');
   renderMeetings();
@@ -658,18 +666,26 @@ async function runImportBackup(input) {
   const file = input.files?.[0];
   input.value = '';
   if (!file) return;
-  const merge = !confirm(
-    'Import backup?\n\nOK = merge (keep existing data, only fill empty slots)\nCancel = replace keys from file'
+  const useMerge = confirm(
+    'Import backup?\n\n' +
+    'OK = Merge: combine with your existing data. Records are matched by ID; ' +
+    "the backup's version wins on conflicts, and new records are added.\n\n" +
+    'Cancel = Replace: overwrite each data category with the backup\'s contents.'
   );
-  const replace = !merge;
   try {
-    const result = await cosData.importBackup(file, { merge: !replace });
+    const result = await cosData.importBackup(file, { merge: useMerge });
+    const n = result.keys.length;
+    const summary = useMerge
+      ? `merged — ${result.added} added, ${result.updated} updated`
+      : 'replaced';
     document.getElementById('backup-status').textContent =
-      `Imported ${result.keys.length} data key(s) (${replace ? 'replaced' : 'merged'}). Reloading…`;
+      `Imported ${n} categor${n === 1 ? 'y' : 'ies'} (${summary}). Reloading…`;
     await reloadData();
     renderHome();
     renderStudents();
     renderObs();
+    renderSkills();
+    renderMeetings();
     populateSelects();
   } catch (e) {
     document.getElementById('backup-status').textContent = 'Import failed: ' + (e.message || e);
