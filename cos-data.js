@@ -15,10 +15,41 @@ const ARCHETYPE_ROOMS = {
 
 const cosData = (() => {
 
+  // The 'cos_' key prefix is a stable on-disk contract: existing pilot browsers
+  // already hold cos_* data, so the prefix is retained even though the files are
+  // renamed (renaming the prefix would orphan that data). Keep it as-is.
   const db = {
-    get: k => JSON.parse(localStorage.getItem('cos_' + k) || 'null'),
-    set: (k, v) => localStorage.setItem('cos_' + k, JSON.stringify(v)),
+    get: k => {
+      try {
+        return JSON.parse(localStorage.getItem('cos_' + k) || 'null');
+      } catch {
+        // A single corrupt key must not brick app init.
+        return null;
+      }
+    },
+    set: (k, v) => {
+      try {
+        localStorage.setItem('cos_' + k, JSON.stringify(v));
+      } catch (e) {
+        const err = new Error(
+          e && (e.name === 'QuotaExceededError' || e.code === 22)
+            ? "Couldn't save — browser storage is full. Export a backup, then clear old data."
+            : "Couldn't save to browser storage. Your change was not stored."
+        );
+        err.name = 'StorageError';
+        throw err;
+      }
+    },
   };
+
+  // Monotonic numeric ID generator: always increasing integers, so two records
+  // created in the same millisecond never collide. Stays numeric to remain
+  // compatible with parseInt() + strict === comparisons in records.html.
+  let _lastId = 0;
+  function genId() {
+    _lastId = Math.max(Date.now(), _lastId + 1);
+    return _lastId;
+  }
 
   const DEFAULT_CONFIG = {
     tier: 1, model: 'local', gpu: false,
@@ -112,7 +143,7 @@ const cosData = (() => {
     if (Array.isArray(avObs) && avObs.length && !(db.get('observations') || []).length) {
       db.set('observations', avObs.map(o => normalizeObservation({
         ...o,
-        id: o.id || Date.now() + Math.random(),
+        id: o.id || genId(),
         created_at: o.created_at || new Date().toISOString(),
       })));
     }
@@ -169,7 +200,7 @@ const cosData = (() => {
       body: JSON.stringify(period)
     }).then(r => r.json());
     const schedule = await getSchedule();
-    const item = { ...period, id: Date.now() };
+    const item = { ...period, id: genId() };
     schedule.push(item);
     db.set('schedule', schedule);
     return item;
@@ -213,7 +244,7 @@ const cosData = (() => {
       body: JSON.stringify(student)
     }).then(r => r.json());
     const all = db.get('students') || [];
-    const item = { ...student, id: student.id || Date.now(), created_at: new Date().toISOString() };
+    const item = { ...student, id: student.id || genId(), created_at: new Date().toISOString() };
     all.push(item);
     db.set('students', all);
     return item;
@@ -242,7 +273,7 @@ const cosData = (() => {
     const all = db.get('observations') || [];
     const item = normalizeObservation({
       ...obs,
-      id: Date.now(),
+      id: genId(),
       created_at: new Date().toISOString(),
       observed_at: obs.observed_at || obs.date || new Date().toISOString(),
     });
@@ -272,7 +303,7 @@ const cosData = (() => {
       body: JSON.stringify(skill)
     }).then(r => r.json());
     const all = db.get('skills') || [];
-    const item = { ...skill, id: skill.id || Date.now() };
+    const item = { ...skill, id: skill.id || genId() };
     all.push(item);
     db.set('skills', all);
     return item;
@@ -291,7 +322,7 @@ const cosData = (() => {
       body: JSON.stringify(meeting)
     }).then(r => r.json());
     const all = db.get('meetings') || [];
-    const item = { ...meeting, id: meeting.id || Date.now() };
+    const item = { ...meeting, id: meeting.id || genId() };
     all.push(item);
     db.set('meetings', all);
     return item;
@@ -315,7 +346,7 @@ const cosData = (() => {
       body: JSON.stringify(lesson)
     }).then(r => r.json());
     const all = db.get('lessons') || [];
-    const item = { ...lesson, id: Date.now(),
+    const item = { ...lesson, id: genId(),
       created_at: new Date().toISOString(), updated_at: new Date().toISOString() };
     all.push(item);
     db.set('lessons', all);
@@ -407,6 +438,13 @@ const cosData = (() => {
     'config', 'students', 'observations', 'skills', 'meetings', 'schedule', 'lessons', 'migrated_av',
   ];
 
+  // Keys whose stored value is an array of {id, ...} records (merged item-by-item on import).
+  const BACKUP_ARRAY_KEYS = ['students', 'observations', 'skills', 'meetings', 'schedule', 'lessons'];
+
+  // On an id conflict during a merge import, whether the backup's version replaces the
+  // existing record. true = backup wins (the teacher explicitly chose to import this backup).
+  const MERGE_INCOMING_WINS = true;
+
   /** Snapshot all Quiet Corner classroom data for export (explicit teacher action). */
   function exportBackup() {
     const data = {};
@@ -442,9 +480,36 @@ const cosData = (() => {
     return payload;
   }
 
+  /** Union two record arrays by `id`. Items without an id are always appended. */
+  function mergeRecords(existing, incoming) {
+    const out = [];
+    const indexById = new Map();
+    for (const item of Array.isArray(existing) ? existing : []) {
+      if (item && item.id != null) indexById.set(item.id, out.length);
+      out.push(item);
+    }
+    let added = 0, updated = 0;
+    for (const item of incoming) {
+      if (item && item.id != null && indexById.has(item.id)) {
+        if (MERGE_INCOMING_WINS) out[indexById.get(item.id)] = item;
+        updated++;
+      } else {
+        if (item && item.id != null) indexById.set(item.id, out.length);
+        out.push(item);
+        added++;
+      }
+    }
+    return { merged: out, added, updated };
+  }
+
   /**
-   * Restore from a backup file. merge=false replaces cos_* keys in the file;
-   * merge=true only fills keys that are empty/missing locally.
+   * Restore from a backup file (explicit teacher action).
+   * - merge=false (replace): each category in the file overwrites the local one.
+   * - merge=true  (merge):   arrays are combined, matched by id (backup wins on
+   *   conflict); config is deep-merged. Existing records keep their place.
+   *
+   * The whole payload is validated BEFORE anything is written, so a malformed
+   * backup is rejected without corrupting existing data.
    */
   async function importBackup(file, { merge = false } = {}) {
     const text = await file.text();
@@ -458,16 +523,53 @@ const cosData = (() => {
       throw new Error('Not a Quiet Corner backup file (missing quiet-corner-backup header).');
     }
     const incoming = payload.data || {};
+    if (typeof incoming !== 'object' || Array.isArray(incoming)) {
+      throw new Error('Backup is malformed: "data" should be an object.');
+    }
+
+    // ── Validate every present key before writing anything (atomic) ──
     for (const k of BACKUP_KEYS) {
       if (!(k in incoming)) continue;
-      if (merge) {
-        const existing = db.get(k);
-        const empty = existing == null
-          || (Array.isArray(existing) && !existing.length)
-          || (k === 'config' && !existing?.preferences?.archetype);
-        if (!empty) continue;
+      const v = incoming[k];
+      if (BACKUP_ARRAY_KEYS.includes(k)) {
+        if (!Array.isArray(v)) {
+          throw new Error(`Backup is invalid: "${k}" should be a list but is ${typeof v}.`);
+        }
+      } else if (k === 'config') {
+        if (v === null || typeof v !== 'object' || Array.isArray(v)) {
+          throw new Error('Backup is invalid: "config" should be an object.');
+        }
+      } else if (k === 'migrated_av') {
+        if (typeof v !== 'boolean') {
+          throw new Error('Backup is invalid: "migrated_av" should be true or false.');
+        }
       }
-      db.set(k, incoming[k]);
+    }
+    if (payload.backgrounds != null &&
+        (typeof payload.backgrounds !== 'object' || Array.isArray(payload.backgrounds))) {
+      throw new Error('Backup is invalid: "backgrounds" should be an object.');
+    }
+
+    // ── Apply (validation passed) ──
+    let added = 0, updated = 0;
+    for (const k of BACKUP_KEYS) {
+      if (!(k in incoming)) continue;
+      if (!merge) {
+        db.set(k, incoming[k]);
+        continue;
+      }
+      if (BACKUP_ARRAY_KEYS.includes(k)) {
+        const r = mergeRecords(db.get(k), incoming[k]);
+        db.set(k, r.merged);
+        added += r.added;
+        updated += r.updated;
+      } else if (k === 'config') {
+        db.set('config', deepMerge(db.get('config') || {}, incoming.config));
+      } else if (k === 'migrated_av') {
+        db.set('migrated_av', !!db.get('migrated_av') || !!incoming.migrated_av);
+      } else {
+        db.set(k, incoming[k]);
+      }
     }
     if (payload.backgrounds && typeof payload.backgrounds === 'object') {
       for (const [key, value] of Object.entries(payload.backgrounds)) {
@@ -475,7 +577,7 @@ const cosData = (() => {
       }
     }
     clearBriefCache();
-    return { keys: Object.keys(incoming), merge };
+    return { keys: Object.keys(incoming), merge, added, updated };
   }
 
   function getCurrentAndNextPeriod(periods) {
