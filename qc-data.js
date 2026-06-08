@@ -1,4 +1,4 @@
-// cos-data.js — Quiet Corner data layer (cos_* legacy prefix)
+// qc-data.js — Quiet Corner data layer (cos_* legacy prefix)
 // USE_API=false: localStorage backend (pilot mode, no server needed)
 // USE_API=true:  FastAPI at 127.0.0.1:8432 (production)
 

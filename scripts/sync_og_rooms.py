@@ -43,10 +43,10 @@ def rewrite_hrefs(html: str) -> str:
 
 
 def inject_head(html: str) -> str:
-    if "cos-data.js" not in html:
+    if "qc-data.js" not in html:
         html = html.replace(
             "<head>",
-            '<head>\n<script src="cos-data.js"></script>',
+            '<head>\n<script src="qc-data.js"></script>',
             1,
         )
     return html

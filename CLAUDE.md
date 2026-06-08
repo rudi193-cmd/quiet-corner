@@ -41,7 +41,7 @@ of the framework."
 
 ## Backup (pilot)
 
-- `cosData.exportBackup()` / `downloadBackup()` / `importBackup(file, {merge})` in `cos-data.js`
+- `cosData.exportBackup()` / `downloadBackup()` / `importBackup(file, {merge})` in `qc-data.js`
 - UI: Records → **Data** panel — explicit teacher action only; JSON format `quiet-corner-backup` v1
 - Docs: `README.md`, `docs/TEACHER_GUIDE.md`
 
