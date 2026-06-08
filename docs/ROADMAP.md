@@ -185,6 +185,74 @@ here, not decided.
 
 ---
 
+## Build vs. reuse — what already exists (2026 scan)
+
+A scan of comparable tools and libraries, to avoid rebuilding solved problems.
+**Headline:** there is no open-source app worth forking wholesale, but the
+*heaviest* roadmap items (IndexedDB, sync, auth/roles) are largely solved by
+existing libraries that drop into our `db` seam — so Tier 2 is far less of a
+rebuild than it looks.
+
+### Existing apps — reference, not fork
+- **Obserfy** (`github.com/obserfy/obserfy`) — Montessori record-keeping + parent
+  comm. Go backend + Next.js/Gatsby, **hosted-only** (maintainers explicitly
+  don't support self-hosting), no offline, early-stage. Wrong stack and wrong
+  philosophy for us. *Use as:* feature reference for parent communication and
+  teacher/parent dashboards.
+- **mrk** (`github.com/alansangma/mrk`) — Montessori lesson record-keeping (which
+  lessons given to which students/groups). PHP, effectively abandoned (~6
+  commits). *Use as:* design reference for the *lesson-given-to-student/group*
+  model if we add Montessori scope-and-sequence tracking.
+- **Transparent Classroom** (commercial) — already ships our Tier 3 ideas: a
+  visual grid of lessons × children, "work curves," equity-segment reports, and
+  a drag-drop conference-report editor with template pull-through. *Use as:* the
+  UX reference for the LevelShip **map** (#12) and the E4 one-pager (#14). Code
+  is ours to build — but the concept is validated and the interaction patterns
+  are worth copying.
+
+**Conclusion:** keep our own app (vanilla, local-first, framework-grounded).
+Reuse *libraries*, not a whole codebase.
+
+### The big reuse win — data layer + sync + auth
+- **Dexie.js** (MIT) — the 2026 default IndexedDB wrapper: typed tables, indexed
+  queries, transactions, schema versioning, live queries. Vanilla-JS friendly
+  (no framework needed — fits our no-build app). **This is the drop-in for the
+  IndexedDB migration (#8) and the blob storage that evidence capture (#2)
+  needs.** It slots behind the single `db` abstraction in `qc-data.js`.
+- **Dexie Cloud** (optional, self-hostable on Node + Postgres) — offline-first
+  *by design* (app works fully offline; sync is the bonus), bidirectional sync,
+  and a built-in **access-control model** (realms + roles + invitations). Free
+  tier (3 users / 100 MB), then ~€0.12/user/mo; **or self-host for the privacy
+  story.**
+  → **This is essentially Option B, pre-built.** It collapses most of Tier 2
+  (#6 auth, #7 sync/multi-teacher/admin) — we would *not* need to hand-build the
+  FastAPI/Willow backend, the sync/merge engine, or an auth system. Local-first
+  default stays intact; sync is opt-in and self-hostable.
+  *Caveat:* it sets the data-layer direction, so evaluate before #4. Our current
+  hand-rolled item-level backup merge would largely be superseded by Dexie's
+  sync — that's fine, the backup format stays as the export/portability path.
+
+### Smaller pieces — standard browser features, not rebuilds
+- **Print / PDF (#5, #14):** `window.print()` + a print stylesheet is the 80/20,
+  zero dependencies. A client-side lib (e.g. print-to-PDF) only if we need
+  pixel-exact artifacts later.
+- **Evidence capture (#2):** `<input type="file" accept="image/*" capture>` for
+  camera/mic + canvas compression — **we already have the compress pattern in
+  `classroom-os-bg.js`** — then store the blob via Dexie (not localStorage).
+- **CSV roster import:** trivial parse, no heavy dep needed.
+- **PWA (#10):** standard manifest + service worker; now viable since assets are
+  local.
+
+### Net effect on the plan
+The only things that are genuinely *ours to build* are the differentiators
+(the pathway **map** and the after-engagement AI scaffold) and the
+observation/timeline UX on top of a reused data layer. The infrastructure tier
+— storage, sync, auth — should be **adopted, not authored**, most likely via
+Dexie + Dexie Cloud. That makes the "functional teacher's tool" jump
+substantially cheaper than a from-scratch backend.
+
+---
+
 ## Non-goals / guardrails (things we should *not* build)
 
 The framework bans more than it asks for. Explicit non-goals so a well-meaning
