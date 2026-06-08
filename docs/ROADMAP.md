@@ -144,6 +144,65 @@ These are the table-stakes that currently block daily use.
 
 ---
 
+## The LevelShip / Emerging Rule relationship (resolving an open question)
+
+`CLAUDE.md`'s open-questions list ends with *"Relationship to LevelShip
+(Emerging Rule product)"*, and Tier 3 #12 already names LevelShip as the owner of
+the pathway-map domain. This section resolves that thread: **LevelShip is the
+intended engine for Tier 3 — not something we build from scratch.** It's the same
+"adopt, don't author" logic applied to our own upstream.
+
+### Division of labor — interface vs. engine
+
+Quiet Corner and LevelShip are two halves of one framework (Assessment
+Visibility / Emerging Rule), and the white paper already draws the line: the
+educator-facing tool *is* the operational interface.
+
+- **Quiet Corner = front of house (the interface).** The system of record for
+  observations: teacher captures across expressive pathways, tags Classroom
+  Signals, and gets E4 admin-legible language. Local-first, private, runs with
+  or without any engine attached.
+- **LevelShip = the engine.** The ML-powered adaptive layer that turns
+  observation coverage into the **map** (#12 — "under-seen ≠ under-capable; what
+  the test missed") and provides the **after-engagement AI scaffold** (#13 —
+  UTETY personas for reflection/articulation, strictly post sense-making).
+
+This means **Tier 3 is largely an integration, not a build.** We own the capture,
+the timeline, and the data contract; LevelShip owns the modeling and the map.
+
+### Technical sketch (how they'd connect)
+
+The seam already exists: `qc-data.js` has the `USE_API` flag and `COS_API`
+endpoint, currently stubbed off. That is the integration point.
+
+1. **Boundary stays privacy-first.** Quiet Corner remains the local system of
+   record. It exports a **pathway-coverage summary** — which expressive pathways,
+   signals, and standards have been *observed* for a student/class — not raw
+   narrative PII. Teacher-initiated, minimum-necessary, and de-identifiable
+   (ids, not names) so it never becomes surveillance data.
+2. **LevelShip returns two things:** (a) **map data** — coverage/gaps across
+   pathways to render the "what the test missed" visualization; (b) the
+   **after-engagement scaffold** — persona/reflection prompts, returned *after*
+   an observation exists, never before. Both arrive through the `USE_API` path.
+3. **Graceful degradation is mandatory.** With no engine attached, Quiet Corner
+   still works and shows a structured (non-ML) coverage view — the same way the
+   morning brief already falls back to a structured brief when `USE_API=false`.
+   LevelShip *enhances*; it is never a hard dependency.
+4. **Fits the architecture fork cleanly.** This is orthogonal to A/B/C: the
+   LevelShip engine can sit behind a local instance (Option A/B, self-hosted,
+   privacy intact) or a hosted endpoint (Option C). Dexie remains the local
+   store either way; LevelShip is a read-side analytics/AI service, not the
+   primary datastore.
+
+### Status
+
+A partnership opportunity, not a commitment — flagged here so the design keeps
+the seam clean (local-first record, exportable coverage contract, opt-in
+engine). The person to talk to is Felipe Castro Quiles (Emerging Rule /
+LevelShip), with whom this framework already originates.
+
+---
+
 ## The architecture fork (still open — do not pick yet)
 
 Almost everything in Tier 2 hangs off one decision that `CLAUDE.md` still lists
