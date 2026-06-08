@@ -1,0 +1,381 @@
+# From Observation Instrument to Teacher's Tool — Roadmap & Gap Analysis
+
+**Status:** Internal working doc. Candid backlog, not a promise.
+**Last updated:** 2026-06-08
+**Audience:** maintainers / future contributors.
+
+---
+
+## Thesis
+
+Quiet Corner today is a strong observation **instrument**. It is not yet a
+**teacher's tool**.
+
+The difference is whether it survives a real school day. An instrument captures
+a clean signal in ideal conditions. A tool gets fat-fingered, dropped, shared,
+and used one-handed on a phone while thirty kids do thirty things — and keeps
+working. Everything below is really one project: crossing that line, without
+betraying what already makes the instrument good (the Assessment Visibility
+framework grounding, expressive pathways + Classroom Signals, E4 admin-legible
+language, and a genuinely private, local-first posture).
+
+We measure every proposed feature against the framework's own constraints
+(`CLAUDE.md` → *Design constraints*): no medicalization, no deficit language, no
+surveillance-oriented transparency, teacher judgment is central, platform-
+agnostic, and the **Posole criterion** — *works for a teacher with 30 students
+and no prep.* If a feature can't pass Posole, it isn't done.
+
+---
+
+## What's already good (protect this)
+
+- **Framework-encoded observation.** Expressive pathways + Classroom Signals
+  vocabulary is genuinely differentiated; near-zero competitors encode a theory
+  of *assessment visibility*.
+- **E4 report generation** (`records.html` → reports panel) translates
+  observations into principal/ESSA/Yazzie-Martinez language. Rare and valuable.
+- **Private by construction.** After the local-image work, the app makes zero
+  third-party requests at runtime and holds no data off-device. Most
+  competitors are cloud-by-default with minors' data on third-party servers.
+- **Hardened data layer.** Typed `StorageError` on write failure, collision-
+  proof ids, atomic + validated backup import with true item-level merge.
+
+---
+
+## The gaps, in three tiers
+
+### Tier 1 — *It has to not fight the teacher* (makes it functional)
+
+These are the table-stakes that currently block daily use.
+
+1. **Records are append-only — no edit or delete.**
+   `qc-data.js` exposes `post*` / `get*` but no update or delete for students,
+   observations, skills, or meetings (only `deleteSchedulePeriod` exists; the
+   `students.archived_at` field is read by `getStudents()` but nothing ever
+   *sets* it). A mistyped observation is permanent. Every comparable tool has
+   full CRUD.
+   *Work:* add `patch*` / `delete*` (or soft-delete via `archived_at`) to the
+   data layer + edit affordances in `records.html`. Backup format already
+   tolerates this — ids are stable.
+
+2. **No evidence capture (photo / audio / video).**
+   Observation is typed text only. In Montessori tooling especially, the
+   observation often *is* a photo of the child's work or a short audio note.
+   *Work:* `<input type="file" capture>` → compress (reuse the pattern in
+   `classroom-os-bg.js`) → store as a data URL or, better, IndexedDB blob
+   (localStorage will not hold many photos — see Tier 2 storage note).
+   *Posole check:* must be one tap from the observation form.
+
+3. **No per-student profile / timeline.**
+   You can list observations globally, but there is no "everything about this
+   child over time" view — which is the screen teachers actually live in.
+   *Work:* a student detail view aggregating observations, skills, pathway
+   coverage, and meetings; pure read-side, no schema change.
+
+4. **No search / filter across observations.**
+   Find-by-student exists in code paths but there's no UI to search notes,
+   filter by pathway/signal/standard/date. Grows from #3.
+
+5. **Output is screen-only — no print / PDF.**
+   Reports render via `textContent`; the E4 language can't actually be handed
+   to a principal as a document. (The "printable" labels in the room mockups
+   are decorative.)
+   *Work:* a print stylesheet + `window.print()` is the 80/20; PDF export later.
+
+### Tier 2 — *It has to survive a school* (trust & scale)
+
+6. **No accounts / auth.** Data lives in one browser profile with no lock. On a
+   shared classroom machine, every child's record is an open book to whoever
+   sits down. This is the most serious **trust** gap for a tool holding minors'
+   records. Even local-only, schools need *some* gate.
+
+7. **Single device, no sync, no co-teacher / admin roles.** The FastAPI backend
+   is designed (`docs/backend-architecture.md`) but stubbed off
+   (`USE_API=false`). No multi-teacher classrooms, no admin visibility, no
+   recovery beyond manual JSON backup.
+
+8. **Storage ceiling.** localStorage is ~5–10 MB and synchronous. It's fine for
+   text records; it will not survive photo/audio evidence (Tier 1 #2). Migrating
+   the persistence layer to IndexedDB is the unlock for evidence + scale.
+   `qc-data.js`'s `db` abstraction is the single seam to do this behind.
+
+9. **No written privacy / compliance posture.** A FERPA/COPPA-aware data-handling
+   note (what's stored, where, who can see it, how to delete) is required before
+   any school adoption — and is cheap to write now while the answer is simply
+   "nothing leaves the device."
+
+10. **Not installable / not resilient offline by policy.** No PWA manifest or
+    service worker. Now that assets are local this is low-hanging fruit:
+    installable app icon, guaranteed offline caching, feels native on a tablet.
+
+11. **Not responsive.** No `@media` queries anywhere; the rooms are fixed desktop
+    grids. Teachers observe *walking around* with a phone or tablet. Until this
+    works one-handed on a small screen, it fails Posole in the field.
+
+### Tier 3 — *The reason it exists* (differentiators)
+
+12. **The LevelShip pathway map is aspirational.** `CLAUDE.md` names "map
+    understanding across pathways … under-seen ≠ under-capable" as LevelShip's
+    domain, but there is no visualization in the app. This is the single most
+    distinctive thing we could build — a per-student/per-class map of which
+    pathways have been *seen*, surfacing what the test missed. Depends on
+    Tier 1 #3/#4 data plumbing.
+
+13. **The after-engagement AI scaffold (UTETY) isn't wired.** The companion
+    "morning brief" is structured, not generated; the "drafts awaiting your
+    edit" / "parent letter drafted" in the rooms are mockups. The framework is
+    explicit that AI is the *secondary* scaffold and must *never precede
+    sense-making* — so this is deliberately last, and must stay opt-in and
+    post-observation. The `USE_API` path + Ollama/local-inference plan in
+    `backend-architecture.md` is the intended home.
+
+14. **E4 → polished artifact.** Pair Tier 1 #5 with the existing report
+    generator so the admin-legible language exports as a clean, branded
+    one-pager. High perceived value, modest effort.
+
+### Everyday connective tissue (smaller, still expected)
+
+- **Roster CSV import** — onboarding a class of 30 by hand fails Posole.
+- **Attendance** — only a `session_scope` flag today; no feature.
+- **Bulk / multi-student observation** — one note, several kids.
+- **Undo** on destructive actions (pairs with edit/delete).
+- **Accessibility** — add ARIA landmarks/labels (form labels exist; structure
+  doesn't).
+
+---
+
+## The LevelShip / Emerging Rule relationship (resolving an open question)
+
+`CLAUDE.md`'s open-questions list ends with *"Relationship to LevelShip
+(Emerging Rule product)"*, and Tier 3 #12 already names LevelShip as the owner of
+the pathway-map domain. This section resolves that thread: **LevelShip is the
+intended engine for Tier 3 — not something we build from scratch.** It's the same
+"adopt, don't author" logic applied to our own upstream.
+
+### Division of labor — interface vs. engine
+
+Quiet Corner and LevelShip are two halves of one framework (Assessment
+Visibility / Emerging Rule), and the white paper already draws the line: the
+educator-facing tool *is* the operational interface.
+
+- **Quiet Corner = front of house (the interface).** The system of record for
+  observations: teacher captures across expressive pathways, tags Classroom
+  Signals, and gets E4 admin-legible language. Local-first, private, runs with
+  or without any engine attached.
+- **LevelShip = the engine.** The ML-powered adaptive layer that turns
+  observation coverage into the **map** (#12 — "under-seen ≠ under-capable; what
+  the test missed") and provides the **after-engagement AI scaffold** (#13 —
+  UTETY personas for reflection/articulation, strictly post sense-making).
+
+This means **Tier 3 is largely an integration, not a build.** We own the capture,
+the timeline, and the data contract; LevelShip owns the modeling and the map.
+
+### Technical sketch (how they'd connect)
+
+The seam already exists: `qc-data.js` has the `USE_API` flag and `COS_API`
+endpoint, currently stubbed off. That is the integration point.
+
+1. **Boundary stays privacy-first.** Quiet Corner remains the local system of
+   record. It exports a **pathway-coverage summary** — which expressive pathways,
+   signals, and standards have been *observed* for a student/class — not raw
+   narrative PII. Teacher-initiated, minimum-necessary, and de-identifiable
+   (ids, not names) so it never becomes surveillance data.
+2. **LevelShip returns two things:** (a) **map data** — coverage/gaps across
+   pathways to render the "what the test missed" visualization; (b) the
+   **after-engagement scaffold** — persona/reflection prompts, returned *after*
+   an observation exists, never before. Both arrive through the `USE_API` path.
+3. **Graceful degradation is mandatory.** With no engine attached, Quiet Corner
+   still works and shows a structured (non-ML) coverage view — the same way the
+   morning brief already falls back to a structured brief when `USE_API=false`.
+   LevelShip *enhances*; it is never a hard dependency.
+4. **Fits the architecture fork cleanly.** This is orthogonal to A/B/C: the
+   LevelShip engine can sit behind a local instance (Option A/B, self-hosted,
+   privacy intact) or a hosted endpoint (Option C). Dexie remains the local
+   store either way; LevelShip is a read-side analytics/AI service, not the
+   primary datastore.
+
+### Status
+
+A partnership opportunity, not a commitment — flagged here so the design keeps
+the seam clean (local-first record, exportable coverage contract, opt-in
+engine). The person to talk to is Felipe Castro Quiles (Emerging Rule /
+LevelShip), with whom this framework already originates.
+
+---
+
+## The architecture fork (still open — do not pick yet)
+
+Almost everything in Tier 2 hangs off one decision that `CLAUDE.md` still lists
+as open. Laying out the three honest paths:
+
+### Option A — Local-first, hardened
+Stay single-device, no-account *by design.* Invest in IndexedDB, rock-solid
+backup/restore, file-based "sneakernet" sync (export → import on another
+machine), and a PWA.
+- **Pros:** maximal privacy story; no servers, no compliance surface; cheapest;
+  most faithful to the current posture.
+- **Cons:** no real collaboration; "sync" is manual; a lost, un-backed-up device
+  is a lost classroom.
+- **Best if:** the pilot stays small and privacy is the headline feature.
+
+### Option B — Optional self-hosted backend
+Default to local; let a school *turn on* the designed Willow/FastAPI backend for
+multi-teacher, sync, and admin. The `USE_API` seam already exists for exactly
+this.
+- **Pros:** keeps the privacy default; adds scale and collaboration only when a
+  school opts in and controls the server; preserves "platform-agnostic."
+- **Cons:** two code paths to maintain and test; someone has to run the server;
+  the local↔server data-merge story is real work.
+- **Best if:** we want growth without becoming a data custodian.
+
+### Option C — Cloud, multi-teacher
+Commit to accounts + hosted sync as the primary path.
+- **Pros:** closest to competitor expectations; effortless multi-device; enables
+  parent sharing and district reporting.
+- **Cons:** biggest lift; we become the custodian of minors' data — full
+  FERPA/COPPA/security burden; directly tensions the "no surveillance" and
+  privacy-first constraints. Would need a very deliberate trust design.
+- **Best if:** the goal is a district-scale product, eyes open to the burden.
+
+**Recommendation for discussion:** B is the path that scales without abandoning
+the framework's privacy stance — local-first default, opt-in server, single
+`USE_API` seam. But this is a product decision, not an engineering one; flagged
+here, not decided.
+
+---
+
+## Build vs. reuse — what already exists (2026 scan)
+
+A scan of comparable tools and libraries, to avoid rebuilding solved problems.
+**Headline:** there is no open-source app worth forking wholesale, but the
+*heaviest* roadmap items (IndexedDB, sync, auth/roles) are largely solved by
+existing libraries that drop into our `db` seam — so Tier 2 is far less of a
+rebuild than it looks.
+
+### Existing apps — reference, not fork
+- **Obserfy** (`github.com/obserfy/obserfy`) — Montessori record-keeping + parent
+  comm. Go backend + Next.js/Gatsby, **hosted-only** (maintainers explicitly
+  don't support self-hosting), no offline, early-stage. Wrong stack and wrong
+  philosophy for us. *Use as:* feature reference for parent communication and
+  teacher/parent dashboards.
+- **mrk** (`github.com/alansangma/mrk`) — Montessori lesson record-keeping (which
+  lessons given to which students/groups). PHP, effectively abandoned (~6
+  commits). *Use as:* design reference for the *lesson-given-to-student/group*
+  model if we add Montessori scope-and-sequence tracking.
+- **Transparent Classroom** (commercial) — already ships our Tier 3 ideas: a
+  visual grid of lessons × children, "work curves," equity-segment reports, and
+  a drag-drop conference-report editor with template pull-through. *Use as:* the
+  UX reference for the LevelShip **map** (#12) and the E4 one-pager (#14). Code
+  is ours to build — but the concept is validated and the interaction patterns
+  are worth copying.
+
+**Conclusion:** keep our own app (vanilla, local-first, framework-grounded).
+Reuse *libraries*, not a whole codebase.
+
+### The big reuse win — data layer + sync + auth
+- **Dexie.js** (MIT) — the 2026 default IndexedDB wrapper: typed tables, indexed
+  queries, transactions, schema versioning, live queries. Vanilla-JS friendly
+  (no framework needed — fits our no-build app). **This is the drop-in for the
+  IndexedDB migration (#8) and the blob storage that evidence capture (#2)
+  needs.** It slots behind the single `db` abstraction in `qc-data.js`.
+- **Dexie Cloud** (optional, self-hostable on Node + Postgres) — offline-first
+  *by design* (app works fully offline; sync is the bonus), bidirectional sync,
+  and a built-in **access-control model** (realms + roles + invitations). Free
+  tier (3 users / 100 MB), then ~€0.12/user/mo; **or self-host for the privacy
+  story.**
+  → **This is essentially Option B, pre-built.** It collapses most of Tier 2
+  (#6 auth, #7 sync/multi-teacher/admin) — we would *not* need to hand-build the
+  FastAPI/Willow backend, the sync/merge engine, or an auth system. Local-first
+  default stays intact; sync is opt-in and self-hostable.
+  *Caveat:* it sets the data-layer direction, so evaluate before #4. Our current
+  hand-rolled item-level backup merge would largely be superseded by Dexie's
+  sync — that's fine, the backup format stays as the export/portability path.
+
+### Smaller pieces — standard browser features, not rebuilds
+- **Print / PDF (#5, #14):** `window.print()` + a print stylesheet is the 80/20,
+  zero dependencies. A client-side lib (e.g. print-to-PDF) only if we need
+  pixel-exact artifacts later.
+- **Evidence capture (#2):** `<input type="file" accept="image/*" capture>` for
+  camera/mic + canvas compression — **we already have the compress pattern in
+  `classroom-os-bg.js`** — then store the blob via Dexie (not localStorage).
+- **CSV roster import:** trivial parse, no heavy dep needed.
+- **PWA (#10):** standard manifest + service worker; now viable since assets are
+  local.
+
+### Net effect on the plan
+The only things that are genuinely *ours to build* are the differentiators
+(the pathway **map** and the after-engagement AI scaffold) and the
+observation/timeline UX on top of a reused data layer. The infrastructure tier
+— storage, sync, auth — should be **adopted, not authored**, most likely via
+Dexie + Dexie Cloud. That makes the "functional teacher's tool" jump
+substantially cheaper than a from-scratch backend.
+
+---
+
+## Decided adoptions — what we will actually use
+
+The specific list. "Adopt now" = committed regardless of the architecture fork.
+"Adopt if B/C" = the designated choice the moment we leave pure local-first, so
+we don't re-litigate it then. "Reference only" = study the UX/model, write no
+shared code.
+
+| Thing | License / cost | Role | Status |
+|-------|----------------|------|--------|
+| **Dexie.js** | MIT, free | Persistence layer — replaces the localStorage `db` in `qc-data.js`; enables blob (photo/audio) storage and real queries for the per-student timeline | **Adopt now** |
+| **Browser `window.print()` + print stylesheet** | native | Printable E4 one-pager / reports (#5, #14) | **Adopt now** |
+| **`<input type="file" accept="image/*" capture>` + canvas compression** | native (reuse `classroom-os-bg.js` pattern) | Evidence capture (#2); store the blob via Dexie | **Adopt now** |
+| **Web App Manifest + Service Worker (PWA)** | native | Installable + guaranteed offline (#10) | **Adopt now** |
+| **Dexie Cloud** | self-host (Node + Postgres) or hosted (free ≤3 users, then ~€0.12/user/mo) | Sync + multi-teacher + access control/roles (#6, #7) — *is* Option B, pre-built; avoids authoring a backend/auth/merge engine | **Adopt if B/C** |
+| **Transparent Classroom** | commercial (no code) | UX reference for the LevelShip map (#12) and conference/E4 report editor (#14) | **Reference only** |
+| **obserfy** | open source (no code reused) | Feature reference for parent communication / dashboards | **Reference only** |
+| **mrk** | open source (no code reused) | Design reference for lesson-given-to-student/group tracking | **Reference only** |
+
+**Deliberately not adopting:** RxDB / PouchDB / TinyBase (Dexie covers our needs
+more simply and is vanilla-JS friendly); a custom FastAPI/Willow backend (Dexie
+Cloud supersedes the need if we go B/C — the `USE_API` stub can be retired);
+any CSV library (native parse is enough for roster import).
+
+**Single decision that gates the rest:** Dexie.js is safe to adopt today and is
+the foundation for evidence capture, the timeline, and (later) sync. Start there;
+it does not commit us to the architecture fork.
+
+---
+
+## Non-goals / guardrails (things we should *not* build)
+
+The framework bans more than it asks for. Explicit non-goals so a well-meaning
+feature doesn't erode the thesis:
+
+- **No deficit dashboards.** No red/green "struggling student" leaderboards, no
+  ranking. Under-seen ≠ under-capable; the map shows coverage, not deficiency.
+- **No surveillance analytics.** No engagement scoring, no time-on-task
+  tracking, no behavior heatmaps. (Note the decorative "attendance gap · 38%
+  unit missed" line in the STEM room mockup — that framing is *off-thesis* and
+  should not become real.)
+- **No diagnostic / medicalized inference.** The tool documents what a teacher
+  saw; it does not label, screen, or predict.
+- **AI never precedes sense-making.** Any generation is post-observation,
+  opt-in, and clearly the *secondary* scaffold.
+- **No teacher-superseding automation.** Teacher judgment is the evidentiary
+  basis; the tool drafts and surfaces, the teacher decides.
+
+---
+
+## Suggested sequencing (rough)
+
+1. **Edit/delete + undo** (Tier 1 #1) — unblocks honest daily use; small.
+2. **Per-student timeline + search/filter** (Tier 1 #3/#4) — the screen teachers
+   live in; read-side only.
+3. **Print/PDF for reports + E4 one-pager** (Tier 1 #5 / Tier 3 #14) — high value,
+   modest effort, no architecture dependency.
+4. **IndexedDB migration behind `db`** (Tier 2 #8) — the unlock for everything
+   heavy; do before evidence capture.
+5. **Evidence capture** (Tier 1 #2) — lands on top of #4.
+6. **PWA + responsive pass** (Tier 2 #10/#11) — makes it real in the field.
+7. **Auth/lock + privacy posture doc** (Tier 2 #6/#9) — required before wider
+   adoption.
+8. **Decide the architecture fork**, then build the LevelShip map (Tier 3 #12)
+   and, last and opt-in, the AI scaffold (Tier 3 #13).
+
+Steps 1–3 make it *honest*; 4–6 make it *usable in the room*; 7–8 make it
+*adoptable by a school*.
