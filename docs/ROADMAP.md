@@ -253,6 +253,35 @@ substantially cheaper than a from-scratch backend.
 
 ---
 
+## Decided adoptions — what we will actually use
+
+The specific list. "Adopt now" = committed regardless of the architecture fork.
+"Adopt if B/C" = the designated choice the moment we leave pure local-first, so
+we don't re-litigate it then. "Reference only" = study the UX/model, write no
+shared code.
+
+| Thing | License / cost | Role | Status |
+|-------|----------------|------|--------|
+| **Dexie.js** | MIT, free | Persistence layer — replaces the localStorage `db` in `qc-data.js`; enables blob (photo/audio) storage and real queries for the per-student timeline | **Adopt now** |
+| **Browser `window.print()` + print stylesheet** | native | Printable E4 one-pager / reports (#5, #14) | **Adopt now** |
+| **`<input type="file" accept="image/*" capture>` + canvas compression** | native (reuse `classroom-os-bg.js` pattern) | Evidence capture (#2); store the blob via Dexie | **Adopt now** |
+| **Web App Manifest + Service Worker (PWA)** | native | Installable + guaranteed offline (#10) | **Adopt now** |
+| **Dexie Cloud** | self-host (Node + Postgres) or hosted (free ≤3 users, then ~€0.12/user/mo) | Sync + multi-teacher + access control/roles (#6, #7) — *is* Option B, pre-built; avoids authoring a backend/auth/merge engine | **Adopt if B/C** |
+| **Transparent Classroom** | commercial (no code) | UX reference for the LevelShip map (#12) and conference/E4 report editor (#14) | **Reference only** |
+| **obserfy** | open source (no code reused) | Feature reference for parent communication / dashboards | **Reference only** |
+| **mrk** | open source (no code reused) | Design reference for lesson-given-to-student/group tracking | **Reference only** |
+
+**Deliberately not adopting:** RxDB / PouchDB / TinyBase (Dexie covers our needs
+more simply and is vanilla-JS friendly); a custom FastAPI/Willow backend (Dexie
+Cloud supersedes the need if we go B/C — the `USE_API` stub can be retired);
+any CSV library (native parse is enough for roster import).
+
+**Single decision that gates the rest:** Dexie.js is safe to adopt today and is
+the foundation for evidence capture, the timeline, and (later) sync. Start there;
+it does not commit us to the architecture fork.
+
+---
+
 ## Non-goals / guardrails (things we should *not* build)
 
 The framework bans more than it asks for. Explicit non-goals so a well-meaning
