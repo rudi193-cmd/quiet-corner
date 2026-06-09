@@ -2,10 +2,10 @@
 
 **A Framework for Assessment Visibility, Equity, and Teacher-Led Governance**
 
-**Author:** Sean Campbell  
-**Version:** v1.1  
-**Date:** 2026-05-26  
-**Folder:** Education / Pedagogy  
+**Author:** USER
+**Version:** v1.1
+**Date:** 2026-05-26
+**Folder:** Education / Pedagogy
 **License:** CC BY 4.0 (Emerging Rule community materials)
 
 > **v1.1 note:** Version 1.0 (2025-12-17) listed appendices E1–E4 and extended companion guides as “included verbatim” but did not contain their full text. This release supplies that material and corrects typographic errors (AI, not “Al”). No product or platform names appear in this document.
@@ -108,7 +108,7 @@ Formal classroom observations demonstrate that students frequently express under
 
 These behaviors are not deviations from learning norms; they are legitimate manifestations of understanding. When assessment systems recognize only a narrow subset of these pathways, they generate **false negatives**—students who appear to lack understanding when they do not.
 
-> Recognizing multiple expressive pathways does not lower standards.  
+> Recognizing multiple expressive pathways does not lower standards.
 > **It refines what counts as evidence.**
 
 See [Appendix A](appendix-a.md) and [Appendix B](appendix-b.md).

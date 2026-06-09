@@ -10,7 +10,7 @@
 **[Assessment Evidence and Expressive Pathways in AI-Present Schools](assessment-visibility-v1.1/)**  
 *A Framework for Assessment Visibility, Equity, and Teacher-Led Governance*
 
-Sean Campbell · CC BY 4.0
+USER · CC BY 4.0
 
 This app implements the framework described in section 7.6 of the white paper: educator-facing materials as the operational interface.
 

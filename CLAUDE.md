@@ -4,7 +4,7 @@
 
 Standalone tool for K-12 teachers (Montessori pilots first). Runs on any machine. HTML-based, expressive. Internal code prefix `cos_*` (Classroom OS legacy) — rename files when convenient.
 
-The white paper this implements: `assessment-visibility-v1.1` (CC BY 4.0, Sean Campbell / Emerging Rule)
+The white paper this implements: `assessment-visibility-v1.1` (CC BY 4.0, USER / Emerging Rule)
 
 ## What this app is
 
