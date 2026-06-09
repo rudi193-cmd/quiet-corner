@@ -3,7 +3,7 @@
 **Assessment Evidence and Expressive Pathways in AI-Present Schools**  
 *A Framework for Assessment Visibility, Equity, and Teacher-Led Governance*
 
-Sean Campbell · v1.1 · 2026-05-26 · CC BY 4.0
+USER · v1.1 · 2026-05-26 · CC BY 4.0
 
 ---
 
